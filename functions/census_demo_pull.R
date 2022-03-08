@@ -1,6 +1,5 @@
-# Minority Population, ACS with Decennial Control
+# Minority Population, ACS with Decennial Control ####
 # Pull minority and non-minority % for each tract from 5-yr ACS. Then apply % to decennial tract population
-
 min_status_by_tract_acs_dec <- function(year_acs, year_dec, state){
 
 m_acs <- paste0("B03002_", str_pad(c(3:9,12), width = 3, side = "left", pad = 0))
@@ -40,9 +39,8 @@ minority_status <- dec_raw %>%
 return(minority_status)
 }
 
-# Minority Population, Decennial
-# Pull non-hispanic white population from decennial, compare to total pop
-
+# Minority Population, Decennial ####
+# Pull non-Hispanic white population from decennial, compare to total pop
 min_status_by_tract_dec <- function( year_dec, state){
   
   # v20_dec <- load_variables(2020, "pl", cache= T)
@@ -64,3 +62,28 @@ min_status_by_tract_dec <- function( year_dec, state){
   return(minstatus_tract_dec)
 }
 
+# Low-income Threshold ####
+# TODO: FINISH OUT FUNCTION
+find_low_inc_threshold <- function( year_acs, state, service_area, type){
+  # Function finds two different types of low-income thresholds
+  # If type is set to "FPL" then the function reports the low-income threshold that is 
+  # 200% of the federal poverty level for the year specified in the year_acs variable.
+  # If type is set to "AMI" then the function reports the low-income threshold that is 60% of the Area Median Income
+  # based on the service area variable using 5-year American Community Survey Household Income data for the year ending in the year_acs variable.
+  if (type == "FPL"){
+    
+  } else if (type = "AMI") {
+    
+  } else {
+    print("Please specify the type of Low-income threshold to calculate. Options are 1) `type = 'FPL'` to find the low-income threshold that is 200% of the Federal Poverty Level
+    or 2) `type = 'AMI'` to find the low-income threshold that is 60% of the area median income.")
+  }
+  
+}
+
+# Low-income Population, ACS with Decennial Control ####
+# Pull minority and non-minority % for each tract from 5-yr ACS. Then apply % to decennial tract population
+# TODO: Finish out function
+inc_status_by_tract_acs_dec <- function(year_acs, year_dec, state, low_income_threshold) {
+  
+}

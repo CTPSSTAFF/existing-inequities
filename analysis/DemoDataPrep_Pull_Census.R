@@ -28,6 +28,11 @@ minstatus_tract_dec <- min_status_by_tract_dec(year_dec, "MA")
 #   scale_fill_continuous(label = scales::percent)+
 #   scale_color_continuous(label = scales::percent) 
 
+# Low-income Population ####
+# Calculate Low-Income Threshold from ACS data
+# 
+# 
+
 
 
 # Population with in the BRMPO ####
@@ -43,4 +48,13 @@ mapview(br_mpo_geog)+ mapview(minstatus_tract_dec) +mapview(br_mpo_equity_pop, c
 
 br_mpo_equity_pop <- minstatus_tract_dec %>% 
  st_intersection(select(br_mpo_geog, Subcounty= NAME, GEOID_Subcounty= GEOID))
-minsta
+# st_write(br_mpo_equity_pop,"output/demo_brmpo_equity_pop.gpkg","equity_pop_2020")
+
+# Minority Status BRMPO Summary
+minstatus <- br_mpo_equity_pop %>% 
+  st_drop_geometry() %>% 
+  summarize(minority_pop= sum(minority_pop),
+            nonminority_pop = sum(nonminority_pop),
+            total_pop = sum(total_pop)) %>% 
+  mutate(minority_pct = minority_pop/total_pop,
+         nonminority_pct = nonminority_pop/total_pop)
