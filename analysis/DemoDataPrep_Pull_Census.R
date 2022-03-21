@@ -35,7 +35,7 @@ minstatus_tract_dec <- min_status_by_tract_dec(year_dec, "MA")
 
 
 
-# Population with in the BRMPO ####
+# Population within the BRMPO ####
 ma_muni_geog <- get_decennial(geography= "county subdivision", 
                               variables = "P1_001N",
                               year = year_dec,
