@@ -30,8 +30,11 @@ if (universe_type == "total population"){
     summarize(percent= est/pop_acs,
             percent_moe= moe_prop(est, pop_acs, est_moe, pop_acs_moe)) %>% 
     pivot_wider(names_from= min_status, values_from = c(percent, percent_moe))
+  
+  if(year_dec == 2010){ dec_var <- "P002001"}
+  if(year_dec == 2020){ dec_var <- "P2_001N"}
   dec_raw <- get_decennial(geography = census_geog,
-                         variables = "P1_001N",
+                         variables = dec_var,
                          state = state,
                          geometry = FALSE,
                          year = year_dec)
@@ -78,8 +81,10 @@ if (universe_type == "total population"){
              percent_nonmin =ifelse(est_total_adult == 0, NA, est_nonmin /est_total_adult)) %>% 
       select(GEOID, percent_min_adult= percent_min, percent_nonmin_adult= percent_nonmin)
     
+    if(year_dec == 2010){ dec_var <- "P004001"}
+    if(year_dec == 2020){ dec_var <- "P4_001N"}
     dec_raw <- get_decennial(geography = census_geog,
-                             variables = "P4_001N",
+                             variables = dec_var,
                              state = state,
                              geometry = FALSE,
                              year = year_dec)
