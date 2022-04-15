@@ -3,7 +3,7 @@ library(tidycensus)
 # TODO: Pull out zero vehicle households
 
 # Demo groups
-demo <- tibble(demo= c("minstatus", "incstatus"))
+demo <- tibble(demo= c("minstatus", "incstatus", "vehicleaccess"))
 # Types
 inc_types <- tibble(demo = c(rep("incstatus",2)), type= c("200% FPL", "60% AMI")) %>% 
   filter(type != "60% AMI")
@@ -33,10 +33,15 @@ demo_data <- demo %>%
   # full_join(geogs, by= character(),) %>%
   full_join(service_area, by= character()) %>% 
   left_join(state) %>% 
+  left_join(geogs, by = character()) %>% 
   full_join(years, by= character()) %>% 
   left_join(total_pop_type, by= character()) %>% 
   # income not reported in decennial
   filter(!(demo=="incstatus" & is.na(y_acs)==T)) %>% 
+  # vehicle access not reported in decennial
+  filter(!(demo== "vehicleaccess" & is.na(y_acs)==T)) %>% 
+  # for vehicle access instead of 18+ pull occupied households
+  mutate(universe_type = ifelse(demo== "vehicleaccess" & universe_type == "age 18 and older", "occupied households", universe_type)) %>% 
   mutate(acs_tables = case_when(
     demo== "minstatus" & is.na(y_acs)==F & universe_type == "age 18 and older" ~ "B01001H",
     demo== "minstatus" & is.na(y_acs)==F & universe_type == "total population" ~ "B03002",
@@ -47,6 +52,7 @@ demo_data <- demo %>%
   mutate(dec_tables = case_when(
     universe_type == "age 18 and older" ~ "P4_001N, P004001",
     universe_type == "total population" ~ "P2_001N, P002001",
+    universe_type == "occupied households" ~ "H1_002N",
     TRUE ~ NA_character_
   ))
 
