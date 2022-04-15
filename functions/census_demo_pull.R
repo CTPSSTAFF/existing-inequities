@@ -1,7 +1,7 @@
 
 # MINORITY STATUS ####
 
-# Minority Population, ACS with Decennial Control ####
+# Minority Population, ACS with Decennial Control 
 # Pull minority and non-minority % for each tract from 5-yr ACS. Then apply % to decennial population
 min_status_acs_dec <- function(year_acs, year_dec, state, census_geog, universe_type){
   # state <- "MA"
@@ -106,7 +106,7 @@ if (universe_type == "total population"){
   
 }
 
-# Minority Population, Decennial ####
+# Minority Population, Decennial
 # Pull non-Hispanic white population from decennial, compare to total pop
 min_status_dec <- function( year_dec, state, census_geog, universe_type){
 if (universe_type == "total population"){
@@ -151,9 +151,7 @@ if (universe_type == "total population"){
 }
 
 # INCOME STATUS #### 
-
-# Low-income Threshold ####
-
+# Low-income Threshold
 get_low_inc_threshold <- function( year_acs, state, service_area, type, percent){
   # state <- "MA"
   # service_area <- boundary
@@ -228,9 +226,78 @@ get_low_inc_threshold <- function( year_acs, state, service_area, type, percent)
   }
   return(NA)
 }
-
-# Low-income Population, ACS with Decennial Control ####
+# Low-income Population, ACS with Decennial Control 
 # Pull low-income and non-low-income % for each tract from 5-yr ACS. Then apply % to decennial  population
+inc_status_AMI_acs_dec <- function(year_acs, year_dec, state, low_income_threshold, census_geog){
+  ##### Income distribution #####
+  
+  # Household income distribution by census geog
+  inc_variables <- paste0("B19001_", str_pad(c(2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17), width = 3, side = "left", pad = 0))
+  inc_ranges <- c( "<10k","10k_15k","15k_20K","20k_25k","25k_30k","30k_35k","35k_40k","40k_45k",
+                   "45k_50k","50k_60k","60k_75k","75k_100k","100k_125k","125k_150k","150k_200k",">200k")
+  inc_low <- c(0, 10000, 15000, 20000, 25000, 30000,35000, 40000,45000, 50000, 60000, 75000, 100000, 125000, 150000, 200000)
+  inc_high <- c(9999, 14999, 19999, 24999, 29999, 34999, 39999, 44999, 49999, 59999, 74999,99999, 124999, 149999, 199999, 999999)
+  inc_summary_var <- "B19001_001"
+  
+  income_dist_raw_acs <- get_acs(geography = census_geog,
+                                 variables = inc_variables,
+                                 summary_var = inc_summary_var,
+                                 state = state,
+                                 geometry = F,
+                                 cb= F,
+                                 year = year_acs) 
+  
+  inc_dist_acs <- income_dist_raw_acs %>% 
+    left_join(tibble(variable = inc_variables, inc_range = inc_ranges), by= "variable") %>% 
+    left_join(tibble(inc_range= inc_ranges, inc_low= inc_low, inc_high= inc_high),by = "inc_range") %>% 
+    mutate(inc_status = case_when(
+      inc_high <= low_income_threshold~ "lowincome",
+      inc_low > low_income_threshold ~ "nonlowincome",
+      TRUE ~ "split"))
+  split <- inc_dist_acs %>% 
+    filter(inc_status== "split") %>% 
+    mutate(estimate_low = (low_income_threshold-inc_low)/(inc_high-inc_low)*estimate,
+           estimate_high= estimate- estimate_low) %>% 
+    pivot_longer(cols= c(estimate_low, estimate_high)) %>%
+    mutate(inc_status= ifelse(name=="estimate_low", "lowincome", "nonlowincome")) %>% 
+    select(-estimate) %>% 
+    rename(estimate= value)
+  
+  inc_status_acs <- inc_dist_acs %>% 
+    filter(inc_status != "split") %>% 
+    bind_rows(split) %>% 
+    group_by(GEOID, inc_status) %>% 
+    summarize(est=sum(estimate),
+              est_moe= moe_sum(moe,estimate),
+              pop_acs= first(summary_est),
+              pop_acs_moe= first(summary_moe)) %>%
+    group_by(GEOID, inc_status) %>% 
+    summarize(percent= est/pop_acs,
+              percent_moe= moe_prop(est, pop_acs, est_moe, pop_acs_moe)) %>% 
+    pivot_wider(names_from= inc_status, values_from = c(percent, percent_moe))
+  
+  
+  
+  
+  # get population/households from decennial
+  dec_raw <- get_decennial(geography = "tract",
+                           # variables = "P001001",  # Sex by Age, total.population
+                           variables= "H003002", # total occupied housing units
+                           state = state,
+                           geometry = FALSE,
+                           year = year_dec)
+  
+  # Bring income acs and dec together ########
+  income_status <- dec_raw %>% 
+    select(-variable) %>% 
+    rename(hh_dec= value) %>% 
+    left_join(inc_status_acs, by = "GEOID") %>% 
+    mutate(lowincome= hh_dec*percent_lowincome,
+           nonlowincome = hh_dec*percent_nonlowincome)
+  
+  return(income_status)
+}
+
 inc_status_FPL_acs_dec <- function(year_acs, year_dec, state, census_geog, universe) {
   if (universe_type == "total_population"){
     # C17002_001 Estimate!!Total: RATIO OF INCOME TO POVERTY LEVEL IN THE PAST 12 MONTHS
@@ -318,3 +385,5 @@ inc_status_FPL_acs_dec <- function(year_acs, year_dec, state, census_geog, unive
 }
 
 # VEHICLE ACCESS ####
+
+
