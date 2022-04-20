@@ -9,16 +9,25 @@ library(mapview)
 # FUNCTIONS ####
 source("functions/census_demo_pull.R")
 
-# Inputs ###
-year_acs <- 2019 # TODO: update to 2020 once 2016-20 data is vetted
-year_dec <- 2020
-state <- "MA"
+# # Inputs ###
+# year_acs <- 2019 # TODO: update to 2020 once 2016-20 data is vetted
+# year_dec <- 2020
+# state <- "MA"
 br_mpo_munis <- read_csv("data/town_codes.csv") %>% 
   filter(MPO == "Boston")
 
+
+demo_data
+
+test <- demo_data %>% 
+  filter(demo == "minstatus" & is.na(acs_tables)==F) %>% 
+  mutate(demo_data = pmap(list(year_acs= y_acs, year_dec= y_dec, 
+                               state= state, census_geog= geogs,
+                               universe_type= universe_type), min_status_acs_dec))
+
 # Minority Population ####
 minstatus_tract_dec <- min_status_by_tract_dec(year_dec, "MA")
-# TODO: clean up tracts
+
 
 # mapview::mapview(dec_minstatus_tract, zcol = 'minority_pct')
 # 
@@ -29,7 +38,6 @@ minstatus_tract_dec <- min_status_by_tract_dec(year_dec, "MA")
 #   scale_color_continuous(label = scales::percent) 
 
 # Low-income Population ####
-# Calculate Low-Income Threshold from ACS data
 # 
 # 
 
