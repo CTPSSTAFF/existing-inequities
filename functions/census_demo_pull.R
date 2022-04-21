@@ -116,8 +116,17 @@ if (universe_type == "total population"){
 min_status_dec <- function( year_dec, state, census_geog, universe_type){
 if (universe_type == "total population"){
   # P2 HISPANIC OR LATINO, AND NOT HISPANIC OR LATINO BY RACE
-  v_non_min <- "P2_005N" #!!Total:!!Not Hispanic or Latino:!!Population of one race:!!White alone
-  v_total <- "P2_001N" # !!Total: # P1_001N
+  # v_non_min <- "P2_005N" #!!Total:!!Not Hispanic or Latino:!!Population of one race:!!White alone
+  # v_total <- "P2_001N" # !!Total: # P1_001N
+  
+  if(year_dec == 2010){
+    v_non_min <- "P002005" #!!Total:!!Not Hispanic or Latino:!!Population of one race:!!White alone
+    v_total <- "P002001"
+    }
+  if(year_dec == 2020){ 
+    v_non_min <- "P2_005N" #!!Total:!!Not Hispanic or Latino:!!Population of one race:!!White alone
+    v_total <- "P2_001N" # !!Total: # P1_001N
+    }
   
   minstatus_dec <- get_decennial(geography = census_geog,
                                        variables =v_non_min,
@@ -134,8 +143,16 @@ if (universe_type == "total population"){
   return(minstatus_dec) }
   else if (universe_type == "age 18 and older") {
     # P4 table: HISPANIC OR LATINO, AND NOT HISPANIC OR LATINO BY RACE FOR THE POPULATION 18 YEARS AND OVER
-    v_non_min <- "P4_005N" #	!!Total:!!Not Hispanic or Latino:!!Population of one race:!!White alone
-    v_total <- "P4_001N" # !!Total:
+    
+    if(year_dec == 2010){ 
+      # TODO: Figure out why decenial detail for P4 table not available via census api
+      v_non_min <- "P004005" #	!!Total:!!Not Hispanic or Latino:!!Population of one race:!!White alone
+      v_total <- "P004001" # !!Total:
+      }
+    if(year_dec == 2020){ 
+      v_non_min <- "P4_005N" #	!!Total:!!Not Hispanic or Latino:!!Population of one race:!!White alone
+      v_total <- "P4_001N" # !!Total:
+      }
     
     minstatus_dec <- get_decennial(geography = census_geog,
                                    variables =v_non_min,
@@ -172,7 +189,7 @@ get_low_inc_threshold <- function( year_acs, state, service_area, type, percent)
     print("Population within a ratio of the federal poverty level is calculated by the US Census. For more detail on the low-income threshold using this definition see:
           https://www.census.gov/data/tables/time-series/demo/income-poverty/historical-poverty-thresholds.html")
     
-  } else if (type = "AMI") {
+  } else if (type == "AMI") {
     
     # Household income distribution by county sub_division
     inc_variables <- paste0("B19001_", str_pad(c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17), width = 3, side = "left", pad = 0))
@@ -303,7 +320,7 @@ inc_status_AMI_acs_dec <- function(year_acs, year_dec, state, low_income_thresho
   return(income_status)
 }
 
-inc_status_FPL_acs_dec <- function(year_acs, year_dec, state, census_geog, universe) {
+inc_status_FPL_acs_dec <- function(year_acs, year_dec, state, census_geog, universe_type) {
   if (universe_type == "total_population"){
     # C17002_001 Estimate!!Total: RATIO OF INCOME TO POVERTY LEVEL IN THE PAST 12 MONTHS
     # C17002_008 Estimate!!Total:!!2.00 and over RATIO OF INCOME TO POVERTY LEVEL IN THE PAST 12 MONTHS
@@ -326,8 +343,11 @@ inc_status_FPL_acs_dec <- function(year_acs, year_dec, state, census_geog, unive
              percent_nonlowinc_moe = moe_prop(est_nonlowinc, est_total_pop, moe_nonlowinc, moe_total_pop)) %>% 
       select(GEOID, starts_with("percent_"))
       
+    if(year_dec == 2010){ dec_var <- "P002001"}
+    if(year_dec == 2020){ dec_var <- "P2_001N"}
+    
     dec_raw <- get_decennial(geography = census_geog,
-                             variables = "P1_001N",
+                             variables = dec_var,
                              state = state,
                              geometry = FALSE,
                              year = year_dec)
@@ -368,8 +388,11 @@ inc_status_FPL_acs_dec <- function(year_acs, year_dec, state, census_geog, unive
              percent_nonlowinc_moe = moe_prop(est_nonlowinc, est_total_adult, moe_nonlowinc, moe_total_adult)) %>% 
       select(GEOID, starts_with("percent_"))
     
+    if(year_dec == 2010){ dec_var <- "P004001"}
+    if(year_dec == 2020){ dec_var <- "P4_001N"}
+    
     dec_raw <- get_decennial(geography = census_geog,
-                             variables = "P4_001N",
+                             variables = dec_var,
                              state = state,
                              geometry = FALSE,
                              year = year_dec)
