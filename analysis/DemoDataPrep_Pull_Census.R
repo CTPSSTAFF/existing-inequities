@@ -8,22 +8,37 @@ library(mapview)
 
 # FUNCTIONS ####
 source("functions/census_demo_pull.R")
-
-# # Inputs ###
-# year_acs <- 2019 # TODO: update to 2020 once 2016-20 data is vetted
-# year_dec <- 2020
-# state <- "MA"
+# Inputs ###
 br_mpo_munis <- read_csv("data/town_codes.csv") %>% 
   filter(MPO == "Boston")
 
+demo_data<- read_csv("data/demo_data_plan.csv") %>% 
+  # TODO: in future work on vehicle access
+  # TODO: determine if block groups are appropriate
+  filter(demo %in% c("incstatus", "minstatus")) %>% 
+  filter(geogs == "tract")
 
-demo_data
 
-test <- demo_data %>% 
-  filter(demo == "minstatus" & is.na(acs_tables)==F) %>% 
-  mutate(demo_data = pmap(list(year_acs= y_acs, year_dec= y_dec, 
-                               state= state, census_geog= geogs,
-                               universe_type= universe_type), min_status_acs_dec))
+# TODO: either use a mutate if function so doesn't need to splinter and filter or make helper function in census data pull
+minstatus_acs_dec <- demo_data %>% 
+  filter(demo == "minstatus" & is.na(acs_tables) == F) %>% 
+  mutate(demo_data = pmap(list(year_acs = y_acs, year_dec = y_dec, 
+                               state = state, census_geog = geogs,
+                               universe_type = universe_type), min_status_acs_dec))
+
+minstatus_dec <- demo_data %>% 
+  filter(demo == "minstatus"& is.na(acs_tables) == T) %>% 
+  filter(y_dec == 2020) %>% 
+  mutate(demo_data= pmap(list(year_dec = y_dec,
+                              state = state, census_geog = geogs,
+                              universe_type = universe_type), min_status_dec))
+
+incstatus_acs_dec <- demo_data %>% 
+  filter(demo == "incstatus" & type == "200% FPL") %>% 
+  mutate(demo_data = pmap(list(year_acs = y_acs, year_dec = y_dec,
+                               state = state, census_geog = geogs,
+                               universe_type = universe_type), inc_status_FPL_acs_dec))
+  
 
 # Minority Population ####
 minstatus_tract_dec <- min_status_by_tract_dec(year_dec, "MA")
