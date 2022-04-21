@@ -56,6 +56,8 @@ demo_data <- demo %>%
     TRUE ~ NA_character_
   ))
 
+# write_csv(demo_data, "data/demo_data_plan.csv")
+
 
 # list tables needed to find data
 acs20 <- load_variables(2020, "acs5", cache = T)

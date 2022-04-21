@@ -1,0 +1,33 @@
+demo,type,service_area,state,geogs,y_acs,y_dec,universe_type,acs_tables,dec_tables
+minstatus,NA,MPO,MA,tract,2019,2010,age 18 and older,B01001H,"P4_001N, P004001"
+minstatus,NA,MPO,MA,tract,2019,2010,total population,B03002,"P2_001N, P002001"
+minstatus,NA,MPO,MA,tract,2020,2020,age 18 and older,B01001H,"P4_001N, P004001"
+minstatus,NA,MPO,MA,tract,2020,2020,total population,B03002,"P2_001N, P002001"
+minstatus,NA,MPO,MA,tract,NA,2010,age 18 and older,NA,"P4_001N, P004001"
+minstatus,NA,MPO,MA,tract,NA,2010,total population,NA,"P2_001N, P002001"
+minstatus,NA,MPO,MA,tract,NA,2020,age 18 and older,NA,"P4_001N, P004001"
+minstatus,NA,MPO,MA,tract,NA,2020,total population,NA,"P2_001N, P002001"
+minstatus,NA,MPO,MA,block group,2019,2010,age 18 and older,B01001H,"P4_001N, P004001"
+minstatus,NA,MPO,MA,block group,2019,2010,total population,B03002,"P2_001N, P002001"
+minstatus,NA,MPO,MA,block group,2020,2020,age 18 and older,B01001H,"P4_001N, P004001"
+minstatus,NA,MPO,MA,block group,2020,2020,total population,B03002,"P2_001N, P002001"
+minstatus,NA,MPO,MA,block group,NA,2010,age 18 and older,NA,"P4_001N, P004001"
+minstatus,NA,MPO,MA,block group,NA,2010,total population,NA,"P2_001N, P002001"
+minstatus,NA,MPO,MA,block group,NA,2020,age 18 and older,NA,"P4_001N, P004001"
+minstatus,NA,MPO,MA,block group,NA,2020,total population,NA,"P2_001N, P002001"
+incstatus,200% FPL,MPO,MA,tract,2019,2010,age 18 and older,B17024,"P4_001N, P004001"
+incstatus,200% FPL,MPO,MA,tract,2019,2010,total population,C17002,"P2_001N, P002001"
+incstatus,200% FPL,MPO,MA,tract,2020,2020,age 18 and older,B17024,"P4_001N, P004001"
+incstatus,200% FPL,MPO,MA,tract,2020,2020,total population,C17002,"P2_001N, P002001"
+incstatus,200% FPL,MPO,MA,block group,2019,2010,age 18 and older,B17024,"P4_001N, P004001"
+incstatus,200% FPL,MPO,MA,block group,2019,2010,total population,C17002,"P2_001N, P002001"
+incstatus,200% FPL,MPO,MA,block group,2020,2020,age 18 and older,B17024,"P4_001N, P004001"
+incstatus,200% FPL,MPO,MA,block group,2020,2020,total population,C17002,"P2_001N, P002001"
+vehicleaccess,NA,MPO,MA,tract,2019,2010,occupied households,NA,H1_002N
+vehicleaccess,NA,MPO,MA,tract,2019,2010,total population,NA,"P2_001N, P002001"
+vehicleaccess,NA,MPO,MA,tract,2020,2020,occupied households,NA,H1_002N
+vehicleaccess,NA,MPO,MA,tract,2020,2020,total population,NA,"P2_001N, P002001"
+vehicleaccess,NA,MPO,MA,block group,2019,2010,occupied households,NA,H1_002N
+vehicleaccess,NA,MPO,MA,block group,2019,2010,total population,NA,"P2_001N, P002001"
+vehicleaccess,NA,MPO,MA,block group,2020,2020,occupied households,NA,H1_002N
+vehicleaccess,NA,MPO,MA,block group,2020,2020,total population,NA,"P2_001N, P002001"
