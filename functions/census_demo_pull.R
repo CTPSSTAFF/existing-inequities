@@ -321,7 +321,7 @@ inc_status_AMI_acs_dec <- function(year_acs, year_dec, state, low_income_thresho
 }
 
 inc_status_FPL_acs_dec <- function(year_acs, year_dec, state, census_geog, universe_type) {
-  if (universe_type == "total_population"){
+  if (universe_type == "total population"){
     # C17002_001 Estimate!!Total: RATIO OF INCOME TO POVERTY LEVEL IN THE PAST 12 MONTHS
     # C17002_008 Estimate!!Total:!!2.00 and over RATIO OF INCOME TO POVERTY LEVEL IN THE PAST 12 MONTHS
     inc_acs <- paste0("C17002_", str_pad(c(1:8), width = 3, side = "left", pad = 0))
