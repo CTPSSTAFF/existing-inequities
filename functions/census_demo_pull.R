@@ -145,7 +145,7 @@ if (universe_type == "total population"){
     # P4 table: HISPANIC OR LATINO, AND NOT HISPANIC OR LATINO BY RACE FOR THE POPULATION 18 YEARS AND OVER
     
     if(year_dec == 2010){ 
-      # TODO: Figure out why decenial detail for P4 table not available via census api
+      # TODO: Figure out why decennial detail for P4 table not available via census api
       v_non_min <- "P004005" #	!!Total:!!Not Hispanic or Latino:!!Population of one race:!!White alone
       v_total <- "P004001" # !!Total:
       }
