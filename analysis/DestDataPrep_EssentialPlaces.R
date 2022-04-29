@@ -105,7 +105,8 @@ farmersmarkets<- fm_unique_geog %>%
             address = first(address)) %>% 
   left_join(fm_unique_geog, by = "id") %>% 
   st_as_sf() %>% 
-  st_transform(26986)
+  st_transform(26986) %>% 
+  mutate(type= "Farmers' Markets")
 rm(FARMERSMARKETS_PT)
 
 # include where primary type “Meat Markets,” “Fish and Seafood Markets,” “All Other Specialty Food Stores,” 
@@ -125,13 +126,8 @@ rm(`export-gisdata.mapc.food_retailers_2017_pt`)
 # STEP 3: Bind Together essential places ####
 # Bring essential places together
 essential_places <- healthcare %>% 
-  bind_rows(townhalls, postoffices, libraries, grocery, retail_pharmacies)
+  bind_rows(townhalls, postoffices, libraries, grocery, retail_pharmacies, farmersmarkets)
 mapview(essential_places, zcol = "type")
-
-# TODO: Determine if clustering is appropriate
-# cluster essential places? Density based scanning?
-library(dbscan)
-# https://cran.r-project.org/web/packages/dbscan/vignettes/hdbscan.html
 
 
 # SAVE DATA ####
