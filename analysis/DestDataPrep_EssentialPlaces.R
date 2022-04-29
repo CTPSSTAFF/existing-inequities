@@ -123,33 +123,19 @@ grocery <- `export-gisdata.mapc.food_retailers_2017_pt` %>%
 
 rm(`export-gisdata.mapc.food_retailers_2017_pt`)
 
-# STEP 3: Bind Together essential places ####
+# STEP 3: Bind Together essential destinations ####
 # Bring essential places together
-essential_places <- healthcare %>% 
-  bind_rows(townhalls, postoffices, libraries, grocery, retail_pharmacies, farmersmarkets)
-mapview(essential_places, zcol = "type")
+essential_destinations <- healthcare %>% 
+  bind_rows(townhalls, postoffices, libraries, grocery, retail_pharmacies, farmersmarkets) %>% 
+  select(-id) %>% 
+  mutate(id= row_number())
+mapview(essential_destinations, zcol = "type")
 
 
 # SAVE DATA ####
-st_write(essential_places, "output/DestinationData.gpkg", "essential_places_PT", append = T)
+st_write(essential_destinations, "output/DestinationData.gpkg", "essential_destinations_PT", append = T)
 
 
 # SAVE DATA FOR CONVEYAL ####
-# note: Conveyal can't have any other numeric fields beside a weight. 
-# if there is an id or an FID (default saving with shp driver) then that id becomes the weight and throws off access opportunity counts
-essential_places_conveyal <- st_read("output/DestinationData.gpkg", "essential_places_PT") %>% 
-  rename(geometry= geom) %>%
-  select(geometry, type) %>% 
-  st_transform(4269)
+# We don't need to save data for Conveyal because we will save the central destination within a cluster
 
-essential_places_csv<- essential_places_conveyal %>%   
-  mutate(lon = st_coordinates(.)[,1],
-         lat =st_coordinates(.)[,2]) %>% 
-  st_drop_geometry() %>% 
-  write_csv("output_test/essential_places.csv")
-
-
-
-
-
-# TODO: Essential Places Clustering ####
