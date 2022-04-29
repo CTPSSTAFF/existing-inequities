@@ -85,6 +85,6 @@ mapview(boundary)+ sub_regions + mapview(submarkets, zcol = 'submarket')
 write_rds(boundary, "data/boundary.rds")
 
 # Save as GeoPackage
-st_write(boundary, "AggregationAreas.gpkg", "MPO_Boundary")
-st_write(sub_regions, "AggregationAreas.gpkg", "CommunityTypes", append = T)
-st_write(submarkets, "AggregationAreas.gpkg", "HousingSubmarkets", append = T)
+st_write(boundary, "output/AggregationAreas.gpkg", "MPO_Boundary")
+st_write(sub_regions, "output/AggregationAreas.gpkg", "CommunityTypes", append = T)
+st_write(submarkets, "output/AggregationAreas.gpkg", "HousingSubmarkets", append = T)
