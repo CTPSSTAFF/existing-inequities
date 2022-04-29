@@ -1,0 +1,128 @@
+name,alias,details
+join_key,Geographic Identifier,ct10_id
+title,Title,MAPC Housing Submarkets
+alt_title,Alternate Title,
+tbl_num,Table number from source data,
+geography,Spatial Geography,Census tracts 2010
+descriptn,Description,MAPC's Housing Submarket Typology classifies each census tract in the MAPC region into one of seven housing submarkets. The census tracts have been clustered into submarkets using a latent profile analysis. This dataset includes variables used in the LPA (tagged with "LPA variable") and variables MAPC has overlaid on the submarkets to understand the people, history, conditions, and opportunities within each submarket (tagged with "Overlay variable").
+datesavail,Dates Available,
+coverage,Coverage,MAPC region (101 municipalities)
+universe,Universe,
+creator,Creator/Source,MAPC
+publisher,Publisher,MAPC
+contributr,Contributors,
+createdate,CreationDate,2020
+moddate,ModificationDate,2020
+ct10_id,Census Tract 2010,Census tract 2010 ID; Census 2010; Geography variable
+submkt_id,Housing Submarket ID,Submarket which the tract is a part of; MAPC analysis; LPA variable
+muni,Municipality,Municipality in which the tract is located; Census 2010; Geography variable
+hdens10,Housing Unit Density,Housing Unit Density (units per square mile); MAPC Calculation of ACS 2017 5-year estimates; LPA variable
+mhi,Median Household Income ($),Median Household Income ($); ACS 2017 5-year estimates; LPA variable
+incu35_p,Households with Income $0-$35K (%),Percent of households with income $0-$35K; ACS 2017 5-year estimates; LPA variable
+inc3574_p,Households with Income $35-$75K (%),Percent of households with income $35-$75K; ACS 2017 5-year estimates; LPA variable
+inc7599_p,Households with Income $75-$100K (%),Percent of households with income $75-$100K; ACS 2017 5-year estimates; LPA variable
+inc100o_p,Households with Income $100K+ (%),Percent of households with income $100K+; ACS 2017 5-year estimates; LPA variable
+inc150o_p,Households with Income $150K+ (%),Percent of households with income $150K+; ACS 2017 5-year estimates; LPA variable
+medconr,Median Contract Rent ($),Median contract rent ($); ACS 2017 5-year estimates; LPA variable
+medhv,Median Home Value ($),Median home value ($); ACS 2017 5-year estimates; LPA variable
+rhu_p,Renter-Occupied Housing Units (%),Percent renter-occupied housing units; ACS 2017 5-year estimates; LPA variable
+bizbuy17_p,Residential Business Buyer Sales (%),Percent of residential sales purchased by business buyers (%); MAPC analysis of Warren Group 2018; LPA variable
+fd17_p,Residential Foreclosures (%),Percent of residential sales with a foreclosure deed; MAPC analysis of Warren Group 2018; LPA variable
+cash17_p,Cash Sales (%) ,Percent of residential sales paid in cash; MAPC analysis of Warren Group 2018; LPA variable
+sales_pch,Change in Residential Home Sales (%),Percent change in residential home sales from 2003-2007 to 2012-2016; MAPC analysis of Warren Group 2018; LPA variable
+vacu_p,Vacant Units (%),Percent of housing units that are vacant; ACS 2017 5-year estimates; LPA variable
+bdrm3o_p,HUD Subsidized Housing Units (%),Percent of housing units that are HUD subsidized; ACS & HUD Picture of Subsidized Households; LPA variable
+yrblt59_p,Three-Bedroom Units (%),Three-Bedroom Units (%); ACS 2017 5-year estimates; LPA variable
+yblt6099_p,Units Built 1959 or Earlier (%),Units Built 1959 or Earlier (%); ACS 2017 5-year estimates; LPA variable
+yrblt00_p,Units Built 1960-1999 (%),Units Built 1960-1999 (%); ACS 2017 5-year estimates; LPA variable
+hudp_hu,Units Built 2000 or Later (%),Units Built 2000 or Later (%); ACS 2017 5-year estimates; LPA variable
+u1_p,1 Unit (%),1 Unit (%); ACS 2017 5-year estimates; LPA variable
+u2_4_p,2-4 Units (%),2-4 Units (%); ACS 2017 5-year estimates; LPA variable
+u5ov_p,5+ Units (%),5+ Units (%); ACS 2017 5-year estimates; LPA variable
+ch_medhv_p,Change in Median Home Value (%),Change in Median Home Value 2000 to 2017 (%); MAPC analysis of Warren Group 2018; LPA variable
+ch_medcr_p,Change in Median Contract Rent (%),Change in Median Contract Rent (%); MAPC analysis of ACS 2010 5-year estimates and ACS 2017 5-year estimates; LPA variable
+ch_rhu_p,Change in Renters (%),Change in Renters (%); MAPC analysis of US Census 2000 data and ACS 2017 5-year estimates; LPA variable
+ch_pop_p,Change in Population (%),Change in Population (%); MAPC analysis of US Census 2000 data and ACS 2017 5-year estimates; LPA variable
+ch_hdens_p,Change Housing Unit Density (%),Change Housing Unit Density (%); MAPC analysis of US Census 2000 data and ACS 2017 5-year estimates; LPA variable
+totpop,Total Population,Population; ACS 2014-2018 5-year estimates; Overlay variable
+nhaa,Black Population,Non-Hispanic Black population; ACS 2014-2018 5-year estimates; Overlay variable
+nhaa_me,Black Population MOE,Non-Hispanic Black population margin of error; ACS 2014-2018 5-year estimates; Overlay variable
+nhas,Asian Population,Non-Hispanic Asian population; ACS 2014-2018 5-year estimates; Overlay variable
+nhas_me,Asian Population MOE,Non-Hispanic Asian population margin of error; ACS 2014-2018 5-year estimates; Overlay variable
+nhwhi,White Population,Non-Hispanic White population; ACS 2014-2018 5-year estimates; Overlay variable
+nhwhi_me,White Population MOE,Non-Hispanic White population marginof error; ACS 2014-2018 5-year estimates; Overlay variable
+lat,Latinx Population,Hispanic population; ACS 2014-2018 5-year estimates; Overlay variable
+lat_me,Latinx Population MOE,Hispanic population margin of error; ACS 2014-2018 5-year estimates; Overlay variable
+nhaa_p,Percent Black,Percent of population that is non-Hispanic Black; ACS 2014-2018 5-year estimates; Overlay variable
+nhaa_mep,Percent Black MOE,Percent of population that is non-Hispanic Black margin of error; ACS 2014-2018 5-year estimates; Overlay variable
+nhas_p,Percent Asian,Percent of population that is non-Hispanic Asian margin of error; ACS 2014-2018 5-year estimates; Overlay variable
+tbl_table,Table Name,hous_submarkets_ct
+nhas_mep,Percent Asian MOE,Percent of population that is non-Hispanic Asian; ACS 2014-2018 5-year estimates; Overlay variable
+lat_p,Percent Latinx,Percent of population that is Hispanic/Latinx; ACS 2014-2018 5-year estimates; Overlay variable
+lat_mep,Percent Latinx MOE,Percent of population that is Hispanic/Latinx margin of error; ACS 2014-2018 5-year estimates; Overlay variable
+nhwhi_p,Percent White,Percent of population that is non-Hispanic White; ACS 2014-2018 5-year estimates; Overlay variable
+nhwhi_mep,Percent White MOE,Percent of population that is non-Hispanic White margin of error; ACS 2014-2018 5-year estimates; Overlay variable
+delt_nhaa,Change in Black population since 2000,Change in Black population since 2000; ACS 2014-2018 5-year estimates and U.S. Decennial Census 2010; Overlay variable
+delt_nhas,Change in Asian population since 2000,Change in Asian population since 2000; ACS 2014-2018 5-year estimates and U.S. Decennial Census 2010; Overlay variable
+delt_lat,Change in Latinx population since 2000,Change in Latinx population since 2000; ACS 2014-2018 5-year estimates and U.S. Decennial Census 2010; Overlay variable
+delt_nhwhi,Change in White population since 2000,Change in White population since 2000; ACS 2014-2018 5-year estimates and U.S. Decennial Census 2010; Overlay variable
+delt_nhaap,Percent change in Black population,Percent change in Black population since 2000 (percent of tract population); ACS 2014-2018 5-year estimates and U.S. Decennial Census 2010; Overlay variable
+delt_nhasp,Percent change in Asian population,Percent change in Asian population since 2000 (percent of tract population); ACS 2014-2018 5-year estimates and U.S. Decennial Census 2010; Overlay variable
+delt_latp,Percent change in Latinx population,Percent change in Latinx population since 2000 (percent of tract population); ACS 2014-2018 5-year estimates and U.S. Decennial Census 2010; Overlay variable
+delt_nhwhp,Percent change in White population,Percent change in White population since 2000 (percent of tract population); ACS 2014-2018 5-year estimates and U.S. Decennial Census 2010; Overlay variable
+dltnhaamep,Percent change in Black population MOE,Percent change in Black population since 2000 margin of error; ACS 2014-2018 5-year estimates and U.S. Decennial Census 2010; Overlay variable
+dltnhasmep,Percent change in Asian population MOE,Percent change in Asian population since 2000 margin of error; ACS 2014-2018 5-year estimates and U.S. Decennial Census 2010; Overlay variable
+dltlatmep,Percent change in Latinx population MOE,Percent change in Latinx population since 2000 margin of error; ACS 2014-2018 5-year estimates and U.S. Decennial Census 2010; Overlay variable
+dltnhwhmep,Percent change in White population MOE,Percent change in White population since 2000 margin of error; ACS 2014-2018 5-year estimates and U.S. Decennial Census 2010; Overlay variable
+fb,Foreign Born Population,Population born outside the United States and territories; ACS 2014-2018 5-year estimates; Overlay variable
+fb_me,Foreign Born Population MOE,Population born outside the United States and territories margin of error; ACS 2014-2018 5-year estimates; Overlay variable
+noncit,Non-Citizen Population,Population that are not United States citizens; ACS 2014-2018 5-year estimates; Overlay variable
+noncit_me,Non-Citizen Population MOE,Population that are not United States citizens margin of error; ACS 2014-2018 5-year estimates; Overlay variable
+fb_p,Percent Foreign Born,Percent of population born outside the United States and territories; ACS 2014-2018 5-year estimates; Overlay variable
+fb_mep,Percent Foreign Born MOE,Percent of population born outside the United States and territories margin of error; ACS 2014-2018 5-year estimates; Overlay variable
+noncit_p,Percent Non-Citizens,Percent of population that are not United States citizens; ACS 2014-2018 5-year estimates; Overlay variable
+noncit_mep,Percent Non-Citizens MOE,Percent of population that are not United States citizens margin of error; ACS 2014-2018 5-year estimates; Overlay variable
+enlim,Limited-English Speakers,Population speaking English not well and population speaking English not at all; ACS 2014-2018 5-year estimates; Overlay variable
+enlim_me,Limited-English Speakers MOE,Population speaking English not well and population speaking English not at all margin of error; ACS 2014-2018 5-year estimates; Overlay variable
+enlim_p,Percent Limited-English Speakers,Percent of population speaking English not well or not at all; ACS 2014-2018 5-year estimates; Overlay variable
+enlim_mep,Percent Limited-English Speakers MOE,Percent of population speaking English not well or not at all margin of error; ACS 2014-2018 5-year estimates; Overlay variable
+hh,Number of households,Number of households; ACS 2014-2018 5-year estimates; Overlay variable
+hh_me,Number of households MOE,Number of households; ACS 2014-2018 5-year estimates margin of error; Overlay variable
+hhkids,Households with kids,Households with kids under 18; ACS 2014-2018 5-year estimates; Overlay variable
+hhkidsme,Households with kids MOE,Households with kids under 18 margin of error; ACS 2014-2018 5-year estimates; Overlay variable
+hhkids_p,Percent of households with kids,Percent of households with kids under 18; ACS 2014-2018 5-year estimates; Overlay variable
+hhkidsmep,Percent of households with kids MOE,Percent of households with kids under 18 margin of error; ACS 2014-2018 5-year estimates; Overlay variable
+hh65o,Households with someone 65 or older,Households with one or more member 65 or over; ACS 2014-2018 5-year estimates; Overlay variable
+hh65osme,Households with someone 65 or older MOE,Households with one or more member 65 or over margin of error; ACS 2014-2018 5-year estimates; Overlay variable
+hh65o_p,Percent of households with someone 65 or older,Percent of households with one or more member 65 or over; ACS 2014-2018 5-year estimates; Overlay variable
+hh65osmep,Percent of households with someone 65 or older MOE,Percent of households with one or more member 65 or over margin of error; ACS 2014-2018 5-year estimates; Overlay variable
+mth_achv,Math achievement score,MCAS math achievement scores for 3rd graders; Department of Elementary and Secondary Education 2019; Overlay variable
+mth_grwth,Math achievement growth,MCAS math achievement score growth from 3rd to 8th grade; Department of Elementary and Secondary Education 2019; Overlay variable
+ela_achv,ELA achievement score,MCAS math achievement scores for 3rd graders; Department of Elementary and Secondary Education 2019; Overlay variable
+ela_grwth,ELA achievement growth,MCAS English and language arts achievement score growth from 3rd to 8th grade; Department of Elementary and Secondary Education 2019; Overlay variable
+bapl,Population holding a Bachelors plus,Population holding a Bachelors degree or higher; ACS 2014-2018 5-year estimates; Overlay variable
+bapl_me,Population holding a Bachelors plus MOE,Population holding a Bachelors degree or higher margin of error; ACS 2014-2018 5-year estimates; Overlay variable
+bapl_p,Percent holding a Bachelors plus,Percent of population holding a Bachelors degree or higher; ACS 2014-2018 5-year estimates; Overlay variable
+bapl_mep,Percent holding a Bachelors plus MOE,Percent of population holding a Bachelors degree or higher margin of error; 2014-2018 5-year estimates; Overlay variable
+delt_bapl,Change in population with Bachelors plus since 2006-2010,Change in population holding a Bachelors degree or higher since 2006-2010 ; ACS 2014-2018 5-year estimates and ACS 2006-2010 5-year estimates; Overlay variable
+deltbaplme,Change in population with Bachelors plus since 2006-2010 MOE,Change in population holding a Bachelors degree or higher since 2006-2010 margin of error; ACS 2014-2018 5-year estimates and ACS 2006-2010 5-year estimates; Overlay variable
+delt_baplp,Percent change Bachelors plus,Change in population holding a Bachelors degree or higher since 2006-2010 (percent of tract population); ACS 2014-2018 5-year estimates and ACS 2006-2010 5-year estimates; Overlay variable
+deltbplmep,Percent change Bachelors plus MOE,Change in population holding a Bachelors degree or higher since 2006-2010 (percent of tract population) margin of error; ACS 2014-2018 5-year estimates and ACS 2006-2010 5-year estimates; Overlay variable
+jobs45trn,Mean jobs in 45 minutes by transit,Population-weighted average number of jobs accessible by transit across census 2010 blocks in tract; University of Minnesota Accessibility Observatory 2017; Overlay variable
+unemp,Population unemployed,Population unemployed; ACS 2014-2018 5-year estimates; Overlay variable
+unemp_me,Population unemployed MOE,Population unemployed margin of error; ACS 2014-2018 5-year estimates; Overlay variable
+unemp_p,Percent unemployed,Percent of population unemployed; ACS 2014-2018 5-year estimates; Overlay variable
+unemp_mep,Percent unemployed MOE,Percent of population unemployed; ACS 2014-2018 5-year estimates margin of error; Overlay variable
+cb_50,Severely cost burdened,Households paying more than 50% of income for housing; ACS 2014-2018 5-year estimates; Overlay variable
+cb_50_me,Severely cost burdened MOE,Households paying more than 50% of income for housing margin of error; ACS 2014-2018 5-year estimates; Overlay variable
+cb_50_p,Percent severely cost burdened,Percent of households paying more than 50% of income for housing; ACS 2014-2018 5-year estimates; Overlay variable
+cb_50_mep,Percent severely cost burdened MOE,Percent of households paying more than 50% of income for housing margin of error; ACS 2014-2018 5-year estimates; Overlay variable
+sfha_p,Share of homes in 1% SFHA,Share of homes in 1% SFHA; MAPC 2019 and FEMA 2017; Overlay variable
+surge41_p,Storm surge flooding 3.39 ft SLR,Share of homes with 1% + annual chance of storm surge flooding 3.39 ft SLR; MassDOT and MAPC 2019; Overlay variable
+surge8_p,Storm surge flooding 8 in SLR,Share of homes with 1% + annual chance of storm surge flooding 8in SLR; MassDOT and MAPC 2019; Overlay variable
+dgrunits,Heat island temperature increase (F),Average home's surface heat island temperature increase (F); USGS and MAPC 2019; Overlay variable
+holcna_pct,No HOLC grade percent,Share of tract area without known HOLC grade; University of Richmond Digital Scholarship Lab 2020; Overlay variable
+holca_pct,HOLC grade A percent,Share of tract area in HOLC grade A; University of Richmond Digital Scholarship Lab 2020; Overlay variable
+holcb_pct,HOLC grade B percent,Share of tract area in HOLC grade B; University of Richmond Digital Scholarship Lab 2020; Overlay variable
+holcc_pct,HOLC grade C percent,Share of tract area in HOLC grade C; University of Richmond Digital Scholarship Lab 2020; Overlay variable
+holcd_pct,HOLC grade D percent,Share of tract area in HOLC grade D; University of Richmond Digital Scholarship Lab 2020; Overlay variable
