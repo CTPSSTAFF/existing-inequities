@@ -51,13 +51,15 @@ br_mpo_geog <- ma_muni_geog %>%
 boundary <- br_mpo_geog %>% st_union(by_feature= F) %>% 
   st_as_sf() %>% 
   mutate(id = "Boston Region MPO") %>% 
-  select(id, geometry= x)
+  select(id, geometry= x) %>% 
+  st_transform(26986)
 
 sub_regions <- mpo_subregions %>% 
   left_join(br_mpo_geog) %>% 
   st_as_sf() %>% 
   group_by(subregion) %>% 
-  summarize(geometry = st_union(geometry))
+  summarize(geometry = st_union(geometry)) %>% 
+  st_transform(26986)
 
 # the MAPC housing subregions use 2010 census tracts
 ma_tract10_geog <- get_decennial(geography= "tract", 
@@ -69,7 +71,8 @@ submarkets_by_tract <- ma_tract10_geog %>%
   filter(GEOID %in% mapc_housing$ct10_id) %>%
   left_join(select(mapc_housing, GEOID, ct10_id, submkt_id, submarket, muni)) %>% 
   st_as_sf() %>% 
-  select(GEOID, submkt_id,submarket, muni )
+  select(GEOID, submkt_id,submarket, muni ) %>% 
+  st_transform(26986)
 
 submarkets <- submarkets_by_tract %>% 
   group_by(submkt_id, submarket) %>% 
