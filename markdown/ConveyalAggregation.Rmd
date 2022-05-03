@@ -1,0 +1,155 @@
+---
+title: "Aggregating Conveyal Regional Analyses"
+author: "Emily Domanico, CTPS"
+date: '2022-05-02'
+output:
+  html_document:
+    df_print: paged
+---
+
+The purpose of this file is to work through an example of how to aggregate regional analysis results from conveyal.
+The example data used here is a regional analysis that measures access to non-emergency healthcare destinations in the MPO region.
+
+The goal here is to work out how to aggregate results so that we can report on how 
+ 
+
+```{r}
+# Raster processing
+library(tidyverse)
+library(sf)
+library(stars)
+library(mapview)
+library(kableExtra)
+
+# INPUTS ####
+# read in census geog layers
+mpo_census_tracts<- st_read("output/demographic_data.gpkg", layer= "tracts_acs_dec_2020") %>% 
+  st_transform(3857)
+boundary<- read_rds("data/boundary.rds") %>% 
+  st_transform(3857) # needs to be psudo-mercator for raster operations
+
+# read in geotiff
+access_layer<- read_stars("data/ConveyalRuns/HealthCareTests/HealthCare_NonEmergency_AMPeak_TransitBusRT_45min_50pct.geotiff") 
+destination <- "Non-emergency Healthcare"
+time_period <- "AM Peak"
+modes <- "Transit (Bus and Rapid Transit only)"
+travel_time <- "45 minutes"
+
+# read in destinations used for conveyal analysis
+dest<- st_read("output/DestinationData.gpkg", layer= "healthcare_PT") %>% 
+  st_transform(3857)
+
+```
+
+Let see what we're staring with:
+
+```{r}
+
+mapview(mpo_census_tracts, zcol= 'percent_min')+
+  mapview(mpo_census_tracts, zcol = 'percent_lowinc')+
+  dest+
+  boundary+
+  access_layer
+
+```
+
+
+Now, let's start some processing.
+First, crop the raster to the boundary extent.
+
+```{r}
+# CROP Access Opps to the MPO Boundary ####
+# crop raster by mpo census geog
+access_layer_crop <- st_crop(access_layer, boundary)
+
+```
+```{r}
+ggplot()+
+  geom_stars(data=access_layer_crop, alpha = .7)+
+  # geom_sf(data=access_contours, aes(color = value),size=.8, show.legend = F)+
+  # geom_contour(data=access_layer_crop)+
+  geom_sf(data=boundary,size=1,color="light gray", fill= NA)+
+  coord_sf()+
+  scale_fill_viridis_c(option = "D", na.value = "transparent",
+                       name = paste0(destination, "\n Opportunities Accessible"))+
+  # scale_color_viridis_c(option = "D", na.value = "transparent",
+  #                      name = paste0(destination, "\n Opportunities Accessible"))+
+  ggtitle(paste0("Access to ", destination, "\nwith ",
+                                    modes, "\nin ", travel_time))+
+  labs(caption= paste0("Time period: ", time_period))+
+  theme_void()
+
+```
+
+
+
+
+```{r}
+# Aggregate by Population group ####
+
+# Option 1: find the average number of destinations accessible within a census tract
+
+# This process finds the average number of opportunities accessible for cells that are within a given census tract geometry. Then multiplies the number of people from a given population in the tract by the average number of opportunities accessible to them.
+
+# http://132.72.155.230:3838/r/combining-rasters-and-vector-layers.html#extracting-to-polygons-single-band
+opps_by_tract<- access_layer_crop %>% 
+  aggregate(mpo_census_tracts, mean, na.rm=T) %>% 
+  st_as_sf()
+# rename the avg opporutnities column to "opps"
+colnames(opps_by_tract)[1]<- "opps"
+
+# join tract level demographic data by matching tract geog used to aggregate
+opps_by_tract_demo<- mpo_census_tracts %>% 
+  st_join(opps_by_tract, join = st_equals) %>% 
+  mutate(
+    people_opps = round(pop_dec*opps),
+    opps_per_person = ifelse(pop_dec  ==0, 0, round(opps/pop_dec)),
+    min_opps = round(minority*opps),
+    nonmin_opps = round(nonminority*opps),
+    lowinc_opps = round(lowinc*opps),
+    nonlowinc_opps = round(nonlowinc*opps))%>%
+  mutate(id= row_number())
+  #select(GEOID, ends_with("_opps"))
+```
+
+
+```{r}
+opps_by_tract_demo %>% 
+  select(GEOID, NAME, ends_with("_opps")) %>% 
+  st_drop_geometry() %>% 
+  head(200) %>% 
+  kbl() %>% 
+  kable_styling()
+```
+```{r}
+mapview(select(opps_by_tract_demo,GEOID, NAME, ends_with("_opps")), zcol = "min_opps", layer.name = "Minority Opps")+
+  mapview(select(opps_by_tract_demo,GEOID, NAME, ends_with("_opps")), zcol = "nonmin_opps", layer.name = "Nonminority Opps")+
+  mapview(select(opps_by_tract_demo,GEOID, NAME, ends_with("_opps")), zcol = "lowinc_opps", layer.name = "Low-Income Opps")+
+  mapview(select(opps_by_tract_demo,GEOID, NAME, ends_with("_opps")), zcol = "nonlowinc_opps", layer.name = "Non-low-income Opps")
+```
+
+
+
+
+```{r}
+# Option 2 allocate opportunities from each raster cell demo populations using areas overlap and 
+tracts <- mpo_census_tracts %>% 
+  mutate(area_tract = unclass(st_area(geom)))
+
+access_crop_sf <- access_layer_crop %>% 
+  st_as_sf() %>%  # convert raster to sf object (each row is a raster cell as vector)
+  rename(opps = 1) 
+
+total_opps <- sum(access_crop_sf$opps)
+avg_opps <- mean(access_crop_sf$opps)
+
+test<- access_crop_sf %>% 
+  st_intersection(select(tracts, GEOID, percent_min,minority, area_tract)) %>% 
+  mutate(area_int = unclass(st_area(geometry))) %>% 
+  mutate(pct_overlap = area_int/area_tract) 
+
+test1 <- test %>% filter(GEOID == "25025071101")
+
+plot(test1)
+```
+
