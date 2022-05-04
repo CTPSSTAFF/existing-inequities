@@ -7,7 +7,9 @@ library(sf)
 library(mapview)
 `%notin%` <- Negate(`%in%`)
 
-boundary<- read_rds("data/boundary.rds") %>% 
+# boundary<- read_rds("data/boundary.rds") 
+boundary <- ma_muni_geog %>% # from agg boundaries muni pull
+  filter(grepl("Brookline", NAME)) %>% 
   st_transform(26986)
 
 
@@ -35,13 +37,32 @@ open_space <- open_space %>%
   mutate(type = "Open Space") %>% 
   mutate(area_acres = round(units::drop_units(st_area(.))/4046.8564224,3)) %>% 
   st_filter(boundary, .predicate = st_intersects)
-# TODO: Consider merging continuous open space so that a minimum area threshold has more meaning
 
 # Shared Use Paths
 # Select those that are at least partially in the MPO region (no minimum percentage.).
 paths <- paths %>% 
-  st_filter(boundary, .predicate = st_intersects)
+  select(objectid, local_name) %>% 
+  st_filter(boundary, .predicate = st_intersects) 
+
 # TODO: consider buffering paths and combining with open space?
+paths_buf <- paths %>% 
+  st_buffer(3) # 3 meter buffer to paths
+
+open_wPaths <- open_space %>% 
+  # st_buffer(20) %>% # 20m buffer on open space to grab closest network
+  st_union() %>%
+  st_union(paths_buf) # %>% 
+  # st_combine() %>% 
+  # st_as_sf()
+mapview(open_wPaths)
+
+osm_edges <- st_read("data/BrooklineOSMNetwork.gpkg", layer ="edges") %>% 
+  st_transform(26986)
+
+test<- st_intersection(osm_edges, 
+                       st_cast(open_wPaths, "MULTILINESTRING", group_or_split= FALSE))
+
+mapview(open_wPaths)+osm_edges+ test +boundary
 
 
 # SAVE DATA
