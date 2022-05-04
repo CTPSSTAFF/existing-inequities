@@ -17,7 +17,7 @@ The goal here is to work out how to aggregate results so that we can answer the 
 "How does access to basic healthcare services differ between EJ and non-EJ populations?"
  
 
-```{r setup, warnings=F, message=FALSE}
+```{r setup, warnings=F, message=FALSE, results='hide'}
 # Raster processing
 library(tidyverse)
 library(sf)
@@ -139,6 +139,11 @@ demo_summary_by_tract <- opps_by_tract_demo %>%
 pct_opps_min_tract = demo_summary_by_tract$min_opps[1]/(demo_summary_by_tract$min_opps[1]+demo_summary_by_tract$nonmin_opps)
 pct_opps_lowinc_tract = demo_summary_by_tract$lowinc_opps[1]/(demo_summary_by_tract$lowinc_opps[1]+demo_summary_by_tract$nonlowinc_opps)
 
+
+demo_summary_by_tract_commtype <- opps_by_tract_demo %>% 
+  st_join(communitytypes, largest = T) %>% # TODO: Fix munis that belong to mult subregions
+
+
 ```
 
 ```{r warnings=F, message=FALSE}
@@ -232,8 +237,8 @@ demo_summary_by_cell <- opps_by_cell_demo %>%
             lowinc_opps = sum(lowinc_opps, na.rm=T),
             nonlowinc_opps = sum(nonlowinc_opps, na.rm=T))
 
-pct_opps_min_cell = demo_summary_by_tract$min_opps[1]/(demo_summary_by_tract$min_opps[1]+demo_summary_by_tract$nonmin_opps)
-pct_opps_lowinc_cell = demo_summary_by_tract$lowinc_opps[1]/(demo_summary_by_tract$lowinc_opps[1]+demo_summary_by_tract$nonlowinc_opps)
+pct_opps_min_cell = demo_summary_by_cell$min_opps[1]/(demo_summary_by_cell$min_opps[1]+demo_summary_by_cell$nonmin_opps)
+pct_opps_lowinc_cell = demo_summary_by_cell$lowinc_opps[1]/(demo_summary_by_cell$lowinc_opps[1]+demo_summary_by_cell$nonlowinc_opps)
 ```
 ```{r}
 demo_summary_by_cell %>% 
@@ -249,29 +254,36 @@ Note: Percent of opportunities is the same for the two options, but the total pe
 
 
 ```{r warnings=F, message=FALSE, hide =T}
-# test <- opps_by_cell_demo %>% 
-#   select(-cell_id,-GEOIDs) %>% 
+# test <- opps_by_cell_demo %>%
+#   select(min_opps) %>%
 #   st_as_stars()
+# # 
+# 
+# access_contours <- st_contour(access_layer,
+#                               na.rm=T,
+#                               contour_lines = T,
+#                               breaks = seq(10,30000, by= 1000) )
+# colnames(access_contours)[1]<- "value"
 # 
 # ggplot()+
-#   geom_stars(data=test$pop_opps, alpha = .7)+
+#   geom_stars(data=test, alpha = .7)+
 #   # geom_sf(data=access_contours, aes(color = value),size=.8, show.legend = F)+
-#   # geom_contour(data=access_layer_crop)+
-#   # geom_sf(data=boundary,size=1,color="light gray", fill= NA)+
-#   # coord_sf()+
-#   # scale_fill_viridis_c(option = "D", na.value = "transparent",
-#   #                      name = paste0(destination, "\n Opportunities Accessible"))+
+#   geom_contour(data=test)+
+#   geom_sf(data=boundary,size=1,color="light gray", fill= NA)+
+#   coord_sf()+
+#   scale_fill_viridis_c(option = "D", na.value = "transparent",
+#                        name = paste0(destination, "\n Opportunities Accessible"))+
 #   # scale_color_viridis_c(option = "D", na.value = "transparent",
 #   #                      name = paste0(destination, "\n Opportunities Accessible"))+
-#   ggtitle(paste0("Access to ", destination, "\nwith ",
-#                                     modes, "\nin ", travel_time))+
+#   # ggtitle(paste0("Access to ", destination, "\nwith ",
+#   #                                   modes, "\nin ", travel_time))+
 #   # facet_wrap(~band)+
-#   coord_equal() +
-#     facet_wrap(~band) +
+#   # coord_equal() +
+#     # facet_wrap(~ba) +
 #     theme_void() +
-#     scale_x_discrete(expand=c(0,0))+
-#     scale_y_discrete(expand=c(0,0))+
-#   # 
+#     # scale_x_discrete(expand=c(0,0))+
+#     # scale_y_discrete(expand=c(0,0))+
+#   #
 #   # labs(caption= paste0("Time period: ", time_period))+
 #   theme_void()
 
