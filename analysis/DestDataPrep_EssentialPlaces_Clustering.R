@@ -42,17 +42,17 @@ ep$cluster_hdbscan <- clusters %>%
   pluck('cluster') %>% as.character()
 mapview(ep, zcol= 'cluster_hdbscan')
 
-# core distance is the distance from a particular feature that must be traveled 
-# to create a cluster with a minimum of x features including itself
-core <- ep 
-core$core_dist_hd <- clusters %>% pluck('coredist')
-buffered <- st_buffer(core, core$core_dist_hd)
-mapview(buffered, zcol= "cluster_hdbscan") + mapview(ep)
-
-dissolved <- buffered %>% 
-  group_by(cluster_hdbscan) %>% 
-  summarize(geometry= st_union(geom))
-mapview(filter(dissolved, cluster_hdbscan!= "0"), zcol='cluster_hdbscan')
+# # core distance is the distance from a particular feature that must be traveled 
+# # to create a cluster with a minimum of x features including itself
+# core <- ep 
+# core$core_dist_hd <- clusters %>% pluck('coredist')
+# buffered <- st_buffer(core, core$core_dist_hd)
+# mapview(buffered, zcol= "cluster_hdbscan") + mapview(ep)
+# 
+# dissolved <- buffered %>% 
+#   group_by(cluster_hdbscan) %>% 
+#   summarize(geometry= st_union(geom))
+# mapview(filter(dissolved, cluster_hdbscan!= "0"), zcol='cluster_hdbscan')
 
 
 # OPTION 3: OPTICS
@@ -85,8 +85,29 @@ icc<- subregions %>%
   filter(grepl("(ICC)", subregion))
 
 # mapview(ep,)+ icc
-# Divide clusters between inner core and non-innercore
-ep_alt <- ep
+
+# Divide clusters between inner core and non-innercore ####
+# Problem: we need to consider clusters that span the ICC boarder, without double counting destinations
+# Solution: All points belonging to DBSCAN clusters which have a centroid within the ICC boundary will be clustered included as DBSCAN clusters
+# Then, for all remaining points, run through the hdbscan clustering again and bind the two cluster results together
+
+# find the centroid for all DBSCAN clusters
+centriod_dbscan <- ep %>% 
+  filter(cluster_dbscan > 0) %>%
+  arrange(cluster_dbscan) %>% 
+  group_by(cluster_dbscan) %>%
+  summarize(
+    count = n(),
+    geometry = st_centroid(st_combine(geom))) %>% 
+  st_as_sf()
+
+# find DBSCAN clusters within the icc boundary
+icc_clusters <- centriod_dbscan %>% 
+  st_filter(icc, .predicate = st_within)
+
+ep_clustered <- ep %>% 
+  fitler()
+
 # identify point closest to cluster centroid
 centriod_dbscan <- ep_alt %>% 
   filter(cluster_dbscan>0) %>%
