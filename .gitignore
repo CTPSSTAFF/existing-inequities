@@ -19,3 +19,5 @@ data/Access to parks and recreation/openspace_gdb.zip
 analysis/conveyal_bikeLTS/
 GIS/
 analysis/TestGeocode.R
+notebooks/cache/
+notebooks/.ipynb_checkpoints/
