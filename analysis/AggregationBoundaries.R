@@ -18,8 +18,12 @@ br_mpo_munis <- read_csv("data/town_codes.csv") %>%
 
 # MPO Subregions
 # Pulled from MPO website:https://www.ctps.org/mpo_communities#subregion
-# Are these essentially the same as MAPC Community types?
 mpo_subregions <- read_csv("data/mpo_subcom.csv")
+
+# MAPC Community Types
+# pulled from http://www.mapc.org/wp-content/uploads/2017/09/Massachusetts-Community-Types-Summary-July_2008.pdf
+mapc_commtypes <- read_csv("data/communityTypesMA.csv") %>% 
+  mutate(municipality = ifelse(municipality == 'Manchester', 'Manchester-by-the-Sea', municipality))
 
 # MAPC Housing Sub-Markets
 # recommended by Tim Reardon
@@ -61,6 +65,9 @@ sub_regions <- mpo_subregions %>%
   summarize(geometry = st_union(geometry)) %>% 
   st_transform(26986)
 
+community_types <- br_mpo_geog %>% 
+  left_join(mapc_commtypes)
+
 # the MAPC housing subregions use 2010 census tracts
 ma_tract10_geog <- get_decennial(geography= "tract", 
                               variables = "P002001",
@@ -82,12 +89,15 @@ submarkets <- submarkets_by_tract %>%
 # Check with visualization #### 
 library(mapview)
 
-mapview(boundary)+ sub_regions + mapview(submarkets, zcol = 'submarket')
+mapview(boundary)+ sub_regions + 
+  mapview(submarkets, zcol = 'submarket')+ 
+  mapview(community_types, zcol='communityType')
 
 # SAVE DATA ####
 write_rds(boundary, "data/boundary.rds")
 
 # Save as GeoPackage
 st_write(boundary, "output/AggregationAreas.gpkg", "MPO_Boundary")
-st_write(sub_regions, "output/AggregationAreas.gpkg", "CommunityTypes", append = T)
+st_write(sub_regions, "output/AggregationAreas.gpkg", "MPO_SubRegions", append = T)
+st_write(community_types, "output/AggregationAreas.gpkg", "CommunityTypes", append = T)
 st_write(submarkets, "output/AggregationAreas.gpkg", "HousingSubmarkets", append = T)

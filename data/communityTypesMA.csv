@@ -1,0 +1,352 @@
+﻿municipality,communityType,subtype
+Boston,Inner Core,Metro Core Communities
+Cambridge,Inner Core,Metro Core Communities
+Chelsea,Inner Core,Metro Core Communities
+Everett,Inner Core,Metro Core Communities
+Malden,Inner Core,Metro Core Communities
+Revere,Inner Core,Metro Core Communities
+Somerville,Inner Core,Metro Core Communities
+Arlington,Inner Core,Streetcar Suburbs
+Belmont,Inner Core,Streetcar Suburbs
+Brookline,Inner Core,Streetcar Suburbs
+Medford,Inner Core,Streetcar Suburbs
+Melrose,Inner Core,Streetcar Suburbs
+Newton,Inner Core,Streetcar Suburbs
+Waltham,Inner Core,Streetcar Suburbs
+Watertown,Inner Core,Streetcar Suburbs
+Winthrop,Inner Core,Streetcar Suburbs
+Brockton,Regional Urban Centers,Major Regional Urban Centers
+Lawrence,Regional Urban Centers,Major Regional Urban Centers
+Lowell,Regional Urban Centers,Major Regional Urban Centers
+New Bedford,Regional Urban Centers,Major Regional Urban Centers
+Worcester,Regional Urban Centers,Major Regional Urban Centers
+Springfield,Regional Urban Centers,Major Regional Urban Centers
+Fall River,Regional Urban Centers,Major Regional Urban Centers
+Amesbury,Regional Urban Centers,Sub-Regional Urban Centers
+Amherst,Regional Urban Centers,Sub-Regional Urban Centers
+Attleboro,Regional Urban Centers,Sub-Regional Urban Centers
+Beverly,Regional Urban Centers,Sub-Regional Urban Centers
+Chicopee,Regional Urban Centers,Sub-Regional Urban Centers
+Clinton,Regional Urban Centers,Sub-Regional Urban Centers
+Easthampton,Regional Urban Centers,Sub-Regional Urban Centers
+Fitchburg,Regional Urban Centers,Sub-Regional Urban Centers
+Framingham,Regional Urban Centers,Sub-Regional Urban Centers
+Gardner,Regional Urban Centers,Sub-Regional Urban Centers
+Gloucester,Regional Urban Centers,Sub-Regional Urban Centers
+Haverhill,Regional Urban Centers,Sub-Regional Urban Centers
+Holyoke,Regional Urban Centers,Sub-Regional Urban Centers
+Leominster,Regional Urban Centers,Sub-Regional Urban Centers
+Lynn,Regional Urban Centers,Sub-Regional Urban Centers
+Marlborough,Regional Urban Centers,Sub-Regional Urban Centers
+Methuen,Regional Urban Centers,Sub-Regional Urban Centers
+Milford,Regional Urban Centers,Sub-Regional Urban Centers
+Newburyport,Regional Urban Centers,Sub-Regional Urban Centers
+North Adams,Regional Urban Centers,Sub-Regional Urban Centers
+Northampton,Regional Urban Centers,Sub-Regional Urban Centers
+ Norwood,Regional Urban Centers,Sub-Regional Urban Centers
+Peabody,Regional Urban Centers,Sub-Regional Urban Centers
+Pittsfield,Regional Urban Centers,Sub-Regional Urban Centers
+Provincetown,Regional Urban Centers,Sub-Regional Urban Centers
+Quincy,Regional Urban Centers,Sub-Regional Urban Centers
+Salem,Regional Urban Centers,Sub-Regional Urban Centers
+Somerset,Regional Urban Centers,Sub-Regional Urban Centers
+Southbridge,Regional Urban Centers,Sub-Regional Urban Centers
+Taunton,Regional Urban Centers,Sub-Regional Urban Centers
+Webster,Regional Urban Centers,Sub-Regional Urban Centers
+West Springfield,Regional Urban Centers,Sub-Regional Urban Centers
+Westfield,Regional Urban Centers,Sub-Regional Urban Centers
+Woburn,Regional Urban Centers,Sub-Regional Urban Centers
+Avon,Maturing Suburbs,Mature Suburban Towns
+Braintree,Maturing Suburbs,Mature Suburban Towns
+Burlington,Maturing Suburbs,Mature Suburban Towns
+Danvers,Maturing Suburbs,Mature Suburban Towns
+Dedham,Maturing Suburbs,Mature Suburban Towns
+Holbrook,Maturing Suburbs,Mature Suburban Towns
+Hull,Maturing Suburbs,Mature Suburban Towns
+Longmeadow,Maturing Suburbs,Mature Suburban Towns
+Marblehead,Maturing Suburbs,Mature Suburban Towns
+Maynard,Maturing Suburbs,Mature Suburban Towns
+Nahant,Maturing Suburbs,Mature Suburban Towns
+Natick,Maturing Suburbs,Mature Suburban Towns
+Needham,Maturing Suburbs,Mature Suburban Towns
+Randolph,Maturing Suburbs,Mature Suburban Towns
+Reading,Maturing Suburbs,Mature Suburban Towns
+Saugus,Maturing Suburbs,Mature Suburban Towns
+Stoneham,Maturing Suburbs,Mature Suburban Towns
+Stoughton,Maturing Suburbs,Mature Suburban Towns
+Swampscott,Maturing Suburbs,Mature Suburban Towns
+Wakefield,Maturing Suburbs,Mature Suburban Towns
+Weymouth,Maturing Suburbs,Mature Suburban Towns
+Winchester,Maturing Suburbs,Mature Suburban Towns
+Acton,Maturing Suburbs,Established Suburbs and Cape Cod Towns
+Ashland,Maturing Suburbs,Established Suburbs and Cape Cod Towns
+Barnstable,Maturing Suburbs,Established Suburbs and Cape Cod Towns
+Bedford,Maturing Suburbs,Established Suburbs and Cape Cod Towns
+Billerica,Maturing Suburbs,Established Suburbs and Cape Cod Towns
+Bourne,Maturing Suburbs,Established Suburbs and Cape Cod Towns
+Brewster,Maturing Suburbs,Established Suburbs and Cape Cod Towns
+Canton,Maturing Suburbs,Established Suburbs and Cape Cod Towns
+Chatham,Maturing Suburbs,Established Suburbs and Cape Cod Towns
+Chelmsford,Maturing Suburbs,Established Suburbs and Cape Cod Towns
+Concord,Maturing Suburbs,Established Suburbs and Cape Cod Towns
+Dennis,Maturing Suburbs,Established Suburbs and Cape Cod Towns
+Duxbury,Maturing Suburbs,Established Suburbs and Cape Cod Towns
+Eastham,Maturing Suburbs,Established Suburbs and Cape Cod Towns
+Falmouth,Maturing Suburbs,Established Suburbs and Cape Cod Towns
+Groveland,Maturing Suburbs,Established Suburbs and Cape Cod Towns
+Hingham,Maturing Suburbs,Established Suburbs and Cape Cod Towns
+Lexington,Maturing Suburbs,Established Suburbs and Cape Cod Towns
+Lincoln,Maturing Suburbs,Established Suburbs and Cape Cod Towns
+Lynnfield,Maturing Suburbs,Established Suburbs and Cape Cod Towns
+Mansfield,Maturing Suburbs,Established Suburbs and Cape Cod Towns
+Marshfield,Maturing Suburbs,Established Suburbs and Cape Cod Towns
+Mashpee,Maturing Suburbs,Established Suburbs and Cape Cod Towns
+Medfield,Maturing Suburbs,Established Suburbs and Cape Cod Towns
+Milton,Maturing Suburbs,Established Suburbs and Cape Cod Towns
+North Reading,Maturing Suburbs,Established Suburbs and Cape Cod Towns
+Orleans,Maturing Suburbs,Established Suburbs and Cape Cod Towns
+Pembroke,Maturing Suburbs,Established Suburbs and Cape Cod Towns
+Sandwich,Maturing Suburbs,Established Suburbs and Cape Cod Towns
+Scituate,Maturing Suburbs,Established Suburbs and Cape Cod Towns
+Sharon,Maturing Suburbs,Established Suburbs and Cape Cod Towns
+Southborough,Maturing Suburbs,Established Suburbs and Cape Cod Towns
+Sudbury,Maturing Suburbs,Established Suburbs and Cape Cod Towns
+Tewksbury,Maturing Suburbs,Established Suburbs and Cape Cod Towns
+Wayland,Maturing Suburbs,Established Suburbs and Cape Cod Towns
+Wellesley,Maturing Suburbs,Established Suburbs and Cape Cod Towns
+Wellfleet,Maturing Suburbs,Established Suburbs and Cape Cod Towns
+Weston,Maturing Suburbs,Established Suburbs and Cape Cod Towns
+Westwood,Maturing Suburbs,Established Suburbs and Cape Cod Towns
+Wilmington,Maturing Suburbs,Established Suburbs and Cape Cod Towns
+Yarmouth,Maturing Suburbs,Established Suburbs and Cape Cod Towns
+Abington,Developing Suburbs,Maturing New England Towns
+Acushnet,Developing Suburbs,Maturing New England Towns
+Adams,Developing Suburbs,Maturing New England Towns
+Agawam,Developing Suburbs,Maturing New England Towns
+Andover,Developing Suburbs,Maturing New England Towns
+Athol,Developing Suburbs,Maturing New England Towns
+Auburn,Developing Suburbs,Maturing New England Towns
+Ayer,Developing Suburbs,Maturing New England Towns
+Bellingham,Developing Suburbs,Maturing New England Towns
+Blackstone,Developing Suburbs,Maturing New England Towns
+Bridgewater,Developing Suburbs,Maturing New England Towns
+Brookfield,Developing Suburbs,Maturing New England Towns
+Carver,Developing Suburbs,Maturing New England Towns
+Cheshire,Developing Suburbs,Maturing New England Towns
+Dalton,Developing Suburbs,Maturing New England Towns
+Dartmouth,Developing Suburbs,Maturing New England Towns
+Deerfield,Developing Suburbs,Maturing New England Towns
+Dracut,Developing Suburbs,Maturing New England Towns
+Dudley,Developing Suburbs,Maturing New England Towns
+East Bridgewater,Developing Suburbs,Maturing New England Towns
+East Brookfield,Developing Suburbs,Maturing New England Towns
+East Longmeadow,Developing Suburbs,Maturing New England Towns
+Easton,Developing Suburbs,Maturing New England Towns
+Edgartown,Developing Suburbs,Maturing New England Towns
+Essex,Developing Suburbs,Maturing New England Towns
+Fairhaven,Developing Suburbs,Maturing New England Towns
+Foxborough,Developing Suburbs,Maturing New England Towns
+Franklin,Developing Suburbs,Maturing New England Towns
+Grafton,Developing Suburbs,Maturing New England Towns
+Great Barrington,Developing Suburbs,Maturing New England Towns
+Greenfield,Developing Suburbs,Maturing New England Towns
+Hadley,Developing Suburbs,Maturing New England Towns
+Halifax,Developing Suburbs,Maturing New England Towns
+Hamilton,Developing Suburbs,Maturing New England Towns
+Hanover,Developing Suburbs,Maturing New England Towns
+Hanson,Developing Suburbs,Maturing New England Towns
+Harwich,Developing Suburbs,Maturing New England Towns
+Holden,Developing Suburbs,Maturing New England Towns
+Holland,Developing Suburbs,Maturing New England Towns
+Holliston,Developing Suburbs,Maturing New England Towns
+Hopedale,Developing Suburbs,Maturing New England Towns
+Hudson,Developing Suburbs,Maturing New England Towns
+Ipswich,Developing Suburbs,Maturing New England Towns
+Kingston,Developing Suburbs,Maturing New England Towns
+Lakeville,Developing Suburbs,Maturing New England Towns
+Lancaster,Developing Suburbs,Maturing New England Towns
+Lee,Developing Suburbs,Maturing New England Towns
+Leicester,Developing Suburbs,Maturing New England Towns
+Lenox,Developing Suburbs,Maturing New England Towns
+Littleton,Developing Suburbs,Maturing New England Towns
+Ludlow,Developing Suburbs,Maturing New England Towns
+Manchester,Developing Suburbs,Maturing New England Towns
+Marion,Developing Suburbs,Maturing New England Towns
+Mattapoisett,Developing Suburbs,Maturing New England Towns
+Medway,Developing Suburbs,Maturing New England Towns
+Merrimac,Developing Suburbs,Maturing New England Towns
+Middleton,Developing Suburbs,Maturing New England Towns
+Millbury,Developing Suburbs,Maturing New England Towns
+Millis,Developing Suburbs,Maturing New England Towns
+Montague,Developing Suburbs,Maturing New England Towns
+Nantucket,Developing Suburbs,Maturing New England Towns
+Norfolk,Developing Suburbs,Maturing New England Towns
+North Andover,Developing Suburbs,Maturing New England Towns
+North Attleborough,Developing Suburbs,Maturing New England Towns
+North Brookfield,Developing Suburbs,Maturing New England Towns
+Northborough,Developing Suburbs,Maturing New England Towns
+Northbridge,Developing Suburbs,Maturing New England Towns
+Norton,Developing Suburbs,Maturing New England Towns
+Oak Bluffs,Developing Suburbs,Maturing New England Towns
+Orange,Developing Suburbs,Maturing New England Towns
+Oxford,Developing Suburbs,Maturing New England Towns
+Palmer,Developing Suburbs,Maturing New England Towns
+Plainville,Developing Suburbs,Maturing New England Towns
+Plymouth,Developing Suburbs,Maturing New England Towns
+Raynham,Developing Suburbs,Maturing New England Towns
+Rockland,Developing Suburbs,Maturing New England Towns
+Rockport,Developing Suburbs,Maturing New England Towns
+Rutland,Developing Suburbs,Maturing New England Towns
+Salisbury,Developing Suburbs,Maturing New England Towns
+Seekonk,Developing Suburbs,Maturing New England Towns
+Shirley,Developing Suburbs,Maturing New England Towns
+Shrewsbury,Developing Suburbs,Maturing New England Towns
+South Hadley,Developing Suburbs,Maturing New England Towns
+Spencer,Developing Suburbs,Maturing New England Towns
+Sturbridge,Developing Suburbs,Maturing New England Towns
+Sunderland,Developing Suburbs,Maturing New England Towns
+Swansea,Developing Suburbs,Maturing New England Towns
+Tisbury,Developing Suburbs,Maturing New England Towns
+Townsend,Developing Suburbs,Maturing New England Towns
+Walpole,Developing Suburbs,Maturing New England Towns
+Ware,Developing Suburbs,Maturing New England Towns
+Wareham,Developing Suburbs,Maturing New England Towns
+Wenham,Developing Suburbs,Maturing New England Towns
+West Boylston,Developing Suburbs,Maturing New England Towns
+West Bridgewater,Developing Suburbs,Maturing New England Towns
+Westborough,Developing Suburbs,Maturing New England Towns
+Westport,Developing Suburbs,Maturing New England Towns
+Whitman,Developing Suburbs,Maturing New England Towns
+Wilbraham,Developing Suburbs,Maturing New England Towns
+Williamstown,Developing Suburbs,Maturing New England Towns
+Ashburnham,Developing Suburbs,Country Suburbs
+Barre,Developing Suburbs,Country Suburbs
+Belchertown,Developing Suburbs,Country Suburbs
+Berkley,Developing Suburbs,Country Suburbs
+Berlin,Developing Suburbs,Country Suburbs
+Bolton,Developing Suburbs,Country Suburbs
+Boxborough,Developing Suburbs,Country Suburbs
+Boxford,Developing Suburbs,Country Suburbs
+Boylston,Developing Suburbs,Country Suburbs
+Carlisle,Developing Suburbs,Country Suburbs
+Charlton,Developing Suburbs,Country Suburbs
+Cohasset,Developing Suburbs,Country Suburbs
+Dighton,Developing Suburbs,Country Suburbs
+Douglas,Developing Suburbs,Country Suburbs
+Dover,Developing Suburbs,Country Suburbs
+Dunstable,Developing Suburbs,Country Suburbs
+Freetown,Developing Suburbs,Country Suburbs
+Georgetown,Developing Suburbs,Country Suburbs
+Granby,Developing Suburbs,Country Suburbs
+Groton,Developing Suburbs,Country Suburbs
+Hampden,Developing Suburbs,Country Suburbs
+Harvard,Developing Suburbs,Country Suburbs
+Hatfield,Developing Suburbs,Country Suburbs
+Hopkinton,Developing Suburbs,Country Suburbs
+Lunenburg,Developing Suburbs,Country Suburbs
+Mendon,Developing Suburbs,Country Suburbs
+Middleborough,Developing Suburbs,Country Suburbs
+Millville,Developing Suburbs,Country Suburbs
+Monson,Developing Suburbs,Country Suburbs
+Newbury,Developing Suburbs,Country Suburbs
+Norwell,Developing Suburbs,Country Suburbs
+Paxton,Developing Suburbs,Country Suburbs
+Pepperell,Developing Suburbs,Country Suburbs
+Plympton,Developing Suburbs,Country Suburbs
+Rehoboth,Developing Suburbs,Country Suburbs
+Rochester,Developing Suburbs,Country Suburbs
+Rowley,Developing Suburbs,Country Suburbs
+Sherborn,Developing Suburbs,Country Suburbs
+Southampton,Developing Suburbs,Country Suburbs
+Southwick,Developing Suburbs,Country Suburbs
+Sterling,Developing Suburbs,Country Suburbs
+Stow,Developing Suburbs,Country Suburbs
+Sutton,Developing Suburbs,Country Suburbs
+Templeton,Developing Suburbs,Country Suburbs
+Topsfield,Developing Suburbs,Country Suburbs
+Tyngsborough,Developing Suburbs,Country Suburbs
+Upton,Developing Suburbs,Country Suburbs
+Uxbridge,Developing Suburbs,Country Suburbs
+Warren,Developing Suburbs,Country Suburbs
+West Brookfield,Developing Suburbs,Country Suburbs
+West Newbury,Developing Suburbs,Country Suburbs
+Westford,Developing Suburbs,Country Suburbs
+Westminster,Developing Suburbs,Country Suburbs
+Winchendon,Developing Suburbs,Country Suburbs
+Wrentham ,Developing Suburbs,Country Suburbs
+Alford,Rural Towns,Rural Towns
+Aquinnah,Rural Towns,Rural Towns
+Ashby,Rural Towns,Rural Towns
+Ashfield,Rural Towns,Rural Towns
+Becket,Rural Towns,Rural Towns
+Bernardston,Rural Towns,Rural Towns
+Blandford,Rural Towns,Rural Towns
+Brimfield,Rural Towns,Rural Towns
+Buckland,Rural Towns,Rural Towns
+Charlemont,Rural Towns,Rural Towns
+Chester,Rural Towns,Rural Towns
+Chesterfield,Rural Towns,Rural Towns
+Chilmark,Rural Towns,Rural Towns
+Clarksburg,Rural Towns,Rural Towns
+Colrain,Rural Towns,Rural Towns
+Conway,Rural Towns,Rural Towns
+Cummington,Rural Towns,Rural Towns
+Egremont,Rural Towns,Rural Towns
+Erving,Rural Towns,Rural Towns
+Florida,Rural Towns,Rural Towns
+Gill,Rural Towns,Rural Towns
+Goshen,Rural Towns,Rural Towns
+Gosnold,Rural Towns,Rural Towns
+Granville,Rural Towns,Rural Towns
+Hancock,Rural Towns,Rural Towns
+Hardwick,Rural Towns,Rural Towns
+Hawley,Rural Towns,Rural Towns
+Heath,Rural Towns,Rural Towns
+Hinsdale,Rural Towns,Rural Towns
+Hubbardston,Rural Towns,Rural Towns
+Huntington,Rural Towns,Rural Towns
+Lanesborough,Rural Towns,Rural Towns
+Leverett,Rural Towns,Rural Towns
+Leyden,Rural Towns,Rural Towns
+Middlefield,Rural Towns,Rural Towns
+Monroe,Rural Towns,Rural Towns
+Monterey,Rural Towns,Rural Towns
+Montgomery,Rural Towns,Rural Towns
+Mount Washington,Rural Towns,Rural Towns
+New Ashford,Rural Towns,Rural Towns
+New Braintree,Rural Towns,Rural Towns
+New Marlborough,Rural Towns,Rural Towns
+New Salem,Rural Towns,Rural Towns
+Northfield,Rural Towns,Rural Towns
+Oakham,Rural Towns,Rural Towns
+Otis,Rural Towns,Rural Towns
+Pelham,Rural Towns,Rural Towns
+Peru,Rural Towns,Rural Towns
+Petersham,Rural Towns,Rural Towns
+Phillipston,Rural Towns,Rural Towns
+Plainfield,Rural Towns,Rural Towns
+Princeton,Rural Towns,Rural Towns
+Richmond,Rural Towns,Rural Towns
+Rowe,Rural Towns,Rural Towns
+Royalston,Rural Towns,Rural Towns
+Russell,Rural Towns,Rural Towns
+Sandisfield,Rural Towns,Rural Towns
+Savoy,Rural Towns,Rural Towns
+Sheffield,Rural Towns,Rural Towns
+Shelburne,Rural Towns,Rural Towns
+Shutesbury,Rural Towns,Rural Towns
+Stockbridge,Rural Towns,Rural Towns
+Tolland,Rural Towns,Rural Towns
+Truro,Rural Towns,Rural Towns
+Tyringham,Rural Towns,Rural Towns
+Wales,Rural Towns,Rural Towns
+Warwick,Rural Towns,Rural Towns
+Washington,Rural Towns,Rural Towns
+Wendell,Rural Towns,Rural Towns
+West Stockbridge,Rural Towns,Rural Towns
+West Tisbury,Rural Towns,Rural Towns
+Westhampton,Rural Towns,Rural Towns
+Whately,Rural Towns,Rural Towns
+Williamsburg,Rural Towns,Rural Towns
+Windsor,Rural Towns,Rural Towns
+Worthington ,Rural Towns,Rural Towns
