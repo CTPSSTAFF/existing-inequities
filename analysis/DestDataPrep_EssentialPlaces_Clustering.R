@@ -4,9 +4,12 @@
 # but we are not strictly sticking to the pandemic framework.
 
 # PACKAGES ####
+library(tidyverse)
 library(dbscan) # Density Based scanning package has an assortment of point clustering options
 library(sf)
 library(mapview)
+
+`%notin%` <- Negate(`%in%`)
 
 # INPUTS ####
 essential_places<- st_read( "output/DestinationData.gpkg", "essential_destinations_PT" )
@@ -80,7 +83,7 @@ cluster_summary <- ep %>%
 # while the DBSCAN does a better job of clustering within the urban/inner core region
 
 # Pull in subregion shapes
-subregions <- st_read("output/AggregationAreas.gpkg", 'CommunityTypes')
+subregions <- st_read("output/AggregationAreas.gpkg", 'MPO_SubRegions')
 icc<- subregions %>%
   filter(grepl("(ICC)", subregion))
 
@@ -106,8 +109,45 @@ icc_clusters <- centriod_dbscan %>%
   st_filter(icc, .predicate = st_within)
 
 ep_clustered <- ep %>% 
-  fitler()
+  filter(cluster_dbscan %in% icc_clusters$cluster_dbscan)
+# mapview(ep_clustered)+icc
 
+icc_clustered_poly <- ep_clustered %>%
+  # buffer points to smooth polygon shape
+  st_buffer(50) %>% 
+  group_by(cluster_dbscan) %>% 
+  summarize() %>% 
+  st_convex_hull() %>% 
+  st_as_sf()
+mapview(ep_clustered)+icc + icc_clustered_poly
+
+ep_hdbscan <- ep %>% 
+  filter(cluster_dbscan %notin% icc_clusters$cluster_dbscan) %>% 
+  # filter out unclustered within icc
+  filter(id %notin% st_filter(ep, icc, .predicate = st_within)$id) 
+
+# OPTION 2: Use a hierarchical density based scan (HDBSCAN) 
+# https://cran.r-project.org/web/packages/dbscan/vignettes/hdbscan.html
+# where the only input is min points
+
+clusters <- hdbscan(st_coordinates(ep_hdbscan), minPts = minPts)
+ep_hdbscan$cluster_hdbscan2 <- clusters %>% 
+  pluck('cluster') %>% as.character()
+
+nonicc_clusters <- ep_hdbscan %>% 
+  filter(cluster_hdbscan2>0) %>% 
+  st_buffer(50) %>% 
+  group_by(cluster_hdbscan2) %>% 
+  summarize() %>% 
+  st_convex_hull() %>% 
+  st_as_sf()
+
+mapview(ep_hdbscan, zcol= 'cluster_hdbscan2')+icc +nonicc_clusters
+
+mapview(icc_clustered)+ nonicc_clusters
+
+
+# TODO: identify the most central destination within a cluster, use this destination as the point to route to
 # identify point closest to cluster centroid
 centriod_dbscan <- ep_alt %>% 
   filter(cluster_dbscan>0) %>%
@@ -130,9 +170,7 @@ test$centroid_geom<-rep(centriod_dbscan$geometry,centriod_dbscan$count)
 test<- test %>% 
   mutate(dist = map2_dbl(.x= geom, .y= centroid_geom, ~unclass(st_distance(.x,.y))))
   
-# check boundaries and create a compromise cluster dataset
 
-# TODO: identify the most central destination within a cluster, use this destination as the point to route to
 
 
 # References and Background ####
