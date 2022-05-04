@@ -18,7 +18,7 @@ demo_data<- read_csv("data/demo_data_plan.csv") %>%
   filter(demo %in% c("incstatus", "minstatus")) %>% 
   filter(geogs == "tract")
 
-
+# Pull Demo Data for all of MA using functions ####
 # TODO: either use a mutate if function so doesn't need to splinter and filter or make helper function in census data pull
 minstatus_acs_dec <- demo_data %>% 
   filter(demo == "minstatus" & is.na(acs_tables) == F) %>% 
@@ -38,46 +38,59 @@ incstatus_acs_dec <- demo_data %>%
   mutate(demo_data = pmap(list(year_acs = y_acs, year_dec = y_dec,
                                state = state, census_geog = geogs,
                                universe_type = universe_type), inc_status_FPL_acs_dec))
-  
 
-# Minority Population ####
-minstatus_tract_dec <- min_status_by_tract_dec(year_dec, "MA")
+demo_data_ma <- bind_rows(minstatus_acs_dec,minstatus_dec,incstatus_acs_dec)  
+# write_rds(demo_data_ma, "data/demo_data_ma.rds")
+demo_data_ma<- demo_data_ma %>% 
+  filter(y_acs==2020)
 
-
-# mapview::mapview(dec_minstatus_tract, zcol = 'minority_pct')
-# 
-# ggplot(dec_minstatus_tract)+
-#   geom_sf(aes(fill = minority_pct, color = minority_pct))+
-#   coord_sf(crs= 26986 )+
-#   scale_fill_continuous(label = scales::percent)+
-#   scale_color_continuous(label = scales::percent) 
-
-# Low-income Population ####
-# 
-# 
-
-
-
-# Population within the BRMPO ####
+# Pull Census Geog ###
 ma_muni_geog <- get_decennial(geography= "county subdivision", 
                               variables = "P1_001N",
-                              year = year_dec,
-                              state = state,
+                              year = 2020,
+                              state = "MA",
                               geometry = T)
 br_mpo_geog <- ma_muni_geog %>% 
   filter(GEOID %in% br_mpo_munis$GEOID)
+# mapview(br_mpo_geog)
 
-mapview(br_mpo_geog)+ mapview(minstatus_tract_dec) +mapview(br_mpo_equity_pop, col.region = "blue")
+# 2020 census tracts in the MPO
+mpo_tract_geog<- get_acs(geography = "tract",
+                        variable = "B03002_001",
+                        year= 2020,
+                        state = "MA",
+                        geometry = T)%>% 
+  st_intersection(st_geometry(br_mpo_geog)) %>% 
+  select(GEOID, NAME)
 
-br_mpo_equity_pop <- minstatus_tract_dec %>% 
- st_intersection(select(br_mpo_geog, Subcounty= NAME, GEOID_Subcounty= GEOID))
-# st_write(br_mpo_equity_pop,"output/demo_brmpo_equity_pop.gpkg","equity_pop_2020")
 
-# Minority Status BRMPO Summary
-minstatus <- br_mpo_equity_pop %>% 
-  st_drop_geometry() %>% 
-  summarize(minority_pop= sum(minority_pop),
-            nonminority_pop = sum(nonminority_pop),
-            total_pop = sum(total_pop)) %>% 
-  mutate(minority_pct = minority_pop/total_pop,
-         nonminority_pct = nonminority_pop/total_pop)
+# Join 2020 demo data with geog
+mpo_tract_geog <- mpo_tract_geog %>% 
+  left_join(select(demo_data_ma$demo_data[[1]], pop_dec_adult= pop_dec, everything())) %>% 
+  left_join(demo_data_ma$demo_data[[2]]) %>% 
+  left_join(select(demo_data_ma$demo_data[[3]], pop_dec_adult = pop_dec, percent_lowinc_adult = percent_lowinc,
+                   percent_lowinc_moe_adult = percent_lowinc_moe, percent_nonlowinc_adult= percent_nonlowinc,
+                   percent_nonlowinc_moe_adult= percent_nonlowinc_moe, everything())) %>% 
+  left_join(demo_data_ma$demo_data[[4]]) %>% 
+  select(GEOID, NAME, starts_with("pop_dec"),starts_with("percent_"), everything())
+st_write(mpo_tract_geog, "output/demographic_data.gpkg","tracts_acs_dec_2020", driver= "GPKG")
+
+# save as shapefile for conveyal upload
+mpo_tract_geog<- st_read("output/demographic_data.gpkg", layer= "tracts_acs_dec_2020")
+mpo_tract_geog_shp <- mpo_tract_geog %>% 
+  select(GEOID, min = minority, nonmin = nonminority, minA= minority_adult, nonminA= nonminority_adult,
+         lowinc, nonlowinc, lowincA= lowinc_adult,nonlowincA= nonlowinc_adult)
+
+st_write(mpo_tract_geog_shp, "output/mpo_tract_2020.shp")
+# # mapview(mpo_tract_geog)+br_mpo_geog
+# # 2019 census tracts in the MPO
+# mpo_tract_geog19<- get_acs(geography = "tract",
+#                          variable = "B03002_001",
+#                          year= 2019,
+#                          state = "MA",
+#                          geometry = T) %>% 
+#   st_intersection(br_mpo_geog)
+# 
+# identical(select(mpo_tract_geog20,-c(variable, estimate,moe)), select(mpo_tract_geog19, -c(variable,estimate,moe)))
+# mapview(mpo_tract_geog19)+mpo_tract_geog20
+#            
