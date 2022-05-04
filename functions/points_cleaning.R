@@ -83,6 +83,15 @@ prep_pt_to_csv_keepID <- function(pt){
   return(pt)
 }
 
+prep_pt_to_csv_keepID_weight <- function(pt){
+  pt <- pt %>% 
+    rename(geometry= geom) %>%
+    select(geometry, type, id, weight) %>% 
+    st_transform(4269)
+  
+  return(pt)
+}
+
 pt_to_csv <- function(pt, output){
   pt<- pt %>% 
   mutate(lon = st_coordinates(.)[,1],
