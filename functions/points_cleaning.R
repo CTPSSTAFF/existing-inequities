@@ -75,8 +75,8 @@ prep_pt_to_csv <- function(pt){
 }
 
 prep_pt_to_csv_keepID <- function(pt){
+  if('geom' %in% colnames(pt)){pt <- pt %>% rename(geometry= geom) }
   pt <- pt %>% 
-    rename(geometry= geom) %>%
     select(geometry, type, id) %>% 
     st_transform(4269)
   
@@ -84,8 +84,8 @@ prep_pt_to_csv_keepID <- function(pt){
 }
 
 prep_pt_to_csv_keepID_weight <- function(pt){
-  pt <- pt %>% 
-    rename(geometry= geom) %>%
+  if('geom' %in% colnames(pt)){pt <- pt %>% rename(geometry= geom) }
+  pt<- pt %>%
     select(geometry, type, id, weight) %>% 
     st_transform(4269)
   
