@@ -269,6 +269,7 @@ ep1_pt <- ep1 %>%
   st_as_sf()
 
 # Option 2: only considered a place if at least two different general types included
+# TODO: Finalize. Picked option 2 with a threshold of at least 5 destinatins in the cluster
 ep2 <- ed_summary_byTypeGen %>% 
   rowwise() %>% 
   filter(sum(is.na(c(food, health, civic)))<2) %>% 
@@ -296,7 +297,7 @@ mapview(ep3)+ ep3_pt
 
 
 # Save Data ####
-gpkg ="DestinationData.gpkg"
+gpkg ="output/DestinationData.gpkg"
 st_write(ep1, gpkg, 'essentailPlace_Option1_POLY', append = T)
 st_write(ep1_pt, gpkg,'essentailPlace_Option1_PT', append = T)
 st_write(ep2, gpkg, 'essentailPlace_Option2_POLY', append = T)
@@ -305,13 +306,19 @@ st_write(ep3, gpkg, 'essentailPlace_Option3_POLY', append = T)
 st_write(ep3_pt, gpkg,'essentailPlace_Option3_PT', append = T)
 
 # Save Data for Conveyal ####
-ep_conveyal <- st_read("DestinationData.gpkg",'essentailPlace_Option3_PT') %>% 
+ep_conveyal <- st_read("output/DestinationData.gpkg",'essentailPlace_Option3_PT') %>% 
   rename(id= cluster, weight = n) %>% 
   mutate(type = 'essentialPlace') %>% 
   prep_pt_to_csv_keepID_weight()
 
 ep_csv <- ep_conveyal %>% 
   pt_to_csv("output/essentailPlaces.csv")
+
+# TODO: Describe essential places ####
+# https://r-graph-gallery.com/142-basic-radar-chart.html
+#https://observablehq.com/@stephanietuerk/radar-chart-small-multiples
+#https://kcuilla.github.io/reactablefmtr/articles/embed_img.html
+
 
 # References and Background ####
 # https://cran.r-project.org/web/packages/dbscan/vignettes/hdbscan.html
