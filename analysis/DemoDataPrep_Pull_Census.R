@@ -82,6 +82,7 @@ mpo_tract_geog_shp <- mpo_tract_geog %>%
          lowinc, nonlowinc, lowincA= lowinc_adult,nonlowincA= nonlowinc_adult)
 
 st_write(mpo_tract_geog_shp, "output/mpo_tract_2020.shp")
+
 # # mapview(mpo_tract_geog)+br_mpo_geog
 # # 2019 census tracts in the MPO
 # mpo_tract_geog19<- get_acs(geography = "tract",
