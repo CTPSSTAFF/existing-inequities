@@ -76,22 +76,5 @@ mpo_tract_geog <- mpo_tract_geog %>%
 st_write(mpo_tract_geog, "output/demographic_data.gpkg","tracts_acs_dec_2020", driver= "GPKG")
 
 # save as shapefile for conveyal upload
-mpo_tract_geog<- st_read("output/demographic_data.gpkg", layer= "tracts_acs_dec_2020")
-mpo_tract_geog_shp <- mpo_tract_geog %>% 
-  select(GEOID, min = minority, nonmin = nonminority, minA= minority_adult, nonminA= nonminority_adult,
-         lowinc, nonlowinc, lowincA= lowinc_adult,nonlowincA= nonlowinc_adult)
-
-st_write(mpo_tract_geog_shp, "output/mpo_tract_2020.shp")
-
-# # mapview(mpo_tract_geog)+br_mpo_geog
-# # 2019 census tracts in the MPO
-# mpo_tract_geog19<- get_acs(geography = "tract",
-#                          variable = "B03002_001",
-#                          year= 2019,
-#                          state = "MA",
-#                          geometry = T) %>% 
-#   st_intersection(br_mpo_geog)
-# 
-# identical(select(mpo_tract_geog20,-c(variable, estimate,moe)), select(mpo_tract_geog19, -c(variable,estimate,moe)))
-# mapview(mpo_tract_geog19)+mpo_tract_geog20
+mpo_tract_geog<- st_read("output/DemographicData.gpkg", layer= "tracts_acs_dec_2020")
 #            
