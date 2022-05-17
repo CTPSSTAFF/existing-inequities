@@ -324,7 +324,7 @@ ep_conveyal <- st_read("output/DestinationData.gpkg",'essentailPlace_Final_PT') 
   prep_pt_to_csv_keepID_weight()
 
 ep_csv <- ep_conveyal %>% 
-  pt_to_csv("output/essentailPlaces.csv")
+  pt_to_csv("output/essentialPlaces.csv")
 
 # TODO: Describe essential places ####
 # https://r-graph-gallery.com/142-basic-radar-chart.html
