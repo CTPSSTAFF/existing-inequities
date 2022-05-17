@@ -269,7 +269,6 @@ ep1_pt <- ep1 %>%
   st_as_sf()
 
 # Option 2: only considered a place if at least two different general types included
-# TODO: Finalize. Picked option 2 with a threshold of at least 5 destinatins in the cluster
 ep2 <- ed_summary_byTypeGen %>% 
   rowwise() %>% 
   filter(sum(is.na(c(food, health, civic)))<2) %>% 
@@ -292,7 +291,18 @@ ep3_pt <- ep3 %>%
 
 mapview(ep1)+ ep2 + ep3
 
-mapview(ep3)+ ep3_pt
+
+# Finalize. Picked option 2 with a threshold of at least 5 destinations in the cluster
+ep2_final<- ep2 %>% 
+  filter(n >= 5)
+ep2_pt_final <- ep2_final %>% 
+  st_drop_geometry() %>% 
+  left_join(central_dest) %>% 
+  st_as_sf()
+
+mapview(ep2_final)+ ep2_pt_final
+
+
 
 
 
@@ -304,9 +314,11 @@ st_write(ep2, gpkg, 'essentailPlace_Option2_POLY', append = T)
 st_write(ep2_pt, gpkg,'essentailPlace_Option2_PT', append = T)
 st_write(ep3, gpkg, 'essentailPlace_Option3_POLY', append = T)
 st_write(ep3_pt, gpkg,'essentailPlace_Option3_PT', append = T)
+st_write(ep2_final,gpkg,'essentailPlace_Final_POLY', append = T)
+st_write(ep2_pt_final,gpkg,'essentailPlace_Final_PT', append = T)
 
 # Save Data for Conveyal ####
-ep_conveyal <- st_read("output/DestinationData.gpkg",'essentailPlace_Option3_PT') %>% 
+ep_conveyal <- st_read("output/DestinationData.gpkg",'essentailPlace_Final_PT') %>% 
   rename(id= cluster, weight = n) %>% 
   mutate(type = 'essentialPlace') %>% 
   prep_pt_to_csv_keepID_weight()
