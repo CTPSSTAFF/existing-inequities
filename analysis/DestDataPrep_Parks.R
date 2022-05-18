@@ -165,10 +165,15 @@ network_ints <- int_walk %>%
 
 
 
-# SAVE DATA
+# SAVE DATA####
 st_write(open_space, "output/DestinationData.gpkg", "OpenSpace_POLY", append = T)
 st_write(paths, "output/DestinationData.gpkg", "Paths_LINE", append = T)
 
 st_write(centroid, "output/OpenSpaceAsPt.gpkg", "centroids_brookline")
 st_write(outline_pt, "output/OpenSpaceAsPt.gpkg", "outline_pt_brookline", append = T)
 st_write(network_ints, "output/OpenSpaceAsPt.gpkg", "network_int_brookline", append = T)
+
+# SAVE DATA for Conveyal test runs
+centroid<- st_read("output/OpenSpaceAsPt.gpkg", "centroids_brookline")
+outline_pt<- st_read( "output/OpenSpaceAsPt.gpkg", "outline_pt_brookline")
+network_ints <- st_read( "output/OpenSpaceAsPt.gpkg", "network_int_brookline")
