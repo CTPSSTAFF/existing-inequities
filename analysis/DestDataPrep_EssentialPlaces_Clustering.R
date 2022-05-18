@@ -308,17 +308,17 @@ mapview(ep2_final)+ ep2_pt_final
 
 # Save Data ####
 gpkg ="output/DestinationData.gpkg"
-st_write(ep1, gpkg, 'essentailPlace_Option1_POLY', append = T)
-st_write(ep1_pt, gpkg,'essentailPlace_Option1_PT', append = T)
-st_write(ep2, gpkg, 'essentailPlace_Option2_POLY', append = T)
-st_write(ep2_pt, gpkg,'essentailPlace_Option2_PT', append = T)
-st_write(ep3, gpkg, 'essentailPlace_Option3_POLY', append = T)
-st_write(ep3_pt, gpkg,'essentailPlace_Option3_PT', append = T)
-st_write(ep2_final,gpkg,'essentailPlace_Final_POLY', append = T)
-st_write(ep2_pt_final,gpkg,'essentailPlace_Final_PT', append = T)
+# st_write(ep1, gpkg, 'essentialPlace_Option1_POLY', append = T)
+# st_write(ep1_pt, gpkg,'essentialPlace_Option1_PT', append = T)
+# st_write(ep2, gpkg, 'essentialPlace_Option2_POLY', append = T)
+# st_write(ep2_pt, gpkg,'essentialPlace_Option2_PT', append = T)
+# st_write(ep3, gpkg, 'essentialPlace_Option3_POLY', append = T)
+# st_write(ep3_pt, gpkg,'essentialPlace_Option3_PT', append = T)
+st_write(ep2_final,gpkg,'essentialPlace_Final_POLY', append = T)
+st_write(ep2_pt_final,gpkg,'essentialPlace_Final_PT', append = T)
 
 # Save Data for Conveyal ####
-ep_conveyal <- st_read("output/DestinationData.gpkg",'essentailPlace_Final_PT') %>% 
+ep_conveyal <- st_read("output/DestinationData.gpkg",'essentialPlace_Final_PT') %>% 
   rename(id= cluster, weight = n) %>% 
   mutate(type = 'essentialPlace') %>% 
   prep_pt_to_csv_keepID_weight()
