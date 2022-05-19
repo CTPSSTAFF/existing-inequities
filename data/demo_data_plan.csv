@@ -23,11 +23,7 @@ incstatus,200% FPL,MPO,MA,block group,2019,2010,age 18 and older,B17024,"P4_001N
 incstatus,200% FPL,MPO,MA,block group,2019,2010,total population,C17002,"P2_001N, P002001"
 incstatus,200% FPL,MPO,MA,block group,2020,2020,age 18 and older,B17024,"P4_001N, P004001"
 incstatus,200% FPL,MPO,MA,block group,2020,2020,total population,C17002,"P2_001N, P002001"
-vehicleaccess,NA,MPO,MA,tract,2019,2010,occupied households,NA,H1_002N
-vehicleaccess,NA,MPO,MA,tract,2019,2010,total population,NA,"P2_001N, P002001"
-vehicleaccess,NA,MPO,MA,tract,2020,2020,occupied households,NA,H1_002N
-vehicleaccess,NA,MPO,MA,tract,2020,2020,total population,NA,"P2_001N, P002001"
-vehicleaccess,NA,MPO,MA,block group,2019,2010,occupied households,NA,H1_002N
-vehicleaccess,NA,MPO,MA,block group,2019,2010,total population,NA,"P2_001N, P002001"
-vehicleaccess,NA,MPO,MA,block group,2020,2020,occupied households,NA,H1_002N
-vehicleaccess,NA,MPO,MA,block group,2020,2020,total population,NA,"P2_001N, P002001"
+vehicleaccess,NA,MPO,MA,tract,2019,2010,occupied households,B08201,"H1_002N, H003002"
+vehicleaccess,NA,MPO,MA,tract,2020,2020,occupied households,B08201,"H1_002N, H003002"
+vehicleaccess,NA,MPO,MA,block group,2019,2010,occupied households,B08201,"H1_002N, H003002"
+vehicleaccess,NA,MPO,MA,block group,2020,2020,occupied households,B08201,"H1_002N, H003002"

@@ -13,9 +13,6 @@ br_mpo_munis <- read_csv("data/town_codes.csv") %>%
   filter(MPO == "Boston")
 
 demo_data<- read_csv("data/demo_data_plan.csv") %>% 
-  # TODO: in future work on vehicle access
-  # TODO: determine if block groups are appropriate
-  filter(demo %in% c("incstatus", "minstatus")) %>% 
   filter(geogs == "tract")
 
 # Pull Demo Data for all of MA using functions ####
@@ -38,8 +35,14 @@ incstatus_acs_dec <- demo_data %>%
   mutate(demo_data = pmap(list(year_acs = y_acs, year_dec = y_dec,
                                state = state, census_geog = geogs,
                                universe_type = universe_type), inc_status_FPL_acs_dec))
+veh_acs_dec <- demo_data %>% 
+  filter(demo == 'vehicleaccess' & universe_type == "occupied households") %>% 
+  mutate(demo_data = pmap(list(year_acs = y_acs, year_dec = y_dec,
+                               state = state, census_geog = geogs,
+                               universe_type = universe_type), no_vehicle_hh_acs_dec))
 
-demo_data_ma <- bind_rows(minstatus_acs_dec,minstatus_dec,incstatus_acs_dec)  
+
+demo_data_ma <- bind_rows(minstatus_acs_dec,minstatus_dec,incstatus_acs_dec, veh_acs_dec)  
 # write_rds(demo_data_ma, "data/demo_data_ma.rds")
 demo_data_ma<- demo_data_ma %>% 
   filter(y_acs==2020)
@@ -72,9 +75,8 @@ mpo_tract_geog <- mpo_tract_geog %>%
                    percent_lowinc_moe_adult = percent_lowinc_moe, percent_nonlowinc_adult= percent_nonlowinc,
                    percent_nonlowinc_moe_adult= percent_nonlowinc_moe, everything())) %>% 
   left_join(demo_data_ma$demo_data[[4]]) %>% 
-  select(GEOID, NAME, starts_with("pop_dec"),starts_with("percent_"), everything())
-st_write(mpo_tract_geog, "output/demographic_data.gpkg","tracts_acs_dec_2020", driver= "GPKG")
+  left_join(demo_data_ma$demo_data[[5]]) %>% 
+  select(GEOID, NAME, starts_with("pop_dec"),starts_with("hh_dec"), starts_with("percent_"), everything())
+st_write(mpo_tract_geog, "output/DemographicData.gpkg","tracts_acs_dec_2020", driver= "GPKG")
 
-# save as shapefile for conveyal upload
-mpo_tract_geog<- st_read("output/DemographicData.gpkg", layer= "tracts_acs_dec_2020")
-#            
+#mpo_tract_geog<- st_read("output/DemographicData.gpkg", layer= "tracts_acs_dec_2020")

@@ -145,7 +145,6 @@ if (universe_type == "total population"){
     # P4 table: HISPANIC OR LATINO, AND NOT HISPANIC OR LATINO BY RACE FOR THE POPULATION 18 YEARS AND OVER
     
     if(year_dec == 2010){ 
-      # TODO: Figure out why decennial detail for P4 table not available via census api
       v_non_min <- "P004005" #	!!Total:!!Not Hispanic or Latino:!!Population of one race:!!White alone
       v_total <- "P004001" # !!Total:
       }
@@ -413,5 +412,54 @@ inc_status_FPL_acs_dec <- function(year_acs, year_dec, state, census_geog, unive
 }
 
 # VEHICLE ACCESS ####
-
+no_vehicle_hh_acs_dec <- function(year_acs, year_dec, state, census_geog,universe_type) {
+  # year_acs <- 2019
+  # year_dec <- 2010
+  # state <- "MA"
+  # census_geog <- "tract"
+  # universe_type <- "occupied households"
+  if(universe_type == "occupied households"){
+      
+      veh_acs <- paste0("B08201_", str_pad(c(1:6), width = 3, side = "left", pad = 0))
+      names(veh_acs)<- c("total_hh", "zero_veh", rep("non_zero_veh",4))
+      
+      acs_veh_raw <- get_acs(geography = census_geog,
+                             variables = veh_acs,
+                             state = state,
+                             geometry = F,
+                             year = year_acs)
+      veh_acs <- acs_veh_raw %>% 
+        group_by(GEOID, variable) %>% 
+        summarise(est= sum(estimate),
+                  moe = moe_sum(moe, est)) %>%
+        pivot_wider(id_cols = GEOID, names_from= variable, values_from = c(est, moe)) %>% 
+        mutate(percent_zero_veh = ifelse(est_total_hh == 0, NA, est_zero_veh/est_total_hh),
+               percent_zero_veh_moe = moe_prop(est_zero_veh, est_total_hh, moe_zero_veh, moe_total_hh),
+               percent_non_zero_veh =ifelse(est_total_hh == 0, NA, est_non_zero_veh /est_total_hh),
+               percent_non_zero_veh_moe = moe_prop(est_non_zero_veh, est_total_hh, moe_non_zero_veh, moe_total_hh)) %>% 
+        select(GEOID, starts_with("percent_"))
+      
+      if(year_dec == 2010){ dec_var <- "H003002"}
+      if(year_dec == 2020){ dec_var <- "H1_002N"}
+      
+      dec_raw <- get_decennial(geography = census_geog,
+                               variables = dec_var,
+                               state = state,
+                               geometry = FALSE,
+                               year = year_dec)
+      # Bring race acs and dec together 
+      veh_status <- dec_raw %>% 
+        select(-variable) %>% 
+        rename(hh_dec= value) %>% 
+        left_join(veh_acs, by = "GEOID") %>% 
+        mutate(zero_veh_hh= hh_dec*percent_zero_veh,
+               non_zero_veh_hh = hh_dec*percent_non_zero_veh)
+      
+      return(veh_status)
+      
+  }else {
+    return ("Currently, Vehcile access only calculated with the universe of 'occupied households'.")
+  }
+    
+}
 

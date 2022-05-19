@@ -40,19 +40,21 @@ demo_data <- demo %>%
   filter(!(demo=="incstatus" & is.na(y_acs)==T)) %>% 
   # vehicle access not reported in decennial
   filter(!(demo== "vehicleaccess" & is.na(y_acs)==T)) %>% 
-  # for vehicle access instead of 18+ pull occupied households
-  mutate(universe_type = ifelse(demo== "vehicleaccess" & universe_type == "age 18 and older", "occupied households", universe_type)) %>% 
+  # for vehicle access pull occupied households
+  mutate(universe_type = ifelse(demo== "vehicleaccess", "occupied households", universe_type)) %>% 
+  distinct() %>% 
   mutate(acs_tables = case_when(
     demo== "minstatus" & is.na(y_acs)==F & universe_type == "age 18 and older" ~ "B01001H",
     demo== "minstatus" & is.na(y_acs)==F & universe_type == "total population" ~ "B03002",
     demo== "incstatus" & type == "200% FPL" & is.na(y_acs)==F & universe_type == "age 18 and older" ~ "B17024",
     demo== "incstatus" & type == "200% FPL" & is.na(y_acs)==F & universe_type == "total population" ~ "C17002",
+    demo== 'vehicleaccess' & universe_type == 'occupied households' ~ "B08201",
     TRUE ~ NA_character_
   )) %>% 
   mutate(dec_tables = case_when(
     universe_type == "age 18 and older" ~ "P4_001N, P004001",
     universe_type == "total population" ~ "P2_001N, P002001",
-    universe_type == "occupied households" ~ "H1_002N",
+    universe_type == "occupied households" ~ "H1_002N, H003002",
     TRUE ~ NA_character_
   ))
 
@@ -61,6 +63,10 @@ demo_data <- demo %>%
 
 # list tables needed to find data
 acs20 <- load_variables(2020, "acs5", cache = T)
+
+# B08201_001 Estimate!!Total: HOUSEHOLD SIZE BY VEHICLES AVAILABLE
+# B08201_002 Estimate!!Total:!!No vehicle available HOUSEHOLD SIZE BY VEHICLES AVAILABLE
+
 
 acs19 <- load_variables(2019, "acs5", cache = T)
 # C17002_001 Estimate!!Total: RATIO OF INCOME TO POVERTY LEVEL IN THE PAST 12 MONTHS
@@ -81,6 +87,8 @@ acs19 <- load_variables(2019, "acs5", cache = T)
 # B01001H_020 Estimate!!Total:!!Female:!!10 to 14 years
 # B01001H_021 Estimate!!Total:!!Female:!!15 to 17 years
 
+# B08201_001 Estimate!!Total:HOUSEHOLD SIZE BY VEHICLES AVAILABLE
+# B08201_002 Estimate!!Total:!!No vehicle available HOUSEHOLD SIZE BY VEHICLES AVAILABLE
 
 dec20 <- load_variables(2020, "pl", cache = T)
 # total population, min status
@@ -90,19 +98,14 @@ dec20 <- load_variables(2020, "pl", cache = T)
 # P4_001N !!Total:HISPANIC OR LATINO, AND NOT HISPANIC OR LATINO BY RACE FOR THE POPULATION 18 YEARS AND OVER
 # P4_005N!!Total:!!Not Hispanic or Latino:!!Population of one race:!!White alone HISPANIC OR LATINO, AND NOT HISPANIC OR LATINO BY RACE FOR THE POPULATION 18 YEARS AND OVER
 
+# H1_002N !!Total:!!Occupied OCCUPANCY STATUS
 
-dec10 <- load_variables(2010, "pl", cache = T)
+dec10 <- load_variables(2010, "sf1", cache = T)
 # P002001 Total
 # P002005 Total!!Not Hispanic or Latino!!Population of one race!!White alone
 
 # P004001 Total HISPANIC OR LATINO, AND NOT HISPANIC OR LATINO BY RACE FOR THE POPULATION 18 YEARS AND OVER
 # P004004 Total!!Not Hispanic or Latino!!Population of one race HISPANIC OR LATINO, AND NOT HISPANIC OR LATINO BY RACE FOR THE POPULATION 18 YEARS AND OVER
 
-
-
-# 
-# # need low income thresholds for 60% ami
-# br_mpo_munis <- read_csv("data/town_codes.csv") %>% 
-#   filter(MPO == "Boston")
-# 
-# br_mpo_60pct_ami <- get
+# H001002 #Total!!Occupied# OCCUPANCY STATUS
+# note same value sin H003002 tables and H001002 table not calling from api
