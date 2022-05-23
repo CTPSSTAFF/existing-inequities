@@ -1,0 +1,289 @@
+---
+title: "Aggregating Conveyal Regional Analyses"
+author: "Emily Domanico, CTPS"
+date: '2022-05-02'
+output: github_document
+---
+
+# Aggregating Conveyal Regional Analyses
+
+The purpose of this file is to work through an example of how to aggregate regional analysis results from Conveyal.
+The example data used here is a regional analysis that measures access to non-emergency healthcare destinations in the MPO region.
+
+## The goal 
+The goal here is to work out how to aggregate results so that we can answer the question:
+"How does access to basic healthcare services differ between EJ and non-EJ populations?"
+ 
+
+```{r setup, warnings=F, message=FALSE, results='hide'}
+# Raster processing
+library(tidyverse)
+library(sf)
+library(stars)
+library(mapview)
+library(kableExtra)
+
+# INPUTS ####
+# read in census geog layers
+mpo_census_tracts<- st_read("output/demographic_data.gpkg", layer= "tracts_acs_dec_2020") %>% 
+  st_transform(3857)
+boundary<-st_read("output/AggregationAreas.gpkg", layer= "MPO_Boundary") %>% 
+  st_transform(3857) # needs to be psudo-mercator for raster operations
+communitytypes<- st_read("output/AggregationAreas.gpkg", layer= "CommunityTypes") %>% st_transform(3857)
+housingsubmarkets <- st_read("output/AggregationAreas.gpkg", layer="HousingSubmarkets") %>% st_transform(3857)
+
+# read in geotiff
+access_layer<- read_stars("data/ConveyalRuns/HealthCareTests/HealthCare_NonEmergency_AMPeak_TransitBusRT_45min_50pct.geotiff") 
+destination <- "Non-emergency Healthcare"
+time_period <- "AM Peak"
+modes <- "Transit (Bus and Rapid Transit only)"
+travel_time <- "45 minutes"
+
+# read in destinations used for conveyal analysis
+dest<- st_read("output/DestinationData.gpkg", layer= "healthcare_PT") %>% 
+  st_transform(3857)
+
+# note conveyal uses lodes workers home locations as a proxy for population density.
+# the workers tiff is in stored in the same grid as the conveyal access output.
+# To apply demographics we would still need to go through a process similar to option 2
+# read in conveyal workers geotiff
+# workers <- read_stars("data/")
+```
+
+First, crop the raster to the boundary extent.
+
+```{r warnings=F, message=FALSE}
+# CROP Access Raster to the MPO Boundary
+access_layer_crop <- st_crop(access_layer, boundary)
+
+```
+```{r warnings=F, message=FALSE}
+ggplot()+
+  geom_stars(data=access_layer_crop, alpha = .7)+
+  # geom_sf(data=access_contours, aes(color = value),size=.8, show.legend = F)+
+  # geom_contour(data=access_layer_crop)+
+  geom_sf(data=boundary,size=1,color="light gray", fill= NA)+
+  coord_sf()+
+  scale_fill_viridis_c(option = "D", na.value = "transparent",
+                       name = paste0(destination, "\n Opportunities Accessible"))+
+  # scale_color_viridis_c(option = "D", na.value = "transparent",
+  #                      name = paste0(destination, "\n Opportunities Accessible"))+
+  ggtitle(paste0("Access to ", destination, "\nwith ",
+                                    modes, "\nin ", travel_time))+
+  labs(caption= paste0("Time period: ", time_period))+
+  theme_void()
+
+```
+
+
+## Option 1: Aggregate to the census geography
+Find the average number of destinations accessible within a census geography. 
+Then multiply average opportunities accessible from the tract by demographic population.
+
+```{r warnings=F, message=FALSE}
+# Option 1: find the average number of destinations accessible within a census tract
+
+# This process finds the average number of opportunities accessible for cells that are within a given census tract geometry. Then multiplies the number of people from a given population in the tract by the average number of opportunities accessible to them.
+# http://132.72.155.230:3838/r/combining-rasters-and-vector-layers.html#extracting-to-polygons-single-band
+
+opps_by_tract<- access_layer_crop %>% 
+  aggregate(mpo_census_tracts, mean, na.rm=T) %>% 
+  st_as_sf() %>% 
+  rename(opps= 1) # rename the avg opportunities column to "opps"
+
+# join tract level demographic data by matching tract geog used to aggregate
+opps_by_tract_demo<- mpo_census_tracts %>% 
+  st_join(opps_by_tract, join = st_equals) %>% 
+  mutate(
+    people_opps = round(pop_dec*opps),
+    opps_per_person = ifelse(pop_dec  == 0, 0, round(opps/pop_dec, 3)),
+    min_opps = round(minority*opps),
+    nonmin_opps = round(nonminority*opps),
+    lowinc_opps = round(lowinc*opps),
+    nonlowinc_opps = round(nonlowinc*opps))%>%
+  mutate(id= row_number())
+  #select(GEOID, ends_with("_opps"))
+```
+
+
+```{r warnings=F, message=FALSE}
+opps_by_tract_demo %>% 
+  select(GEOID, opps, pop_dec, ends_with("_opps")) %>% 
+  st_drop_geometry() %>% 
+  arrange(desc(min_opps)) %>% 
+  head(10) %>% 
+  kbl() %>% 
+  kable_styling()
+```
+```{r warnings=F, message=FALSE}
+mapview(select(opps_by_tract_demo,GEOID, NAME, ends_with("_opps")), zcol = "min_opps", layer.name = "Minority Opps")+
+  mapview(select(opps_by_tract_demo,GEOID, NAME, ends_with("_opps")), zcol = "nonmin_opps", layer.name = "Nonminority Opps")+
+  mapview(select(opps_by_tract_demo,GEOID, NAME, ends_with("_opps")), zcol = "lowinc_opps", layer.name = "Low-Income Opps")+
+  mapview(select(opps_by_tract_demo,GEOID, NAME, ends_with("_opps")), zcol = "nonlowinc_opps", layer.name = "Non-low-income Opps")
+```
+
+To summarize region-wide:
+```{r warnings=F, message=FALSE}
+
+demo_summary_by_tract <- opps_by_tract_demo %>%
+  st_drop_geometry() %>% 
+  ungroup() %>% # or join and group by aggregation geometry instead
+  summarize(people_opps = sum(people_opps, na.rm = T),
+            min_opps = sum(min_opps, na.rm= T),
+            nonmin_opps = sum(nonmin_opps, na.rm=T),
+            lowinc_opps = sum(lowinc_opps, na.rm=T),
+            nonlowinc_opps = sum(nonlowinc_opps, na.rm=T))
+
+pct_opps_min_tract = demo_summary_by_tract$min_opps[1]/(demo_summary_by_tract$min_opps[1]+demo_summary_by_tract$nonmin_opps)
+pct_opps_lowinc_tract = demo_summary_by_tract$lowinc_opps[1]/(demo_summary_by_tract$lowinc_opps[1]+demo_summary_by_tract$nonlowinc_opps)
+
+
+demo_summary_by_tract_commtype <- opps_by_tract_demo %>% 
+  st_join(communitytypes, largest = T) %>% # TODO: Fix munis that belong to mult subregions
+
+
+```
+
+```{r warnings=F, message=FALSE}
+demo_summary_by_tract %>% 
+  kbl() %>% 
+  kable_styling()
+```
+
+Note some people-opps not assigned to demographics, because of ACS demo gaps and maybe treatment of region edges.
+Overall, minority people have `r round(pct_opps_min_tract*100)`% of region-wide healthcare opportunities accessible by transit (Bus and RT).
+And low-income people have ``r round(pct_opps_lowinc_tract*100)`% of region-wide healthcare opportunities accessible by transit (Bus and RT).
+
+
+## Option 2: Pull demographics down to the raster cell
+
+```{r warnings=F, message=FALSE}
+# Option 2 allocate opportunities from each raster cell demo populations using areas overlap and 
+tracts <- mpo_census_tracts %>% 
+  mutate(area_tract = unclass(st_area(geom)))
+# total_pop <- sum(tracts$pop_dec, na.rm=T)
+
+access_crop_sf <- access_layer_crop %>% 
+  st_as_sf() %>%  # convert raster to sf object (each row is a raster cell as vector)
+  rename(opps = 1) %>% 
+  mutate(area_cell = unclass(st_area(geometry)),
+         cell_id = row_number())
+
+#summary(access_crop_sf$opps)
+# total_opps <- sum(access_crop_sf$opps)
+# avg_opps <- mean(access_crop_sf$opps)
+
+opps_by_cell_demo<- access_crop_sf %>% 
+  st_intersection(select(tracts, 
+                         GEOID, pop_dec, 
+                         percent_min, percent_nonmin,
+                         percent_lowinc, percent_nonlowinc,
+                         area_tract)) %>% 
+  mutate(area_int = unclass(st_area(geometry))) %>% 
+  mutate(pct_overlap_tract = area_int/area_tract,
+         pct_overlap_cell= area_int/area_cell) %>% 
+  mutate(
+    pop_part= pop_dec*pct_overlap_tract,
+    opps_part = opps*pct_overlap_cell,
+    pop_opps = pop_part*opps_part,
+    min_opps = pop_opps*percent_min,
+    nonmin_opps = pop_opps*percent_nonmin,
+    lowinc_opps = pop_opps*percent_lowinc,
+    nonlowinc_opps = pop_opps*percent_nonlowinc) %>% 
+  # group back into whole cells
+  group_by(cell_id) %>% 
+  summarise(
+    pop_opps = sum(pop_opps, na.rm=T),
+    min_opps = sum(min_opps, na.rm=T),
+    nonmin_opps = sum(nonmin_opps, na.rm=T),
+    lowinc_opps = sum(lowinc_opps, na.rm=T),
+    nonlowinc_opps = sum(nonlowinc_opps, na.rm=T),
+    GEOIDs = paste0(unique(unlist(GEOID)), collapse = ' '),
+    geometry= st_union(geometry)) %>% 
+  st_as_sf()
+
+```
+
+```{r}
+opps_by_cell_demo %>% 
+  st_drop_geometry() %>% 
+  arrange(desc(min_opps)) %>% 
+  head() %>% 
+  kbl() %>% 
+  kable_styling()
+```
+
+
+To focus just on the cells associated with a specific tract:
+
+```{r warnings=F, message=FALSE}
+opps_by_cell_focus <- opps_by_cell_demo %>% 
+  filter(grepl( "25025071101", GEOIDs))
+```
+
+```{r warnings=F, message=FALSE}
+mapview(opps_by_cell_focus)
+```
+
+```{r}
+demo_summary_by_cell <- opps_by_cell_demo %>% 
+  st_drop_geometry() %>% 
+  ungroup() %>% # or join and group by aggregation geometry instead
+  summarize(people_opps = sum(pop_opps, na.rm = T),
+            min_opps = sum(min_opps, na.rm= T),
+            nonmin_opps = sum(nonmin_opps, na.rm=T),
+            lowinc_opps = sum(lowinc_opps, na.rm=T),
+            nonlowinc_opps = sum(nonlowinc_opps, na.rm=T))
+
+pct_opps_min_cell = demo_summary_by_cell$min_opps[1]/(demo_summary_by_cell$min_opps[1]+demo_summary_by_cell$nonmin_opps)
+pct_opps_lowinc_cell = demo_summary_by_cell$lowinc_opps[1]/(demo_summary_by_cell$lowinc_opps[1]+demo_summary_by_cell$nonlowinc_opps)
+```
+```{r}
+demo_summary_by_cell %>% 
+  kbl() %>% 
+  kable_styling()
+```
+
+Note some people-opps not assigned to demographics, because of ACS demo gaps and maybe treatment of region edges.
+Overall, minority people have `r round(pct_opps_min_cell*100)`% of region-wide healthcare opportunities accessible by transit (Bus and RT).
+And low-income people have ``r round(pct_opps_lowinc_cell*100)`% of region-wide healthcare opportunities accessible by transit (Bus and RT).
+
+Note: Percent of opportunities is the same for the two options, but the total people opps are not.
+
+
+```{r warnings=F, message=FALSE, hide =T}
+# test <- opps_by_cell_demo %>%
+#   select(min_opps) %>%
+#   st_as_stars()
+# # 
+# 
+# access_contours <- st_contour(access_layer,
+#                               na.rm=T,
+#                               contour_lines = T,
+#                               breaks = seq(10,30000, by= 1000) )
+# colnames(access_contours)[1]<- "value"
+# 
+# ggplot()+
+#   geom_stars(data=test, alpha = .7)+
+#   # geom_sf(data=access_contours, aes(color = value),size=.8, show.legend = F)+
+#   geom_contour(data=test)+
+#   geom_sf(data=boundary,size=1,color="light gray", fill= NA)+
+#   coord_sf()+
+#   scale_fill_viridis_c(option = "D", na.value = "transparent",
+#                        name = paste0(destination, "\n Opportunities Accessible"))+
+#   # scale_color_viridis_c(option = "D", na.value = "transparent",
+#   #                      name = paste0(destination, "\n Opportunities Accessible"))+
+#   # ggtitle(paste0("Access to ", destination, "\nwith ",
+#   #                                   modes, "\nin ", travel_time))+
+#   # facet_wrap(~band)+
+#   # coord_equal() +
+#     # facet_wrap(~ba) +
+#     theme_void() +
+#     # scale_x_discrete(expand=c(0,0))+
+#     # scale_y_discrete(expand=c(0,0))+
+#   #
+#   # labs(caption= paste0("Time period: ", time_period))+
+#   theme_void()
+
+```
+
