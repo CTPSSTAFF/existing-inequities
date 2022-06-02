@@ -11,14 +11,6 @@ source('functions/points_cleaning.R')
 
 # IPUTS ####
 boundary<- read_rds("data/boundary.rds") 
-# ma_muni_geog <- tidycensus::get_decennial(geography= "county subdivision", 
-#                               variables = "P1_001N",
-#                               year = 2020,
-#                               state = "MA",
-#                               geometry = T)
-# brookline <- ma_muni_geog %>% # from agg boundaries muni pull
-#   filter(grepl("Brookline", NAME)) %>%
-#   st_transform(26986)
 
 
 # STEP 1: read in data from the data folder ####
@@ -59,7 +51,7 @@ open_space_merge <- open_space %>%
 open_space_large <- open_space_merge %>% 
   #filter(area > 300000) # approx 75 acres
   filter(area > 500000) # approx 124 acres
-mapview(open_space_large, zcol = ("primary_purpose"))
+#mapview(open_space_large, zcol = ("primary_purpose"))
 
 # Shared Use Paths
 # Select those that are at least partially in the MPO region (no minimum percentage.).
@@ -78,13 +70,12 @@ osm_primary_roads <- st_read("notebooks/data/MA_drive_primary.gpkg", layer = "ed
   st_transform(26986)
 # Remove primary roads from road network
 # test <- osm_edges_drive %>% filter(osmid %in% osm_primary_roads$osmid)
-# test<- osm_edges_drive %>% 
-#   filter(osmid %notin% osm_primary_roads$osmid)
+drive_network <- osm_edges_drive %>% 
+  filter(osmid %notin% osm_primary_roads$osmid)
+rm(osm_edges_drive, osm_primary_roads)
 
-osm_edges_walk <- st_read("notebooks/data/mpo_walk_network.gpkg", layer ="edges") %>% 
+walk_network <- st_read("notebooks/data/mpo_walk_network.gpkg", layer ="edges") %>% 
   st_transform(26986)
-
-
 
 set_up_network_ints <- function(open_space){
   open_space<- open_space %>%
@@ -92,6 +83,17 @@ set_up_network_ints <- function(open_space){
   return(open_space)
 }
 find_access_points<- function(open_space, network){
+  # network <- network_drive
+  # open_space <- open_space_remaining
+  
+  if(nrow( open_space[network,]) == 0) {
+    print("No overlap.")
+    empty <-  open_space[network,]
+    empty <- empty %>% 
+      rename(geom= geometry) %>% 
+      mutate(osmid = NA_character_) %>% select(osmid, geom)
+    return(empty)
+} else {
   int <- st_intersection(select(network,osmid), 
                               st_cast(
                                 st_union(open_space), 
@@ -103,17 +105,21 @@ find_access_points<- function(open_space, network){
     select(-geomtype)
   
   return(int)
+  }
   
 }
 find_nonintersecting_open_space <- function(open_space, network){
-  open_space_remaining <- open_space %>% 
-    filter(id %notin% st_filter(open_space, network, .predicate = st_crosses)$id)
+    int <- open_space[network,]
+    open_space_remaining<- open_space %>% 
+      filter(id %notin% int$id)
   return(open_space_remaining)
 }
-
 find_network_ints <- function(open_space, network_walk, network_drive, buffer_dist){
+  # open_space <- open_space_large %>% set_up_network_ints()
+  # network_walk<-walk_network_muni
+  # network_drive <- drive_network_muni
+  # buffer_dist <- 3 
   int_walk <- open_space %>% 
-    set_up_network_ints() %>% 
     find_access_points(network = network_walk)
   
   open_space_remaining <- open_space %>% 
@@ -134,11 +140,33 @@ find_network_ints <- function(open_space, network_walk, network_drive, buffer_di
   
   return(network_ints)
 }
-  
+
+# drive_network_muni <- drive_network %>% st_filter(muni, .predicate = st_intersects)
+# walk_network_muni <- walk_network %>% st_filter(muni, .predicate = st_intersects)
+network_ints_large <- open_space_large %>% 
+  set_up_network_ints() %>% 
+  find_network_ints(network_walk = walk_network, 
+                    network_drive = drive_network,
+                    buffer_dist = 3)
+# plot(boundary$geometry, col = 'yellow')
+# plot(open_space_large$geometry, col = 'green', border = "black", add = T)
+# plot(network_ints_large, col= 'blue', add = T)
+# mapview(boundary)+ mapview(open_space_large, col.region= 'green')+ mapview(network_ints_large, cex= 3, color = 'blue')+ paths_pts
+
+network_ints <- open_space_merge %>% 
+  set_up_network_ints() %>% 
+  find_network_ints(network_walk = walk_network, 
+                    network_drive = drive_network,
+                    buffer_dist = 3)
+
+
+# plot(muni$geometry, col = 'yellow')
+# plot(open_space_merge$geometry, col = 'green', border = "black", add = T)
+# plot(test, col= 'blue', add = T)
 
 paths_pts<- paths%>% 
   st_cast("LINESTRING") %>%
-  st_line_sample(density = 1/250) %>% 
+  st_line_sample(density = 1/500) %>% 
   st_as_sf() %>% 
   filter(!st_is_empty(.)) %>% 
   rename(geom= x) %>% 
@@ -148,23 +176,44 @@ paths_pts<- paths%>%
   st_as_sf() %>% 
   select(-geomtype)
 
+# plot(boundary$geometry)
+# plot(paths_pts$geom, add= T)
 
 
 
 # SAVE DATA####
 st_write(open_space, "output/DestinationData.gpkg", "OpenSpace_POLY", append = T)
 st_write(paths, "output/DestinationData.gpkg", "Paths_LINE", append = T)
+st_write(paths_pts , "output/DestinationData.gpkg", "Paths_PT", append = T)
+st_write(open_space_merge, "output/DestinationData.gpkg", "OpenSpaceAccess_Poly", append= T)
+st_write(open_space_large, "output/DestinationData.gpkg", "OpenSpaceAccess_large_POLY", append = T)
+st_write(network_ints, "output/DestinationData.gpkg", "OpenSpaceAccess_PT", append = T)
+st_write(network_ints_large, "output/DestinationData.gpkg", "OpenSpaceAccess_large_PT", append=T)
 
-st_write(centroid, "output/OpenSpaceAsPt.gpkg", "centroids_brookline")
-st_write(outline_pt, "output/OpenSpaceAsPt.gpkg", "outline_pt_brookline", append = T)
-st_write(network_ints, "output/OpenSpaceAsPt.gpkg", "network_int_brookline", append = T)
+# st_write(centroid, "output/OpenSpaceAsPt.gpkg", "centroids_brookline")
+# st_write(outline_pt, "output/OpenSpaceAsPt.gpkg", "outline_pt_brookline", append = T)
+# st_write(network_ints, "output/OpenSpaceAsPt.gpkg", "network_int_brookline", append = T)
 
 # SAVE DATA for Conveyal test runs
-centroid<- st_read("output/OpenSpaceAsPt.gpkg", "centroids_brookline")
-outline_pt<- st_read( "output/OpenSpaceAsPt.gpkg", "outline_pt_brookline")
-network_ints <- st_read( "output/OpenSpaceAsPt.gpkg", "network_int_brookline")
+# centroid<- st_read("output/OpenSpaceAsPt.gpkg", "centroids_brookline")
+# outline_pt<- st_read( "output/OpenSpaceAsPt.gpkg", "outline_pt_brookline")
+# network_ints <- st_read( "output/OpenSpaceAsPt.gpkg", "network_int_brookline")
 
-
+open_space_large_csv <- network_ints_large %>% 
+  mutate(id = row_number(), type= "Open space") %>% 
+  select(id, type) %>% 
+  prep_pt_to_csv_keepID() %>%   
+  pt_to_csv("output/open_space_large_network_access.csv")
+open_space_csv <- network_ints %>% 
+  mutate(id = row_number(), type= "Open space") %>% 
+  select(id, type) %>% 
+  prep_pt_to_csv_keepID() %>%   
+  pt_to_csv("output/open_space_network_access.csv")
+paths_csv <- paths_pts %>% 
+  mutate(id = row_number(), type= "Path") %>% 
+  select(id, type) %>% 
+  prep_pt_to_csv_keepID() %>%   
+  pt_to_csv("output/open_space_path_access.csv")
 
 # # Back up park to point options
 # # OPTION 1: Cetroids of parks
