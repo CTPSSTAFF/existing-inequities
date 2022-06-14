@@ -24,6 +24,9 @@ demo <- st_read("output/DemographicData.gpkg", layer = 'tracts_acs_dec_2020') %>
 dasy_demo <- st_read("notebooks/pop_output/dasy_demo.gpkg", layer = 'interpolated') %>% 
   st_transform(st_crs(prep_grid))
 
+dasy_raster <- dasy_demo %>% 
+  st_rasterize(template = prep_grid)
+
 # Check demographic totals
 # make sure that populations in census tract demo are account for in the dasymetric mapping process
 demo_summary <- demo %>% 
@@ -77,9 +80,10 @@ healthcareEmg <- healthcare %>% select(starts_with("Healthcare_Emergency"))
 healthcareNonEmg <- healthcare %>% select(starts_with("Healthcare_Nonemergency"))
 rm(healthcare) 
 
+openspace_conservation <- openspace %>% select(starts_with("OpenSpace_Conservation"))
+openspace_paths <- openspace %>% select(starts_with("OpenSpacePaths_"))
+openspace <- openspace %>% select(starts_with("OpenSpace_Weekend"))
 
-dasy_raster <- dasy_demo %>% 
-  st_rasterize(template = jobs) 
 
 jobs_minWeighted <- jobs*select(dasy_raster, minority_adult)
 names(jobs_minWeighted) <- paste0(names(jobs_minWeighted), "_min")
