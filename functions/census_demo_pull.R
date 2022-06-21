@@ -463,3 +463,107 @@ no_vehicle_hh_acs_dec <- function(year_acs, year_dec, state, census_geog,univers
     
 }
 
+# Median earnings/income for a service area
+get_median_inc <- function(year_acs, state, service_area, type){
+  # state <- "MA"
+  # year_acs <- 2020
+  # service_area <- br_mpo_geog
+  if (type == "earnings-worker"){
+    # Household income distribution by county sub_division
+    ern_variables <- paste0("B08119_", str_pad(c(1,2,3,4,5,6,7,8,9), width = 3, side = "left", pad = 0))
+    ern_ranges <- c( "TotWk","<10k","10k_15k","15k_25k","25k_35k","35k_50k","50k_65k","65k_75k",">75k")
+    
+    
+    ern_dist_state <- get_acs(geography = "county subdivision",
+                                 variables = ern_variables,
+                                 state = state,
+                                 # geometry = T,
+                                 year = year_acs) 
+    
+    # # from state, pull only towns in service area
+    # inc_dist_state<- income_dist_raw %>% st_transform(26986)
+    # inc_dist_service_area <-inc_dist_state[sf::st_centroid(st_transform(service_area, 26986)),]
+    
+    # inc_dist_state <- income_dist_raw
+    ern_dist_service_area <- ern_dist_state %>% filter(GEOID %in% service_area$GEOID)
+    
+    ern_dist <- ern_dist_service_area %>% 
+      # st_drop_geometry() %>% 
+      left_join(tibble(variable = ern_variables, ern_range = ern_ranges), by= "variable") %>% 
+      rename(estimate_wks = estimate, 
+             moe_wks = moe #,
+             # est_tot_hh = summary_est,
+             # moe_tot_hh = summary_moe
+      ) %>% 
+      select(GEOID, NAME, ern_range, estimate_wks) %>% 
+      pivot_wider(names_from = ern_range, values_from = estimate_wks) %>% 
+      janitor::adorn_totals() 
+    
+    ern<- c("<10k","10k_15k","15k_25k","25k_35k","35k_50k","50k_65k","65k_75k",">75k")
+    ern_low <- c(0, 10000, 15000, 25000, 35000, 50000,65000, 75000)
+    ern_high <- c(9999, 14999, 24999, 34999, 49999, 64999, 74999, 999999)
+    
+    totals <- ern_dist[ern_dist$GEOID == "Total",] %>% 
+      select(-c(GEOID, NAME)) %>% 
+      pivot_longer(cols= -TotWk,names_to = "ern", values_to = "wk" ) %>% 
+      mutate(perc_wk_sa= wk/TotWk*100) %>% 
+      mutate(cumsum = cumsum(perc_wk_sa)) %>% 
+      left_join(tibble(ern= ern, ern_low=ern_low, ern_high= ern_high), by="ern") %>% 
+      mutate(med_calc = ifelse(cumsum >= 50 & lag(cumsum <50),
+                               round(ern_low+(ern_high-ern_low)*(50-lag(cumsum))/(cumsum-lag(cumsum)),2),
+                               0))
+    
+    median_earning_service_area <-totals$med_calc[which(totals$med_calc!=0)]
+  } else if (type == "income"){
+    # Household income distribution by county sub_division
+    inc_variables <- paste0("B19001_", str_pad(c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17), width = 3, side = "left", pad = 0))
+    inc_ranges <- c( "TotHH","<10k","10k_15k","15k_20K","20k_25k","25k_30k","30k_35k","35k_40k","40k_45k",
+                     "45k_50k","50k_60k","60k_75k","75k_100k","100k_125k","125k_150k","150k_200k",">200k")
+    
+    
+    income_dist_state <- get_acs(geography = "county subdivision",
+                                 variables = inc_variables,
+                                 # summary_var = inc_summary_var,
+                                 state = state,
+                                 # geometry = T,
+                                 year = year_acs) 
+    
+    # # from state, pull only towns in service area
+    # inc_dist_state<- income_dist_raw %>% st_transform(26986)
+    # inc_dist_service_area <-inc_dist_state[sf::st_centroid(st_transform(service_area, 26986)),]
+    
+    # inc_dist_state <- income_dist_raw
+    inc_dist_service_area <- income_dist_raw %>% filter(GEOID %in% service_area)
+    
+    inc_dist <- inc_dist_service_area %>% 
+      # st_drop_geometry() %>% 
+      left_join(tibble(variable = inc_variables, inc_range = inc_ranges), by= "variable") %>% 
+      rename(estimate_hh = estimate, 
+             moe_hh = moe #,
+             # est_tot_hh = summary_est,
+             # moe_tot_hh = summary_moe
+      ) %>% 
+      select(GEOID, NAME, inc_range, estimate_hh) %>% 
+      pivot_wider(names_from = inc_range, values_from = estimate_hh) %>% 
+      janitor::adorn_totals() 
+    
+    inc<- c( "<10k","10k_15k","15k_20K","20k_25k","25k_30k","30k_35k","35k_40k","40k_45k",
+             "45k_50k","50k_60k","60k_75k","75k_100k","100k_125k","125k_150k","150k_200k",">200k")
+    inc_low <- c(0, 10000, 15000, 20000, 25000, 30000,35000, 40000,45000, 50000, 60000, 75000, 100000, 125000, 150000, 200000)
+    inc_high <- c(9999, 14999, 19999, 24999, 29999, 34999, 39999, 44999, 49999, 59999, 74999,99999, 124999, 149999, 199999, 999999)
+    
+    totals <- inc_dist[inc_dist$GEOID == "Total",] %>% 
+      select(-c(GEOID, NAME)) %>% 
+      pivot_longer(cols= -TotHH,names_to = "inc", values_to = "hh" ) %>% 
+      mutate(perc_hh_sa= hh/TotHH*100) %>% 
+      mutate(cumsum = cumsum(perc_hh_sa)) %>% 
+      left_join(tibble(inc= inc, inc_low=inc_low, inc_high= inc_high), by="inc") %>% 
+      mutate(med_calc = ifelse(cumsum >= 50 & lag(cumsum <50),
+                               round(inc_low+(inc_high-inc_low)*(50-lag(cumsum))/(cumsum-lag(cumsum)),2),
+                               0))
+    
+    median_income_service_area <-totals$med_calc[which(totals$med_calc!=0)]
+  } else {
+    print("Specify earnings or income revenue type.")
+  }
+}
