@@ -477,23 +477,14 @@ get_median_inc <- function(year_acs, state, service_area, type){
     ern_dist_state <- get_acs(geography = "county subdivision",
                                  variables = ern_variables,
                                  state = state,
-                                 # geometry = T,
                                  year = year_acs) 
-    
-    # # from state, pull only towns in service area
-    # inc_dist_state<- income_dist_raw %>% st_transform(26986)
-    # inc_dist_service_area <-inc_dist_state[sf::st_centroid(st_transform(service_area, 26986)),]
-    
-    # inc_dist_state <- income_dist_raw
+  
     ern_dist_service_area <- ern_dist_state %>% filter(GEOID %in% service_area$GEOID)
     
     ern_dist <- ern_dist_service_area %>% 
-      # st_drop_geometry() %>% 
       left_join(tibble(variable = ern_variables, ern_range = ern_ranges), by= "variable") %>% 
       rename(estimate_wks = estimate, 
-             moe_wks = moe #,
-             # est_tot_hh = summary_est,
-             # moe_tot_hh = summary_moe
+             moe_wks = moe
       ) %>% 
       select(GEOID, NAME, ern_range, estimate_wks) %>% 
       pivot_wider(names_from = ern_range, values_from = estimate_wks) %>% 
@@ -513,8 +504,8 @@ get_median_inc <- function(year_acs, state, service_area, type){
                                round(ern_low+(ern_high-ern_low)*(50-lag(cumsum))/(cumsum-lag(cumsum)),2),
                                0))
     
-    median_earning_service_area <-totals$med_calc[which(totals$med_calc!=0)]
-  } else if (type == "income"){
+    median_money_service_area <-totals$med_calc[which(totals$med_calc!=0)]
+  } else if (type == "income-household"){
     # Household income distribution by county sub_division
     inc_variables <- paste0("B19001_", str_pad(c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17), width = 3, side = "left", pad = 0))
     inc_ranges <- c( "TotHH","<10k","10k_15k","15k_20K","20k_25k","25k_30k","30k_35k","35k_40k","40k_45k",
@@ -523,25 +514,15 @@ get_median_inc <- function(year_acs, state, service_area, type){
     
     income_dist_state <- get_acs(geography = "county subdivision",
                                  variables = inc_variables,
-                                 # summary_var = inc_summary_var,
                                  state = state,
-                                 # geometry = T,
                                  year = year_acs) 
-    
-    # # from state, pull only towns in service area
-    # inc_dist_state<- income_dist_raw %>% st_transform(26986)
-    # inc_dist_service_area <-inc_dist_state[sf::st_centroid(st_transform(service_area, 26986)),]
-    
-    # inc_dist_state <- income_dist_raw
-    inc_dist_service_area <- income_dist_raw %>% filter(GEOID %in% service_area)
+  
+    inc_dist_service_area <- income_dist_state%>% filter(GEOID %in% service_area$GEOID)
     
     inc_dist <- inc_dist_service_area %>% 
-      # st_drop_geometry() %>% 
       left_join(tibble(variable = inc_variables, inc_range = inc_ranges), by= "variable") %>% 
       rename(estimate_hh = estimate, 
-             moe_hh = moe #,
-             # est_tot_hh = summary_est,
-             # moe_tot_hh = summary_moe
+             moe_hh = moe
       ) %>% 
       select(GEOID, NAME, inc_range, estimate_hh) %>% 
       pivot_wider(names_from = inc_range, values_from = estimate_hh) %>% 
@@ -562,8 +543,9 @@ get_median_inc <- function(year_acs, state, service_area, type){
                                round(inc_low+(inc_high-inc_low)*(50-lag(cumsum))/(cumsum-lag(cumsum)),2),
                                0))
     
-    median_income_service_area <-totals$med_calc[which(totals$med_calc!=0)]
+    median_money_service_area <-totals$med_calc[which(totals$med_calc!=0)]
   } else {
     print("Specify earnings or income revenue type.")
   }
+  return(median_income_service_area)
 }

@@ -80,3 +80,7 @@ mpo_tract_geog <- mpo_tract_geog %>%
 st_write(mpo_tract_geog, "output/DemographicData.gpkg","tracts_acs_dec_2020", driver= "GPKG")
 
 #mpo_tract_geog<- st_read("output/DemographicData.gpkg", layer= "tracts_acs_dec_2020")
+
+
+median_earnings_mpo <- get_median_inc(2020, "MA", br_mpo_geog, "earnings-worker")
+median_incHH_mpo <- get_median_inc(2020, "MA", br_mpo_geog, "income-household")
