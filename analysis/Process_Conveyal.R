@@ -8,6 +8,7 @@ library(stars)
 # SETUP INPUTS ####
 boundary<-st_read("output/AggregationAreas.gpkg", layer= "MPO_Boundary") %>% 
   st_transform(3857) # needs to be psudo-mercator for raster operations
+mpoBoundary <- boundary
 comm_types <- st_read("output/AggregationAreas.gpkg", layer= "CommunityTypes") %>%
   st_transform(3857)
 
@@ -108,14 +109,14 @@ openspace <- openspace %>% select(starts_with("OpenSpace_Weekend"))
 rm(openspacepaths)
 
 # write to app data
-# write_rds(healthcareNonEmg, "app/data/healthcareNonEmg_access.rds")
-# write_rds(healthcareEmg, "app/data/healthcareEmg_access.rds")
-# write_rds(jobs, "app/data/jobs_access.rds")
-# write_rds(essentialplaces, "app/data/essentialplaces_access.rds")
-# write_rds(highered, "app/data/highered_access.rds")
-# write_rds(openspace, "app/data/openspace_access.rds")
-# write_rds(openspace_conservation, "app/data/openspace_conservation_access.rds")
-# write_rds(openspace_paths, "app/data/openspace_paths_access.rds")
+write_rds(healthcareNonEmg, "app/data/healthcareNonEmg_access.rds")
+write_rds(healthcareEmg, "app/data/healthcareEmg_access.rds")
+write_rds(jobs, "app/data/jobs_access.rds")
+write_rds(essentialplaces, "app/data/essentialplaces_access.rds")
+write_rds(highered, "app/data/highered_access.rds")
+write_rds(openspace, "app/data/openspace_access.rds")
+write_rds(openspace_conservation, "app/data/openspace_conservation_access.rds")
+write_rds(openspace_paths, "app/data/openspace_paths_access.rds")
 
 # Visualize by access type ####
 visualize_for_access <- function(access){
@@ -146,7 +147,7 @@ visualize_for_access <- function(access){
   }
 }
 
-jobs_access_vis <- visualize_for_access(jobs_access)
+jobs_access_vis <- visualize_for_access(jobs)
 highered_access_vis <- visualize_for_access(highered_access)
 test <- highered*dasy_raster$pop_dec_adult
 plot(test$HigherEd_MD_TransitAll_30min)

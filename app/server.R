@@ -126,14 +126,12 @@ shinyServer(function(input, output, session) {
     if (dests == 7) {access <- openspace_conservation_access}
     if (dests == 8) {access <- openspace_paths_access}
     
-    if (1 %notin% modes) { access <- access %>% select(-contains("Walk_15min"))}
-    if (2 %notin% modes) { access <- access %>% select(-contains("Walk_30min"))}
-    if (3 %notin% modes) { access <- access %>% select(-contains("Bike_15min"))}
-    if (4 %notin% modes) { access <- access %>% select(-contains("Bike_30min"))}
-    if (5 %notin% modes) { access <- access %>% select(-contains("TransitBusRt_30min"))}
-    if (7 %notin% modes) { access <- access %>% select(-contains("TransitAll_30min"))}
-    if (8 %notin% modes) { access <- access %>% select(-contains("TransitAll_60min"))}
-    if (9 %notin% modes) { access <- access %>% select(-contains("Drive_30min"))}
+    if (1 %notin% modes) { access <- access %>% select(-contains("Walk"))}
+    if (2 %notin% modes) { access <- access %>% select(-contains("Bike"))}
+    if (3 %notin% modes) { access <- access %>% select(-contains("TransitBusRT"))}
+    if (4 %notin% modes) { access <- access %>% select(-contains("TransitAll"))}
+    if (5 %notin% modes) { access <- access %>% select(-contains("Drive"))}
+
     
     access_rv$access_mpo <- access
     # test_access_mpo <<- access
