@@ -30,12 +30,12 @@ This project studies access to various types of destinations throughout the MPO 
 * **Higher Education Opportunities**:
 * **Healthcare Opportunities**: 
 
-    **Emergency Healthcare**:   
-    **Nonemergency Healthcare**:   
+    * **Emergency Healthcare**:   
+    * **Nonemergency Healthcare**:   
 
 * **Essentail Places**:
 * **Parks and Open Space**:
 
-    **Open Space**:   
-    **Open Space, Paths**:   
-    **Open Space, Conservation**:   
+    * **Open Space**:   
+    * **Open Space, Paths**:   
+    * **Open Space, Conservation**:   
