@@ -54,4 +54,4 @@ This project studies access to various types of destinations throughout the MPO 
 
    Open spaces are not weighted by the amount of open space in a polygon, instead, open spaces are represented by how accessible they are from the transporation network. 
 
-Destination outputs are saved here: [`/output/`](https://github.com/CTPSSTAFF/existing-inequities/tree/main/output) as a geopackage (`DemographicData.gpkg`) and as csv files to be uploaded in Conveyal.
+Destination outputs are saved here: [`/output/`](https://github.com/CTPSSTAFF/existing-inequities/tree/main/output) as a geopackage (`DestinationData.gpkg`) and as csv files to be uploaded in Conveyal.
