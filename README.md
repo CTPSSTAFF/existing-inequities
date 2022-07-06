@@ -34,7 +34,17 @@ This project studies access to various types of destinations throughout the MPO 
     * **Emergency Healthcare**: Emergency healthcare destinations are acute care hospitals located within MPO municipalities.  
     * **Nonemergency Healthcare**: Nonemergency healthcare destinations include emergency healthcare plus medical clinics and community health centers within MPO municipalities.  
 
-* **Essentail Places**:
+* **Essentail Places**: Essential places are idenified as clusters of essentail destinations. 
+
+   * Essentail destinations consist of three types of destinations: **health**, **civic**, and **food**. The **health** type consists of all healthcare destinations (see Nonemergency healthcare destination description above) and retail pharmacies. The **civic** type consists of townhalls, post offices, and libraries. The **food** type consists of farmersmarkets, and grocery stores. Essential desinations data prep happens here: [`/analysis/DestDataPrep_2A_EssentialDestinations.R`](https://github.com/CTPSSTAFF/existing-inequities/blob/main/analysis/DestDataPrep_2A_EssentialDestinations.R).  
+   * Clusters of essential destinations are identified using density based scanning [(DBSCAN)](https://www.rdocumentation.org/packages/dbscan/versions/1.1-10/topics/dbscan). Work to identify appropriate clustering parameters is here:[`/analysis/DestDataPrep_2B_EssentialPlaces_Clustering.R`](https://github.com/CTPSSTAFF/existing-inequities/blob/main/analysis/DestDataPrep_2B_EssentialPlaces_Clustering.R). 
+   
+      * Within the MPO's Inner Core sub-region, clusters were identified as groups of at least four essential destinations linked by a maxium of 161 meters (~ 2 minute walk as the crow flies). 
+      * Outside of the Inner Core, clusters were identified as groups of at least four essential destinations linked by a maximum of 483 meters (~ 6 minute walk as the crow flies)  
+      
+  * We reviewed clustering results and determined that to be considered an essential place in this analysis, the cluster would have to contain at least two types of destinations (health/civic/food) and there are at least five destinations represented in the cluster. 
+  * Essentail places are weighted by the number of destinations contained in the cluster.
+   
 * **Parks and Open Space**:
 
     * **Open Space**:   
