@@ -9,12 +9,13 @@ library(reactable)
 
 shiny.useragg = TRUE
 
-mpoBoundary <- st_read("data/AggregationAreas.gpkg", "MPO_Boundary") %>% 
-  st_transform(3857) 
-commTypes_byMuni <- st_read("data/AggregationAreas.gpkg", "CommunityTypes")
-commTypes<- commTypes_byMuni %>% 
-  group_by(communityType) %>% 
-  summarize(geometry = st_union(geom))
+mpoBoundary <- st_read("data/AggregationAreas.gpkg", "MPO_Boundary") %>%
+  st_transform(3857)
+commTypes_byMuni <- st_read("data/AggregationAreas.gpkg", "CommunityTypes") %>% st_transform(3857)
+# commTypes<- commTypes_byMuni %>% 
+#   group_by(communityType) %>% 
+#   summarize(geometry = st_union(geom))
+
 
 
 # higherEd <- st_read("data/DestinationData.gpkg", "higherEd_PT")
@@ -36,31 +37,63 @@ dasy_raster<- read_rds("data/dasy_raster.rds")
 comm_types_rast<- read_rds("data/comm_types_rast.rds")
 comm_types_id<- read_rds("data/comm_types_id.rds")
 `%notin%` <- Negate(`%in%`)
-visualize_for_access <- function(access){
+visualize_for_access <- function(access,dests, cols = 4 ){
+  if (dests == 1) {d <- "Healthcare opportunities, Non-emergency"
+    time_period <- "AM Peak"}
+  if (dests == 2) {d <- "Healthcare opportunities, Emergency"
+    time_period <- "AM Peak"}
+  if (dests == 3) {d <- "Jobs"
+    time_period = "AM Peak"}
+  if (dests == 4) {d <- "Higher Education"
+    time_period = "Midday"}
+  if (dests == 5) {d <- "Essential Places"
+    time_period = "AM Peak" }
+  if (dests == 6) {d <- "Open Space"
+    time_period = "Weekend, Midday" }
+  if (dests == 7) {d <- "Open Space, Conservation"
+    time_period = "Weekend, Midday" }
+  if (dests == 8) {d <- "Open Space, Paths"
+    time_period = "Weekend, Midday" }
+  t <- paste(str_sub(word(names(access), sep = "min"), start = -2), "minute")
+  if (time_period ==  "AM Peak"){
+    m <- word(word(names(access), sep = "_..min"), sep = "_.M_", start = 2)
+  } else if(time_period ==  "Midday") {
+    m <- word(word(names(access), sep = "_..min"), sep = "_Midday_", start = 2)
+  } 
+  else{
+    m <- word(word(names(access), sep = "_..min"), sep = "_Weekend_", start = 2)
+  }
+  n <- paste(t, m)
+  names(access)<- n
+  
   if (length(names(access))>1 ){
     access <- access %>% st_redimension()
     ggplot()+
       geom_stars(data = access)+
-      geom_sf(data= mpoBoundary,size=.4,color="light gray", fill= 'transparent')+
+      geom_sf(data = commTypes_byMuni, size=.2, color = 'light gray', fill = 'transparent')+
+      geom_sf(data= mpoBoundary,size=.5,color='gray', fill= 'transparent')+
       coord_sf()+
       scale_fill_gradient(low= 'white', high= '#871F78' ,trans="sqrt", #'log1p',
                           na.value = "transparent",
                           name = "Opportunities Accessible")+
       # scale_fill_steps(n.breaks = 30,na.value = 'transparent')+
-      facet_wrap(~new_dim)+
-      theme_void()#+
-      #theme(text=element_text(family="Helvetica"))
+      facet_wrap(~new_dim, ncol = cols)+
+      ggtitle(paste0("Access to ", d))+
+      labs(caption= paste0("Time period: ", time_period))+
+      theme_void()
   } else {
     ggplot()+
       geom_stars(data = access)+
+      geom_sf(data = commTypes_byMuni, size=.3, color = 'light gray', fill = 'transparent')+
       geom_sf(data=mpoBoundary,size=.4,color="light gray", fill= "transparent")+
       coord_sf()+
       scale_fill_gradient(low= 'white', high= '#871F78' ,trans="sqrt",#trans= 'log1p',
                           na.value = "transparent",
                           name = "Opportunities Accessible")+
       # scale_fill_steps(n.breaks = 30,na.value = 'transparent')+
-      theme_void()+
-      theme(text=element_text(family="Helvetica"))
+      ggtitle(paste0("Access to ", d, "\n", names(access)))+
+      labs(caption= paste0("Time period: ", time_period))+
+      theme_void()
   }
 }
 
@@ -113,6 +146,7 @@ shinyServer(function(input, output, session) {
   output$access_plots <- renderPlot({
     dests <- input$dest
     modes <- input$modes
+    time <- input$time
     agg <- input$aggArea
     # dests <- 1 
     # modes <- c(1,2,3,4)
@@ -132,7 +166,11 @@ shinyServer(function(input, output, session) {
     if (4 %notin% modes) { access <- access %>% select(-contains("TransitAll"))}
     if (5 %notin% modes) { access <- access %>% select(-contains("Drive"))}
 
-    
+    if (1 %notin% time) { access <- access %>% select(-ends_with("15min"))}
+    if (2 %notin% time) { access <- access %>% select(-ends_with("30min"))}
+    if (3 %notin% time) { access <- access %>% select(-ends_with("45min"))}
+    if (4 %notin% time) { access <- access %>% select(-ends_with("60min"))}
+
     access_rv$access_mpo <- access
     # test_access_mpo <<- access
     if (agg == 1) { access <- access * (comm_types_rast %>% select(id1))}
@@ -145,8 +183,8 @@ shinyServer(function(input, output, session) {
     # if (agg == 8) { access <- access * (comm_types_rast %>% select(id))}
     
     access_rv$access <- access
-    #test_access <<- access
-    plot <- visualize_for_access(access)
+    test_access <<- access
+    plot <- visualize_for_access(access,dests, cols= length(time))
     plot
     
   })
