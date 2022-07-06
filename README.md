@@ -51,4 +51,5 @@ This project studies access to various types of destinations throughout the MPO 
     * **Open Space**: Open space areas are identifed as publicly accessible open spaces with a primary purpose of conservation or recreation. Open spaces must be at least partially within an MPO municipality and have an area greater than a half acre. Access points to these spaces are then identfied based on where the boundary of the open space overlaps with the pedestrian and/or road network.
     * **Open Space, Paths**: For shared use paths at least partially within the MPO region, an destination point is identified every 500 feet along the path with at least one point per path segment.
     * **Open Space, Conservation**: To identify access to large parks, we also identifed access to large open spaces seperately. Large/Convervation open space access points correspond to open spaces that have an area greater than 124 acres.   
-Open spaces are not weighted by the amount of open space in a polygon, instead, open spaces are represented by how accessible they are from the transporation network. 
+
+   Open spaces are not weighted by the amount of open space in a polygon, instead, open spaces are represented by how accessible they are from the transporation network. 
