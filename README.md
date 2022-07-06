@@ -28,7 +28,6 @@ To map the census tract level demographic onto the raster grid, we will allocate
 
 ## Destination Data Preparation
 This project studies access to various types of destinations throughout the MPO region. For data that required geocoding, see [`/geocoding/`](https://github.com/CTPSSTAFF/existing-inequities/tree/main/geocoding) for notes on the process. The destination data was prepared as follows:
-* **Higher Education Opportunities**:
 * **Healthcare Opportunities**: Healthcare destination data is prepared in [`/analysis/DestDataPrep_1_Healthcare.R`](https://github.com/CTPSSTAFF/existing-inequities/blob/main/analysis/DestDataPrep_1_Healthcare.R). There are two outputs for healthcare destinations: 1) emergency healthcare and 2) nonemergency healthcare.
 
     * **Emergency Healthcare**: Emergency healthcare destinations are acute care hospitals located within MPO municipalities.  
@@ -44,7 +43,9 @@ This project studies access to various types of destinations throughout the MPO 
       
   * We reviewed clustering results and determined that to be considered an essential place in this analysis, the cluster would have to contain at least two types of destinations (health/civic/food) and there are at least five destinations represented in the cluster. 
   * Essentail places are represented by the most central destination in the cluster and is weighted by the number of destinations contained in the cluster.
-   
+ 
+* **Higher Education Opportunities**: Higher education opportutnies are idenfied by colleges and universities within MPO municipalities where more than 50% of undergraduates live off-campus and there is graduate enrollment. Enrollment data is from the National Center for Education Statistics for the fall semester of the 2020-21 AY. Joining enrollment data to location data happens here: [`/analysis/DestDataPrep_3_HigherEd.R`](https://github.com/CTPSSTAFF/existing-inequities/blob/main/analysis/DestDataPrep_3_HigherEd.R) Higher education destinations are weighted by enrollment.
+
 * **Parks and Open Space**:
 
     * **Open Space**:   
