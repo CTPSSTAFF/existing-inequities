@@ -79,8 +79,8 @@ cluster_summary <- ed %>%
 
 
 # Create compromise clusters region-wide ###
-# the HDBSCAN does a better job a clustering in the suburban areas of the mpo region
-# while the DBSCAN does a better job of clustering within the urban/inner core region
+# Use DBSCAN with stricter inputs to identify clusters within the inner core, then 
+# use DBSCAN with less strict inputs to identify remaining clusters outside of the inner core.
 
 # Pull in subregion shapes
 subregions <- st_read("output/AggregationAreas.gpkg", 'MPO_SubRegions')
@@ -308,16 +308,11 @@ mapview(ep2_final)+ ep2_pt_final
 
 # Save Data ####
 gpkg ="output/DestinationData.gpkg"
-# st_write(ep1, gpkg, 'essentialPlace_Option1_POLY', append = T)
-# st_write(ep1_pt, gpkg,'essentialPlace_Option1_PT', append = T)
-# st_write(ep2, gpkg, 'essentialPlace_Option2_POLY', append = T)
-# st_write(ep2_pt, gpkg,'essentialPlace_Option2_PT', append = T)
-# st_write(ep3, gpkg, 'essentialPlace_Option3_POLY', append = T)
-# st_write(ep3_pt, gpkg,'essentialPlace_Option3_PT', append = T)
 st_write(ep2_final,gpkg,'essentialPlace_Final_POLY', append = T)
 st_write(ep2_pt_final,gpkg,'essentialPlace_Final_PT', append = T)
 
 # Save Data for Conveyal ####
+source("functions/points_cleaning.R")
 ep_conveyal <- st_read("output/DestinationData.gpkg",'essentialPlace_Final_PT') %>% 
   rename(id= cluster, weight = n) %>% 
   mutate(type = 'essentialPlace') %>% 
