@@ -45,11 +45,10 @@ open_space_merge <- open_space %>%
   summarize(geometry = st_cast(st_union(geometry), "POLYGON")) %>% 
   st_as_sf() %>% 
   mutate(area = unclass(st_area(geometry))) %>% 
-  # filter parks that are less than half an acre in area
+  # filter out parks that are less than half an acre in area
   filter(area > 4046.86/2)
 
 open_space_large <- open_space_merge %>% 
-  #filter(area > 300000) # approx 75 acres
   filter(area > 500000) # approx 124 acres
 #mapview(open_space_large, zcol = ("primary_purpose"))
 
