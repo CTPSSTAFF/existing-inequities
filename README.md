@@ -46,8 +46,10 @@ This project studies access to various types of destinations throughout the MPO 
  
 * **Higher Education Opportunities**: Higher education opportutnies are idenfied by colleges and universities within MPO municipalities where more than 50% of undergraduates live off-campus and there is graduate enrollment. Enrollment data is from the National Center for Education Statistics for the fall semester of the 2020-21 AY. Joining enrollment data to location data happens here: [`/analysis/DestDataPrep_3_HigherEd.R`](https://github.com/CTPSSTAFF/existing-inequities/blob/main/analysis/DestDataPrep_3_HigherEd.R) Higher education destinations are weighted by enrollment.
 
-* **Parks and Open Space**:
+* **Parks and Open Space**: There are three types of open space destinations analyzed in this study. Work to identify access points to open spaces happens here: [`/analysis/DestDataPrep_4_Parks.R`](https://github.com/CTPSSTAFF/existing-inequities/blob/main/analysis/DestDataPrep_4_Parks.R). And pedestrian and road networks used to find access points are pulled from OpenStreetMap here: [`/notebooks/OSMPull.ipynb`](https://github.com/CTPSSTAFF/existing-inequities/blob/main/notebooks/OSMPull.ipynb) 
 
-    * **Open Space**:   
-    * **Open Space, Paths**:   
-    * **Open Space, Conservation**:   
+    * **Open Space**: Open space areas are identifed as publicly accessible open spaces with a primary purpose of conservation or recreation. Open spaces must be at least partially within an MPO municipality and have an area greater than a half acre. Access points to these spaces are then identfied based on where the boundary of the open space overlaps with the pedestrian and/or road network.
+    * **Open Space, Paths**: For shared use paths at least partially within the MPO region, an destination point is identified every 500 feet along the path with at least one point per path segment.
+    * **Open Space, Conservation**: To identify access to large parks, we also identifed access to large open spaces seperately. Large/Convervation open space access points correspond to open spaces that have an area greater than 124 acres.   
+
+   Open spaces are not weighted by the amount of open space in a polygon, instead, open spaces are represented by how accessible they are from the transporation network. 
