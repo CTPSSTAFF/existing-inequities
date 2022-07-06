@@ -29,7 +29,7 @@ To map the census tract level demographic onto the raster grid, we will allocate
 ## Destination Data Preparation
 This project studies access to various types of destinations throughout the MPO region. For data that required geocoding, see [`/geocoding/`](https://github.com/CTPSSTAFF/existing-inequities/tree/main/geocoding) for notes on the process. The destination data was prepared as follows:
 * **Higher Education Opportunities**:
-* **Healthcare Opportunities**: Healthcare destination data is prepared in [`/analysis/DestDataPrep_Healthcare.R`](https://github.com/CTPSSTAFF/existing-inequities/blob/main/analysis/DestDataPrep_Healthcare.R). There are two outputs for healthcare destinations: 1) emergency healthcare and 2) nonemergency healthcare.
+* **Healthcare Opportunities**: Healthcare destination data is prepared in [`/analysis/DestDataPrep_1_Healthcare.R`]([https://github.com/CTPSSTAFF/existing-inequities/blob/main/analysis/DestDataPrep_Healthcare.R](https://github.com/CTPSSTAFF/existing-inequities/blob/main/analysis/DestDataPrep_1_Healthcare.R)). There are two outputs for healthcare destinations: 1) emergency healthcare and 2) nonemergency healthcare.
 
     * **Emergency Healthcare**: Emergency healthcare destinations are acute care hospitals located within MPO municipalities.  
     * **Nonemergency Healthcare**: Nonemergency healthcare destinations include emergency healthcare plus medical clinics and community health centers within MPO municipalities.  
