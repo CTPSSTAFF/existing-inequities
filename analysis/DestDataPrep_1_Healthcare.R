@@ -40,34 +40,30 @@ rm(shp, xl_data, filenames_xl, name, datafolder,filenames_all, filenames_shp, i)
 
 # STEP 2: Prep addresses for geocoding #### 
 # Prep non-spatial data for geocoding
-# Tidygeocoder has a methods argument, 
-# Tried using Open Street Map's Nominatim, but results were not as clean as method = "arcgis"
-# When method = "arcgis" results are analogous to running addresses through ArcGIS geoproccessing
-# https://cran.r-project.org/web/packages/tidygeocoder/readme/README.html
-
-# address_cl <- `licensed-clinic-services-february-2022` %>% 
-#   select(name= `Clinic Name`, addr_st = Street, town= `City/Town`, zip = `Zip Code`) %>% 
-#   mutate(address= paste0(addr_st,", ", town, ", MA ",zip )) %>% 
-#   select(name, address) %>% 
-#   mutate(type= "Licensed Clinic")
+address_cl <- `licensed-clinic-services-february-2022` %>%
+  select(name= `Clinic Name`, addr_st = Street, town= `City/Town`, zip = `Zip Code`, medical= Medical) %>%
+  mutate(address= paste0(addr_st,", ", town, ", MA ",zip )) %>%
+  select(name, address, medical) %>%
+  mutate(type= "Licensed Clinic")
 # write_csv(address_cl, "geocoding/clinics_addresses.csv")
 rm(`licensed-clinic-services-february-2022`)
+
 # STEP 3: Geocode ####
-
-# library(tidygeocoder)
-# pt_cl <- address_cl %>% 
-#   geocode(address, method= 'arcgis', lat = latitude , long = longitude) %>% 
-#   st_as_sf(coords= c("longitude", "latitude"), crs=4326 )
-
 # Geocoded using MassGIS Locator file in ArcGIS Pro
+# see https://github.com/CTPSSTAFF/existing-inequities/tree/main/geocoding for notes
 pt_cl <- read_sf("geocoding/Clinics_Geocoded.geojson") %>% 
   select(name = USER_name, address = USER_address, type= USER_type) %>% 
-  st_transform(4326)
+  st_transform(4326) %>% 
+  left_join(address_cl, by = c("name", "address", "type")) %>% 
+  filter(medical == "Yes") %>% 
+  select(-medical)
+rm(address_cl)
 
 # note community health centers had spatial info stored as a character string,
 # using that point instead of geocoding
 pt_ch <- CommunityHealthCenters_Oct2019 %>% 
-  select(name= site_name, addr_st= address, town= mail_city, zip = zip, shape) %>% 
+  filter(admin_only == "N") %>% 
+  select(name= site_name, addr_st= address, town= mail_city, zip = zip, shape) %>%
   mutate(address= paste0(addr_st,", ", town, ", MA ",zip )) %>% 
   select(name, address, shape) %>% 
   rowwise() %>% 
@@ -78,6 +74,8 @@ pt_ch <- CommunityHealthCenters_Oct2019 %>%
   st_transform(4326) %>% 
   mutate(type= "Community Health Center")
 rm(CommunityHealthCenters_Oct2019)
+
+
 # STEP 4: Find duplicate healthcare opportunities ####
 # for the clinics and community health centers there is some overlap between layers. 
 # Compare the layers to make sure that the same clinic or CHC isn’t being counted twice, and if it is, 
@@ -94,6 +92,11 @@ pt_ch <- remove_duplicate_points2(pt_ch, pt_cl, dup_ch_cl)
 
 # STEP 5: Compile into single layer ####
 healthcare <- hospitals %>% 
+  # Filter on the field: COHORT <> Specialty Hospital, except Shriners Boston and Boston Children’s Hospital
+  filter((COHORT %in% c("Academic Medical Center", "Teaching Hospital",
+                       "Community High Public Payer Hospital","Community Hospital")) |
+           (COHORT == "Specialty Hospital" & 
+              SHORTNAME %in% c("Shriners Boston", "Boston Children's Hospital"))) %>% 
   select(name= NAME, addr_st= ADDRESS, town= TOWN, zip= ZIPCODE ) %>% 
   mutate(address= paste0(addr_st,", ", town, ", MA ",zip )) %>% 
   select(name, address) %>% 
@@ -104,8 +107,7 @@ healthcare <- hospitals %>%
   st_filter(boundary, .predicate = st_within) %>% 
   mutate(id = row_number())
 
-
-mapview(healthcare, zcol= "type")
+mapview(healthcare, zcol= "type") 
 
 # SAVE DATA ####
 st_write(healthcare, "output/DestinationData.gpkg", "healthcare_PT")
