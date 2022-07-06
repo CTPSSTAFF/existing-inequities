@@ -27,7 +27,7 @@ To map the census tract level demographic onto the raster grid, we will allocate
 
 
 ## Destination Data Preparation
-This project studies access to various types of destinations throughout the MPO region. For data that required geocoding, see [`/geocoding/`](https://github.com/CTPSSTAFF/existing-inequities/tree/main/geocoding) for notes on the process. The destination data was prepared as follows:
+This project studies access to various types of destinations throughout the MPO region. For data that required geocoding, see [`/geocoding/`](https://github.com/CTPSSTAFF/existing-inequities/tree/main/geocoding) for notes on the process. Destination outputs are saved here: [`/output/`](https://github.com/CTPSSTAFF/existing-inequities/tree/main/output) as a geopackage (`DestinationData.gpkg`) and as csv files to be uploaded in Conveyal. The destination data was prepared as follows:
 * **Healthcare Opportunities**: Healthcare destination data is prepared in [`/analysis/DestDataPrep_1_Healthcare.R`](https://github.com/CTPSSTAFF/existing-inequities/blob/main/analysis/DestDataPrep_1_Healthcare.R). There are two outputs for healthcare destinations: 1) emergency healthcare and 2) nonemergency healthcare.
 
     * **Emergency Healthcare**: Emergency healthcare destinations are acute care hospitals located within MPO municipalities.  
@@ -53,3 +53,5 @@ This project studies access to various types of destinations throughout the MPO 
     * **Open Space, Conservation**: To identify access to large parks, we also identifed access to large open spaces seperately. Large/Convervation open space access points correspond to open spaces that have an area greater than 124 acres.   
 
    Open spaces are not weighted by the amount of open space in a polygon, instead, open spaces are represented by how accessible they are from the transporation network. 
+
+
