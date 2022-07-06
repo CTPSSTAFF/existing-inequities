@@ -43,7 +43,7 @@ This project studies access to various types of destinations throughout the MPO 
       * Outside of the Inner Core, clusters were identified as groups of at least four essential destinations linked by a maximum of 483 meters (~ 6 minute walk as the crow flies)  
       
   * We reviewed clustering results and determined that to be considered an essential place in this analysis, the cluster would have to contain at least two types of destinations (health/civic/food) and there are at least five destinations represented in the cluster. 
-  * Essentail places are weighted by the number of destinations contained in the cluster.
+  * Essentail places are represented by the most central destination in the cluster and is weighted by the number of destinations contained in the cluster.
    
 * **Parks and Open Space**:
 
