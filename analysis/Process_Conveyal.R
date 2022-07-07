@@ -109,14 +109,14 @@ openspace <- openspace %>% select(starts_with("OpenSpace_Weekend"))
 rm(openspacepaths)
 
 # write to app data
-# write_rds(healthcareNonEmg, "app/data/healthcareNonEmg_access.rds")
-# write_rds(healthcareEmg, "app/data/healthcareEmg_access.rds")
-# write_rds(jobs, "app/data/jobs_access.rds")
-# write_rds(essentialplaces, "app/data/essentialplaces_access.rds")
-# write_rds(highered, "app/data/highered_access.rds")
-# write_rds(openspace, "app/data/openspace_access.rds")
-# write_rds(openspace_conservation, "app/data/openspace_conservation_access.rds")
-# write_rds(openspace_paths, "app/data/openspace_paths_access.rds")
+write_rds(healthcareNonEmg, "app/data/healthcareNonEmg_access.rds")
+write_rds(healthcareEmg, "app/data/healthcareEmg_access.rds")
+write_rds(jobs, "app/data/jobs_access.rds")
+write_rds(essentialplaces, "app/data/essentialplaces_access.rds")
+write_rds(highered, "app/data/highered_access.rds")
+write_rds(openspace, "app/data/openspace_access.rds")
+write_rds(openspace_conservation, "app/data/openspace_conservation_access.rds")
+write_rds(openspace_paths, "app/data/openspace_paths_access.rds")
 
 # Visualize by access type ####
 visualize_for_access <- function(access){
@@ -300,15 +300,17 @@ for (i in 1:length(access_all)){
   rm(access_avgs_agg)
 }
 
-
-
-
-
-test <- tibble(
-  dest_type = c("Healthcare, Non-emergency", "Healthcare, Emergency", 
-                "Jobs", "Essential Places", "Higher Education", 
-                "Open Space", "Open Space, Paths", "Open Space, Conservation")) %>% 
-  mutate(access= access_all) %>% 
-  full_join(comm_filters, by = character()) 
-  
+access_all_avgs2 <- access_all_avgs %>%
+  rowwise() %>% 
+  mutate(time_min= str_sub(.id, start= -5, end = -4),
+         destination = case_when(
+           grepl('HealthCare_NonEmergency', .id) ~ "Healthcare, Non-emergency",
+           grepl('HealthCare_Emergency', .id) ~ "Healthcare, Emergency",
+           grepl('Jobs', .id) ~"Jobs", 
+           grepl("EssentialPlaces", .id) ~ "Essential Places",
+           grepl("HigherEd", .id) ~ "Higher Education",
+           grepl("OpenSpace_Conservation", .id) ~ "Open Space, Conservation",
+           grepl("OpenSpacePaths", .id) ~ "Open Space, Paths",
+           grepl("OpenSpace", .id) ~ "Open Space",
+           TRUE ~ NA_character_))
 
