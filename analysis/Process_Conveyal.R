@@ -93,11 +93,11 @@ access_data <- read_stars(files, quiet= T)
 names(access_data)<- str_remove(names(access_data),"_50pct.geotiff")
 # note cropping pulls raster cells based on whether the cell center falls within the boundary
 access_data <- suppressWarnings(st_crop(access_data, boundary))
-# access_data[[1]][access_data[[1]] < 1] = NA
 
 assign(dest_name, access_data)
 }
  rm(dest_name, files, access_data)
+ 
 # SPLIT out multiple runs for same destination types
 healthcareEmg <- healthcare %>% select(starts_with("Healthcare_Emergency"))
 healthcareNonEmg <- healthcare %>% select(starts_with("Healthcare_Nonemergency"))
@@ -155,60 +155,10 @@ highered_access_vis <- visualize_for_access(highered)
 highered_access_vis
 test <- highered*dasy_raster$pop_dec_adult
 plot(test$HigherEd_MD_TransitAll_30min)
-# weighted average region wide####
 
-get_weighted_avgs_mpo <- function(access_layer, weights=dasy_raster){
-  # access_layer <- highered$HigherEd_MD_TransitAll_30min
-  access_vector <- as.vector(access_layer)
-  weighted_mean_for_avg <- function(w){result <- round(weighted.mean(access_vector, as.vector(w), na.rm=T))}
-  weighted_avgs <- lapply(weights, weighted_mean_for_avg) %>% 
-    enframe() %>%
-    mutate(
-      pop = name,
-      AvgAccessOpps = as.numeric(value)) %>% 
-    rowwise() %>% 
-    mutate(
-      type = str_split(pop, "_")[[1]][1],
-           type = case_when(
-             grepl("min_adult", pop) ~ "Minority Status, adult",
-             grepl("min", pop) ~ "Minority Status",
-             grepl("inc_adult", pop) ~ "Income status, adult",
-             grepl("inc", pop) ~ "Income status",
-             grepl("veh_hh", pop) ~ "Household vehicles",
-             grepl("pop_dec_adult", pop)~ "Total population, adult",
-             grepl("pop_dec", pop) ~ "Total population",
-             grepl("hh_dec", pop) ~ "Total households"),
-           pop_name= case_when(
-             pop == "minority_adult" ~ "Minority, adult",
-             pop == "nonminority_adult" ~ "Nonminority, adult",
-             pop == "minority" ~ "Minoirty",
-             pop == "nonminority" ~ "Nonminority",
-             pop == "lowinc" ~ "Low-income",
-             pop == "nonlowinc" ~ "Non-low-income",
-             pop == "lowinc_adult" ~ "Low-income, adult",
-             pop == "nonlowinc_adult" ~ "Non-low-income, adult",
-             pop == "zero_veh_hh" ~ "Zero vehicle households",
-             pop == "non_zero_veh_hh" ~ "Non-zero vehicle households",
-             grepl("pop_dec_adult", pop)~ "Total population, adult",
-             grepl("pop_dec", pop) ~ "Total population",
-             grepl("hh_dec", pop) ~ "Total households"))
-  # TODO: develop ratio and percent outputs for comparisons
-  
-  
-  return(weighted_avgs)
-}
 
-# # test function for one layer
-# highered_TransitAll_30min <- get_weighted_avgs_mpo(highered$HigherEd_MD_TransitAll_30min, dasy_raster) %>% 
-#   mutate(Region = "MPO")
-# # setup apply statement for all layers
-# test<- lapply(highered, get_weighted_avgs_mpo)
-# test2 <- plyr::ldply(test, data.frame) %>% 
-#   mutate(region = "MPO")
+# Find weighted average region wide and  for sub-regions ####
 get_weighted_avgs <- function(access_layer, weights){
-  # access_layer <- access[1]
-  # weights <-  dasy_raster 
-  # weights <- dasy_filtered
   access_vector <- as.vector(access_layer)
   weighted_mean_for_avg <- function(w){result <- weighted.mean(access_vector, as.vector(w), na.rm=T)}
   weighted_avgs <- lapply(weights, FUN = weighted_mean_for_avg) %>% 
@@ -242,9 +192,6 @@ get_weighted_avgs <- function(access_layer, weights){
         grepl("pop_dec_adult", pop)~ "Total population, adult",
         grepl("pop_dec", pop) ~ "Total population",
         grepl("hh_dec", pop) ~ "Total households"))
-  # TODO: develop ratio and percent outputs for comparisons
-  
-  
   return(weighted_avgs)
 }
 
@@ -256,7 +203,6 @@ comm_filters <- comm_types_id %>%
 access_all_avgs <- tibble()
 
 for (i in 1:length(access_all)){
-  # i <- 3
   access <- access_all[i][[1]]
   avgs_mpo <- lapply(access, get_weighted_avgs, weights= dasy_raster)
   avgs_mpo <- plyr::ldply(avgs_mpo, data.frame) %>% 
@@ -264,7 +210,6 @@ for (i in 1:length(access_all)){
   
   access_avgs_agg <- tibble()
   for(j in 1: 7){
-    # j <- 3
     agg <- j
     if (agg == 1) { comm_filter <- comm_types_rast %>% select(id1)}
     if (agg == 2) { comm_filter <- comm_types_rast %>% select(id2)}
@@ -273,7 +218,6 @@ for (i in 1:length(access_all)){
     if (agg == 5) { comm_filter <- comm_types_rast %>% select(id5)}
     if (agg == 6) { comm_filter <- comm_types_rast %>% select(id6)}
     if (agg == 7) { comm_filter <- comm_types_rast %>% select(id7)}
-    #if (agg == 8) { comm_filter <- comm_types_rast %>% select(id)}
     
     if (agg == 1) { access_agg <- access * (comm_types_rast %>% select(id1))}
     if (agg == 2) { access_agg <- access * (comm_types_rast %>% select(id2))}
@@ -282,7 +226,7 @@ for (i in 1:length(access_all)){
     if (agg == 5) { access_agg <- access * (comm_types_rast %>% select(id5))}
     if (agg == 6) { access_agg <- access * (comm_types_rast %>% select(id6))}
     if (agg == 7) { access_agg <- access * (comm_types_rast %>% select(id7))}
-    #if (agg == 8) { access_agg <- access * (comm_types_rast %>% select(id))}
+    
     dasy_filtered <- dasy_raster * comm_filter
     
     avgs <- lapply(access_agg, get_weighted_avgs,weights= dasy_filtered)
@@ -299,10 +243,11 @@ for (i in 1:length(access_all)){
                                avgs_mpo, access_avgs_agg)
   rm(access_avgs_agg)
 }
+rm(avgs, dasy_filtered, comm_filter, access, access_agg)
 
 access_all_avgs2 <- access_all_avgs %>%
   rowwise() %>% 
-  mutate(time_min= str_sub(.id, start= -5, end = -4),
+  mutate(time= str_sub(.id, start= -5, end = -4),
          destination = case_when(
            grepl('HealthCare_NonEmergency', .id) ~ "Healthcare, Non-emergency",
            grepl('HealthCare_Emergency', .id) ~ "Healthcare, Emergency",
@@ -312,5 +257,37 @@ access_all_avgs2 <- access_all_avgs %>%
            grepl("OpenSpace_Conservation", .id) ~ "Open Space, Conservation",
            grepl("OpenSpacePaths", .id) ~ "Open Space, Paths",
            grepl("OpenSpace", .id) ~ "Open Space",
-           TRUE ~ NA_character_))
+           TRUE ~ NA_character_),
+         mode = case_when(
+           grepl("Walk", .id) ~ "Walk",
+           grepl("Bike", .id) ~ "Bike",
+           grepl("Drive", .id) ~ "Drive",
+           grepl("TransitA", .id) ~ "Transit (All modes)",
+           grepl("TransitBusRT", .id) ~ "Transit (Bus and RT only)",
+           TRUE ~ NA_character_)) %>% 
+  select(-name,  -.id, -value)
 
+access_all_ratios <-access_all_avgs2 %>% 
+  mutate(type_detail = case_when(
+    grepl('Total', type)~ "Total",
+    grepl("Non", pop_name) ~ "Non-EJ",
+    TRUE ~ "EJ"),
+    type2 = ifelse(grepl("adult", pop_name), "Adult", NA)) %>% 
+  pivot_wider(id_cols = c(destination, mode, time, region, type, type2), names_from = type_detail, values_from = c(AvgAccessOpps) ) %>% 
+  rowwise() %>% 
+  mutate(Ratio = round(EJ/`Non-EJ`, 3)) %>% 
+  select(destination, mode, time, everything()) %>% 
+  select(-type2) %>% 
+  mutate_if(is.numeric, round, digits=3)
+
+access_all_ratios_MPO  <- access_all_ratios %>% 
+  filter(region == "MPO")
+
+access_all_comp <- access_all_ratios %>% 
+  filter(region != "MPO") %>% 
+  left_join(select(access_all_ratios_MPO, -c(region, Total, EJ, `Non-EJ`)), 
+            by = c("destination", "mode", "time", "type"),
+            suffix = c(" Aggregation Area", " MPO")) %>% 
+  bind_rows(rename(access_all_ratios_MPO, `Ratio MPO`  = Ratio))
+write_csv(access_all_comp, "app/data/access_all_comp.csv")
+write_csv(access_all_comp, "output/access_all_comp.csv")
