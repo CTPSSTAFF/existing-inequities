@@ -37,6 +37,9 @@ dasy_raster<- read_rds("data/dasy_raster.rds")
 comm_types_rast<- read_rds("data/comm_types_rast.rds")
 comm_types_id<- read_rds("data/comm_types_id.rds")
 `%notin%` <- Negate(`%in%`)
+
+access_all_comp <- read_csv("data/access_all_comp.csv")
+
 visualize_for_access <- function(access,dests, cols = 4 ){
   if (dests == 1) {d <- "Healthcare opportunities, Non-emergency"
     time_period <- "AM Peak"}
@@ -261,48 +264,78 @@ shinyServer(function(input, output, session) {
     reactable(access_avgs_tbl, compact = TRUE)
   })
   
-  output$avgs_agg <- renderReactable({
-    agg <- input$aggArea
-    if (agg == 1) { comm_filter <- comm_types_rast %>% select(id1)}
-    if (agg == 2) { comm_filter <- comm_types_rast %>% select(id2)}
-    if (agg == 3) { comm_filter <- comm_types_rast %>% select(id3)}
-    if (agg == 4) { comm_filter <- comm_types_rast %>% select(id4)}
-    if (agg == 5) { comm_filter <- comm_types_rast %>% select(id5)}
-    if (agg == 6) { comm_filter <- comm_types_rast %>% select(id6)}
-    if (agg == 7) { comm_filter <- comm_types_rast %>% select(id7)}
-    if (agg == 8) { comm_filter <- comm_types_rast %>% select(id)}
-    dasy_filtered <- dasy_raster * comm_filter
-    
-    access_all <- access_rv$access
-    access_avgs <- tibble()
-    
-    avgs <- lapply(access_all, get_weighted_avgs,weights= dasy_filtered)
-    avgs <- plyr::ldply(avgs, data.frame) %>% 
-      mutate(agg_id = as.numeric(agg)) %>%
-      left_join(comm_types_id, by= c("agg_id" = "id")) %>% 
-      mutate(region = paste0(communityType, ': ', subtype)) %>% 
-      select(-c(agg_id, communityType, subtype))
-    access_avgs <- bind_rows(access_avgs,
-                             avgs)
-    
-    access_avgs_tbl <- access_avgs %>%
-      select(.id, region, type, pop_name, AvgAccessOpps) %>% 
-      mutate(type_detail = case_when(
-        grepl('Total', type)~ "Total",
-        grepl("Non", pop_name) ~ "Non-EJ",
-        TRUE ~ "EJ"),
-        type2 = ifelse(grepl("adult", pop_name), "Adult", NA)) %>% 
-      pivot_wider(id_cols = c(.id,region, type, type2), names_from = type_detail, values_from = c(AvgAccessOpps) ) %>%
-      rowwise() %>% 
-      mutate(Ratio = round(EJ/`Non-EJ`, 3)) %>% 
-      mutate(time=word(.id, start = -1, sep = "_"),
-             mode= word(.id, start= -2, end= -2, sep="_")) %>% 
-      select(mode, time, everything()) %>% 
-      select(-c(.id, type2)) %>% 
-      mutate_if(is.numeric, round, digits=3)
-    #elect(Run = .id,type, type2, pop_ region)
-    
-    reactable(access_avgs_tbl, compact = TRUE)
+  output$access_all <- renderReactable({
+    access_all_tbl <- access_all_comp %>% 
+      rename(`Population Group`= type,
+             `Destination` = destination,
+             `Mode` = mode,
+             `Travel Time (minutes)`= time,
+             `Aggregation Area`=  region)
+    reactable(access_all_tbl, compact = TRUE, 
+              filterable = T,
+              highlight = T, 
+             # searchable = T
+             groupBy = c("Destination", "Mode", "Travel Time (minutes)"),
+             columns = list(
+               `Destination`= colDef(minWidth = 150),
+               `Aggregation Area` = colDef(minWidth = 200),
+               `Travel Time (minutes)`= colDef(format = colFormat(suffix = " min")),
+               Total = colDef(filterable = F,  format = colFormat(separators = T)),
+               EJ = colDef(filterable = F, format = colFormat(separators = T)),
+               `Non-EJ` = colDef(filterable  = F, format = colFormat(separators = T)),
+               `Ratio Aggregation Area`=  colDef(filterable =F,
+                                                 # count inequity flags
+                                                 aggregate = JS("function(values, rows) {
+        let flag = 0
+        rows.forEach(function(row) {
+         if ( row['Ratio Aggregation Area'] < 1 ) {
+          flag += 1
+          }
+        })
+        return( flag + ' equity flags')
+      }"),
+                                                 style = JS("function(rowInfo) {
+      const value = rowInfo.values['Ratio Aggregation Area']
+      let color
+      let weight
+      if (value < 1) {
+        color = '#e00000'
+        weight =  'bold'
+      } else {
+        color = '#000'
+        weight= 'normal'
+      }
+      return { color: color, fontWeight: weight }
+    }")
+                                                 ),
+               `Ratio MPO`= colDef(filterable= F,
+                                   # count inequity flags
+                                   aggregate = JS("function(values, rows) {
+        let flag = 0
+        rows.forEach(function(row) {
+         if ( row['Ratio MPO'] < 1 ) {
+          flag += 1
+          }
+        })
+        return( flag + ' equity flags')
+      }"),
+                                   style = JS("function(rowInfo) {
+      const value = rowInfo.values['Ratio MPO']
+      let color
+      let weight
+      if (value < 1) {
+        color = '#e00000'
+        weight= 'bold'
+      } else {
+        color = '#000'
+        weight = 'normal'
+      }
+      return { color: color, fontWeight: weight }
+    }"))),
+             columnGroups = list(
+               colGroup(name = "Average opportunities accessible per person, by population",
+                        columns= c("Total", "EJ", "Non-EJ")))
+             )
   })
   
   # ranges2 <- reactiveValues(x = NULL, y = NULL)

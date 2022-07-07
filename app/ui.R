@@ -69,21 +69,22 @@ shinyUI(fluidPage(
                                  plotOutput("access_plots", height = 800),
                                  h4("Weighted Avg Access Opportunities for Boston Region MPO and Aggregation Area"),
                                  reactableOutput("avgs"),
-                                 # column(6,
-                                 #        h4("Weighted Avg Access Opportunities for Boston Region MPO"),
-                                 #        reactableOutput("avgs_mpo")
-                                 #        ),
-                                 # column(6, 
-                                 #        h4("Weighted Avg Access Opportunities for Aggregation Area"),
-                                 #        reactableOutput("avgs_agg")),
                                  #girafeOutput("mapZoom", height = 800)
                                )
                                ),
-                      # tabPanel(strong("Compare Access"),
-                      #          ),
+                      tabPanel(strong("Compare Access"),
+                               reactableOutput("access_all"),
+                              ),
                       # tabPanel(strong("Travel Costs"),
                       #          ),
                       tabPanel(strong("About Project"),
+                               p("The purpose of this study is to develop a baseline assessment of existing transportation
+                               inequities in the Boston region. While the equity policies applied by the MPO and other
+                               transportation agencies often take the status quo as a given and attempt to prevent making
+                               inequities worse through future investments, this study will take a historical perspective
+                               and attempt to identify existing inequities that have been caused by past decisions and
+                               identify opportunities for the MPO to reduce the divergent outcomes between population groups."),
+                               p("See methodology notes", a("here", href= "https://github.com/CTPSSTAFF/existing-inequities", target="_blank" ), ".")
                                )
                       ),
           
