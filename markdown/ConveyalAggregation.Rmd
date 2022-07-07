@@ -27,41 +27,34 @@ library(kableExtra)
 
 # INPUTS ####
 # read in census geog layers
-mpo_census_tracts<- st_read("output/demographic_data.gpkg", layer= "tracts_acs_dec_2020") %>% 
+mpo_census_tracts<- st_read("../output/DemographicData.gpkg", layer= "tracts_acs_dec_2020") %>% 
   st_transform(3857)
-boundary<-st_read("output/AggregationAreas.gpkg", layer= "MPO_Boundary") %>% 
+boundary<-st_read("../output/AggregationAreas.gpkg", layer= "MPO_Boundary") %>% 
   st_transform(3857) # needs to be psudo-mercator for raster operations
-communitytypes<- st_read("output/AggregationAreas.gpkg", layer= "CommunityTypes") %>% st_transform(3857)
-housingsubmarkets <- st_read("output/AggregationAreas.gpkg", layer="HousingSubmarkets") %>% st_transform(3857)
+communitytypes<- st_read("../output/AggregationAreas.gpkg", layer= "CommunityTypes") %>% st_transform(3857)
+housingsubmarkets <- st_read("../output/AggregationAreas.gpkg", layer="HousingSubmarkets") %>% st_transform(3857)
 
 # read in geotiff
-access_layer<- read_stars("data/ConveyalRuns/HealthCareTests/HealthCare_NonEmergency_AMPeak_TransitBusRT_45min_50pct.geotiff") 
+access_layer<- read_stars("../data/ConveyalRuns/HealthCareTests/HealthCare_NonEmergency_AMPeak_TransitBusRT_45min_50pct.geotiff") 
 destination <- "Non-emergency Healthcare"
 time_period <- "AM Peak"
 modes <- "Transit (Bus and Rapid Transit only)"
 travel_time <- "45 minutes"
 
 # read in destinations used for conveyal analysis
-dest<- st_read("output/DestinationData.gpkg", layer= "healthcare_PT") %>% 
+dest<- st_read("../output/DestinationData.gpkg", layer= "healthcare_PT") %>% 
   st_transform(3857)
-
-# note conveyal uses lodes workers home locations as a proxy for population density.
-# the workers tiff is in stored in the same grid as the conveyal access output.
-# To apply demographics we would still need to go through a process similar to option 2
-# read in conveyal workers geotiff
-# workers <- read_stars("data/")
 ```
 
 First, crop the raster to the boundary extent.
 
 ```{r warnings=F, message=FALSE}
 # CROP Access Raster to the MPO Boundary
-access_layer_crop <- st_crop(access_layer, boundary)
-
+access_layer <- st_crop(access_layer, boundary)
 ```
 ```{r warnings=F, message=FALSE}
 ggplot()+
-  geom_stars(data=access_layer_crop, alpha = .7)+
+  geom_stars(data=access_layer, alpha = .7)+
   # geom_sf(data=access_contours, aes(color = value),size=.8, show.legend = F)+
   # geom_contour(data=access_layer_crop)+
   geom_sf(data=boundary,size=1,color="light gray", fill= NA)+
@@ -76,6 +69,64 @@ ggplot()+
   theme_void()
 
 ```
+
+```{r }
+# note conveyal uses lodes workers home locations as a proxy for population density.
+# the workers tiff is in stored in the same grid as the conveyal access output.
+# To apply demographics we would still need to go through a process similar to option 2
+# read in conveyal workers geotiff
+workers <- read_stars("../data/lodes-data-2018 Workers total conveyal.tif")%>% 
+  st_transform(3857)
+workers_crop <- st_crop(workers, boundary)
+# note significant difference between workers adult mpo in mpo from lodes
+tot_pop_lodes <- sum(workers_crop$`lodes-data-2018 Workers total conveyal.tif`, na.rm = T)
+tot_pop_adult_census <- sum(tracts$pop_dec_adult)
+# some what closer comparing to census households
+tot_hh_census <- sum(tracts$hh_dec)
+```
+
+
+## Dasymetric Mapping approach
+
+```{r }
+# remove zero access
+test <- access_layer
+test[[1]][test[[1]] < 1] = NA 
+
+ggplot()+
+  geom_stars(data=test, alpha = .7)+
+  geom_sf(data = mpo_census_tracts, color= 'pink', fill = 'transparent')+
+  geom_sf(data= communitytypes, color = "red", fill= 'transparent' )+
+  theme_void()
+```
+
+```{r }
+# dot density demographics
+
+# https://tarakc02.github.io/dot-density/
+  
+# demo <- mpo_census_tracts %>% 
+#   # st_drop_geometry() %>% 
+#   select(GEOID, minority, nonminority) %>% 
+#   pivot_longer(cols = c('minority', 'nonminority'), names_to = 'demo', values_to = 'pop') %>% 
+#   filter(is.na(pop)==F)
+
+#https://web.archive.org/web/20180928043346/https://www.cultureofinsight.com/blog/2018/05/02/2018-04-08-multivariate-dot-density-maps-in-r-with-sf-ggplot2/
+# test <- demo %>% 
+#   mutate(points = map2(.x = geom, .y = pop, ~ st_sample(.x, round(.y/100)))) %>% 
+#   st_drop_geometry() %>% 
+#   rename(geometry = points)
+# test2 <- test %>% 
+#   mutate(geometry = map(.x = geometry, ~st_coordinates(st_cast(.x, "POINT")))) 
+#   st_as_sf()
+#  ggplot() + 
+#    geom_sf(data =tracts, fill='transparent',size = .75) + 
+#    geom_sf(data= test,aes(color = demo), size=1)+ 
+#    theme_void()
+
+```
+
+
 
 
 ## Option 1: Aggregate to the census geography
