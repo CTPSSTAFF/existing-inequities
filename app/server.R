@@ -1,13 +1,16 @@
 #
 library(shiny)
-library(tidyverse)
+#library(tidyverse)
+library(readr)
+library(ggplot2)
+library(stringr)
+library(dplyr)
 library(sf)
-library(ragg)
-library(ggiraph)
+library(Cairo)
 library(stars)
 library(reactable)
 
-shiny.useragg = TRUE
+# shiny.useragg = TRUE
 
 mpoBoundary <- st_read("data/AggregationAreas.gpkg", "MPO_Boundary") %>%
   st_transform(3857)
@@ -15,14 +18,10 @@ commTypes_byMuni <- st_read("data/AggregationAreas.gpkg", "CommunityTypes") %>% 
 # commTypes<- commTypes_byMuni %>% 
 #   group_by(communityType) %>% 
 #   summarize(geometry = st_union(geom))
-
-
-
 # higherEd <- st_read("data/DestinationData.gpkg", "higherEd_PT")
 # healthcare <- st_read("data/DestinationData.gpkg", "healthcare_PT")
-# # TODO: spell essential correctly and re-save destination data.
-# essentialPlace_poly <- st_read("data/DestinationData.gpkg", "essentailPlace_Final_POLY")
-# essentialPlace_pt <- st_read("data/DestinationData.gpkg", "essentailPlace_Final_PT")
+# essentialPlace_poly <- st_read("data/DestinationData.gpkg", "essentialPlace_Final_POLY")
+# essentialPlace_pt <- st_read("data/DestinationData.gpkg", "essentialPlace_Final_PT")
 
 healthcare_nonemg_access <- read_rds("data/healthcareNonEmg_access.rds")
 healthcare_emg_access <- read_rds("data/healthcareEmg_access.rds")
@@ -36,43 +35,124 @@ openspace_paths_access <- read_rds("data/openspace_paths_access.rds")
 dasy_raster<- read_rds("data/dasy_raster.rds")
 comm_types_rast<- read_rds("data/comm_types_rast.rds")
 comm_types_id<- read_rds("data/comm_types_id.rds")
+
 `%notin%` <- Negate(`%in%`)
+total_pop_dec <- sum(as.vector(dasy_raster$pop_dec), na.rm = T)
+total_pop_adult <- sum(as.vector(dasy_raster$pop_dec_adult), na.rm = T)
+weights_all_for_plot <- dasy_raster %>% 
+  mutate(pct_min = minority/(minority+nonminority),
+         pct_nonmin = nonminority/(minority+nonminority),
+         pct_min_adult = minority_adult/(minority_adult+nonminority_adult),
+         pct_nonmin_adult = nonminority_adult/(minority_adult+nonminority_adult),
+         pct_lowinc = lowinc/ (lowinc+ nonlowinc),
+         pct_nonlowinc = nonlowinc/ (lowinc +nonlowinc),
+         pct_lowinc_adult = lowinc_adult/ (lowinc_adult+ nonlowinc_adult),
+         pct_nonlowinc_adult = nonlowinc_adult/ (lowinc_adult +nonlowinc_adult),
+         pct_zvhh = zero_veh_hh/(zero_veh_hh+ non_zero_veh_hh),
+         pct_nonzvhh = non_zero_veh_hh/(zero_veh_hh+ non_zero_veh_hh),
+         pct_pop = pop_dec/total_pop_dec,
+        pct_pop_adult = pop_dec_adult/ total_pop_adult) %>% 
+  select(starts_with("pct"))
 
 access_all_comp <- read_csv("data/access_all_comp.csv")
-
-visualize_for_access <- function(access,dests, cols = 4 ){
+visualize_for_access_w_demo <- function(access, demo, dests,modes, cols = 4 ){
   if (dests == 1) {d <- "Healthcare opportunities, Non-emergency"
-    time_period <- "AM Peak"}
+  time_period <- "AM Peak"}
   if (dests == 2) {d <- "Healthcare opportunities, Emergency"
-    time_period <- "AM Peak"}
+  time_period <- "AM Peak"}
   if (dests == 3) {d <- "Jobs"
-    time_period = "AM Peak"}
+  time_period = "AM Peak"}
   if (dests == 4) {d <- "Higher Education"
-    time_period = "Midday"}
+  time_period = "Midday"}
   if (dests == 5) {d <- "Essential Places"
-    time_period = "AM Peak" }
+  time_period = "AM Peak" }
   if (dests == 6) {d <- "Open Space"
-    time_period = "Weekend, Midday" }
+  time_period = "Weekend, Midday" }
   if (dests == 7) {d <- "Open Space, Conservation"
-    time_period = "Weekend, Midday" }
+  time_period = "Weekend, Midday" }
   if (dests == 8) {d <- "Open Space, Paths"
-    time_period = "Weekend, Midday" }
+  time_period = "Weekend, Midday" }
+  
   t <- paste(str_sub(word(names(access), sep = "min"), start = -2), "minute")
-  if (time_period ==  "AM Peak"){
+  
+  if (time_period ==  "AM Peak") {
     m <- word(word(names(access), sep = "_..min"), sep = "_.M_", start = 2)
   } else if(time_period ==  "Midday") {
     m <- word(word(names(access), sep = "_..min"), sep = "_Midday_", start = 2)
-  } 
-  else{
+  } else{
     m <- word(word(names(access), sep = "_..min"), sep = "_Weekend_", start = 2)
   }
   n <- paste(t, m)
   names(access)<- n
   
-  if (length(names(access))>1 ){
-    access <- access %>% st_redimension()
+  if(demo == 0){
+    access_weighted <- access
+  } else if (demo == 1){
+    weight <-select(weights_all_for_plot, pct_pop)
+    access_w <- access*weight
+    names(access_w)<- paste("Population weighted,\n", names(access_w))
+    access_weighted <- c( access_w)
+  } else if (demo == 2){
+    weight <-select(weights_all_for_plot, pct_pop_adult)
+    access_w <- access*weight
+    names(access_w)<- paste("Adult population weighted,\n", names(access_w))
+    access_weighted <- c( access_w)
+  } else if (demo == 3){
+    weight_ej <- select(weights_all_for_plot, pct_min_adult)
+    weight_nonej <- select(weights_all_for_plot, pct_nonmin_adult)
+    
+    access_ej <- access*weight_ej
+    names(access_ej)<- paste("Minorirty (Adult),\n", names(access_ej))
+    access_nonej <- access*weight_nonej
+    names(access_nonej)<- paste("Nonminority (Adult),\n", names(access_nonej))
+    access_weighted <- c( access_ej, access_nonej)
+  } else if (demo == 4){
+    weight_ej <- select(weights_all_for_plot, pct_min)
+    weight_nonej <- select(weights_all_for_plot, pct_nonmin)
+    
+    access_ej <- access*weight_ej
+    names(access_ej)<- paste("Minorirty,\n", names(access_ej))
+    access_nonej <- access*weight_nonej
+    names(access_nonej)<- paste("Nonminority,\n", names(access_nonej))
+    access_weighted <- c( access_ej, access_nonej)
+  } else if (demo == 5){
+    weight_ej <- select(weights_all_for_plot, pct_lowinc_adult)
+    weight_nonej <- select(weights_all_for_plot, pct_nonlowinc_adult)
+    
+    access_ej <- access*weight_ej
+    names(access_ej)<- paste("Low-income (Adult),\n", names(access_ej))
+    access_nonej <- access*weight_nonej
+    names(access_nonej)<- paste("Non-low-income (Adult),\n", names(access_nonej))
+    access_weighted <- c( access_ej, access_nonej)
+  } else if (demo == 6){
+    weight_ej <- select(weights_all_for_plot, pct_lowinc)
+    weight_nonej <- select(weights_all_for_plot, pct_nonlowinc)
+    
+    access_ej <- access*weight_ej
+    names(access_ej)<- paste("Low-income,\n", names(access_ej))
+    access_nonej <- access*weight_nonej
+    names(access_nonej)<- paste("Non-low-income,\n", names(access_nonej))
+    access_weighted <- c( access_ej, access_nonej)
+  } else if (demo == 7){
+    weight_ej <- select(weights_all_for_plot, pct_zvhh)
+    weight_nonej <- select(weights_all_for_plot, pct_nonzvhh)
+    
+    access_ej <- access*weight_ej
+    names(access_ej)<- paste("Zero vehicle households,\n", names(access_ej))
+    access_nonej <- access*weight_nonej
+    names(access_nonej)<- paste("Non-zero vehicle households,\n", names(access_nonej))
+    access_weighted <- c( access_ej, access_nonej)
+  } else (
+    access_weighted <- access
+  )
+  
+  
+  
+  
+  if (length(names(access_weighted))>1 & length(modes)>1){
+    access_weighted <- access_weighted %>% st_redimension()
     ggplot()+
-      geom_stars(data = access)+
+      geom_stars(data = access_weighted)+
       geom_sf(data = commTypes_byMuni, size=.2, color = 'light gray', fill = 'transparent')+
       geom_sf(data= mpoBoundary,size=.5,color='gray', fill= 'transparent')+
       coord_sf()+
@@ -84,9 +164,24 @@ visualize_for_access <- function(access,dests, cols = 4 ){
       ggtitle(paste0("Access to ", d))+
       labs(caption= paste0("Time period: ", time_period))+
       theme_void()
+  } else if (length(names(access_weighted))>1 & length(modes)==1){
+    access_weighted <- access_weighted %>% st_redimension()
+    ggplot()+
+      geom_stars(data = access_weighted)+
+      geom_sf(data = commTypes_byMuni, size=.2, color = 'light gray', fill = 'transparent')+
+      geom_sf(data= mpoBoundary,size=.5,color='gray', fill= 'transparent')+
+      coord_sf()+
+      scale_fill_gradient(low= 'white', high= '#871F78' ,trans="sqrt", #'log1p',
+                          na.value = "transparent",
+                          name = "Opportunities Accessible")+
+      # scale_fill_steps(n.breaks = 30,na.value = 'transparent')+
+      facet_wrap(~new_dim)+
+      ggtitle(paste0("Access to ", d))+
+      labs(caption= paste0("Time period: ", time_period))+
+      theme_void()
   } else {
     ggplot()+
-      geom_stars(data = access)+
+      geom_stars(data = access_weighted)+
       geom_sf(data = commTypes_byMuni, size=.3, color = 'light gray', fill = 'transparent')+
       geom_sf(data=mpoBoundary,size=.4,color="light gray", fill= "transparent")+
       coord_sf()+
@@ -100,47 +195,6 @@ visualize_for_access <- function(access,dests, cols = 4 ){
   }
 }
 
-get_weighted_avgs <- function(access_layer, weights){
-  # access_layer <- highered$HigherEd_MD_TransitAll_30min
-  access_vector <- as.vector(access_layer)
-  weighted_mean_for_avg <- function(w){result <- weighted.mean(access_vector, as.vector(w), na.rm=T)}
-  weighted_avgs <- lapply(weights, weighted_mean_for_avg) %>% 
-    enframe() %>%
-    mutate(
-      pop = name,
-      AvgAccessOpps = as.numeric(value)) %>% 
-    rowwise() %>% 
-    mutate(
-      type = str_split(pop, "_")[[1]][1],
-      type = case_when(
-        grepl("minority_adult", pop) ~ "Minority Status, adult",
-        grepl("min", pop) ~ "Minority Status",
-        grepl("inc_adult", pop) ~ "Income status, adult",
-        grepl("inc", pop) ~ "Income status",
-        grepl("veh_hh", pop) ~ "Household vehicles",
-        grepl("pop_dec_adult", pop)~ "Total population, adult",
-        grepl("pop_dec", pop) ~ "Total population",
-        grepl("hh_dec", pop) ~ "Total households"),
-      pop_name= case_when(
-        pop == "minority_adult" ~ "Minority, adult",
-        pop == "nonminority_adult" ~ "Nonminority, adult",
-        pop == "minority" ~ "Minoirty",
-        pop == "nonminority" ~ "Nonminority",
-        pop == "lowinc" ~ "Low-income",
-        pop == "nonlowinc" ~ "Non-low-income",
-        pop == "lowinc_adult" ~ "Low-income, adult",
-        pop == "nonlowinc_adult" ~ "Non-low-income, adult",
-        pop == "zero_veh_hh" ~ "Zero vehicle households",
-        pop == "non_zero_veh_hh" ~ "Non-zero vehicle households",
-        grepl("pop_dec_adult", pop)~ "Total population, adult",
-        grepl("pop_dec", pop) ~ "Total population",
-        grepl("hh_dec", pop) ~ "Total households"))
-  # TODO: develop ratio and percent outputs for comparisons
-  
-  
-  return(weighted_avgs)
-}
-
 shinyServer(function(input, output, session) {
   access_rv <- reactiveValues()
   access_rv$access <- NULL
@@ -151,9 +205,7 @@ shinyServer(function(input, output, session) {
     modes <- input$modes
     time <- input$time
     agg <- input$aggArea
-    # dests <- 1 
-    # modes <- c(1,2,3,4)
-    # aggA <- 8
+    demo <- as.numeric(input$demo)
     if (dests == 1) {access <- healthcare_nonemg_access}
     if (dests == 2) {access <- healthcare_emg_access}
     if (dests == 3) {access <- jobs_access}
@@ -175,7 +227,7 @@ shinyServer(function(input, output, session) {
     if (4 %notin% time) { access <- access %>% select(-ends_with("60min"))}
 
     access_rv$access_mpo <- access
-    # test_access_mpo <<- access
+
     if (agg == 1) { access <- access * (comm_types_rast %>% select(id1))}
     if (agg == 2) { access <- access * (comm_types_rast %>% select(id2))}
     if (agg == 3) { access <- access * (comm_types_rast %>% select(id3))}
@@ -183,85 +235,114 @@ shinyServer(function(input, output, session) {
     if (agg == 5) { access <- access * (comm_types_rast %>% select(id5))}
     if (agg == 6) { access <- access * (comm_types_rast %>% select(id6))}
     if (agg == 7) { access <- access * (comm_types_rast %>% select(id7))}
-    # if (agg == 8) { access <- access * (comm_types_rast %>% select(id))}
     
     access_rv$access <- access
-    test_access <<- access
-    plot <- visualize_for_access(access,dests, cols= length(time))
+    plot <- visualize_for_access_w_demo(access,demo,dests,modes, cols= length(modes)) 
     plot
     
   })
   
   output$avgs<- renderReactable({
-    
-    access_all <- access_rv$access_mpo
-    access_avgs_mpo <- tibble()
-    avgs <- lapply(access_all, get_weighted_avgs,weights= dasy_raster)
-    avgs <- plyr::ldply(avgs, data.frame) %>% 
-      mutate(region = "MPO")
-    access_avgs_mpo <- bind_rows(access_avgs_mpo,
-                                   avgs)
-    access_avgs_tbl <- access_avgs_mpo %>%
-      select(.id, region, type, pop_name, AvgAccessOpps) %>% 
-      mutate(type_detail = case_when(
-        grepl('Total', type)~ "Total",
-        grepl("Non", pop_name) ~ "Non-EJ",
-        TRUE ~ "EJ"),
-        type2 = ifelse(grepl("adult", pop_name), "Adult", NA)) %>% 
-      pivot_wider(id_cols = c(.id,region, type, type2), names_from = type_detail, values_from = c(AvgAccessOpps) ) %>% 
-      rowwise() %>% 
-      mutate(Ratio = round(EJ/`Non-EJ`, 3)) %>% 
-      mutate(time=word(.id, start = -1, sep = "_"),
-             mode= word(.id, start= -2, end= -2, sep="_")) %>% 
-      select(mode, time, everything()) %>% 
-      select(-c(.id, type2)) %>% 
-      mutate_if(is.numeric, round, digits=3)
-    
+    dests <- input$dest
+    modes <- input$modes
+    time <- input$time
     agg <- input$aggArea
-    if (agg == 1) { comm_filter <- comm_types_rast %>% select(id1)}
-    if (agg == 2) { comm_filter <- comm_types_rast %>% select(id2)}
-    if (agg == 3) { comm_filter <- comm_types_rast %>% select(id3)}
-    if (agg == 4) { comm_filter <- comm_types_rast %>% select(id4)}
-    if (agg == 5) { comm_filter <- comm_types_rast %>% select(id5)}
-    if (agg == 6) { comm_filter <- comm_types_rast %>% select(id6)}
-    if (agg == 7) { comm_filter <- comm_types_rast %>% select(id7)}
-    if (agg == 8) { comm_filter <- comm_types_rast %>% select(id)}
-    dasy_filtered <- dasy_raster * comm_filter
+    demo <- as.numeric(input$demo)
     
-    access_all_agg <- access_rv$access
-    access_avgs_agg <- tibble()
+    if (dests == 1) {d <-  "Healthcare, Non-emergency" }
+    if (dests == 2) {d <- "Healthcare, Emergency"}
+    if (dests == 3) {d <- "Jobs"  }
+    if (dests == 4) {d <- "Higher Education" }
+    if (dests == 5) {d <-  "Essential Places" }
+    if (dests == 6) {d <- "Open Space"   }
+    if (dests == 7) {d <- "Open Space, Conservation" }
+    if (dests == 8) {d <- "Open Space, Paths"}
     
-    avgs <- lapply(access_all_agg, get_weighted_avgs,weights= dasy_filtered)
-    avgs <- plyr::ldply(avgs, data.frame) %>% 
-      mutate(agg_id = as.numeric(agg)) %>%
-      left_join(comm_types_id, by= c("agg_id" = "id")) %>% 
-      mutate(region = paste0(communityType, ': ', subtype)) %>% 
-      select(-c(agg_id, communityType, subtype))
-    access_avgs_agg <- bind_rows(access_avgs_agg,
-                             avgs)
+    m <- c()
+    if (1 %in% modes) { m <- c(m, "Walk")}
+    if (2 %in% modes) { m <- c(m, "Bike")}
+    if (3 %in% modes) { m <- c(m, "Transit (Bus and RT only)")}
+    if (4 %in% modes) { m <- c(m, "Transit (All modes)")}
+    if (5 %in% modes) { m <- c(m, "Drive")}
     
-    access_avgs_tbl_agg <- access_avgs_agg %>%
-      select(.id, region, type, pop_name, AvgAccessOpps) %>% 
-      mutate(type_detail = case_when(
-        grepl('Total', type)~ "Total",
-        grepl("Non", pop_name) ~ "Non-EJ",
-        TRUE ~ "EJ"),
-        type2 = ifelse(grepl("adult", pop_name), "Adult", NA)) %>% 
-      pivot_wider(id_cols = c(.id,region, type, type2), names_from = type_detail, values_from = c(AvgAccessOpps) ) %>% 
-      rowwise() %>% 
-      mutate(Ratio = round(EJ/`Non-EJ`, 3)) %>% 
-      mutate(time=word(.id, start = -1, sep = "_"),
-             mode= word(.id, start= -2, end= -2, sep="_")) %>% 
-      select(mode, time, everything()) %>% 
-      select(-c(.id, type2)) %>% 
-      mutate_if(is.numeric, round, digits=3)
-    access_avgs_tbl<- access_avgs_tbl %>% 
-      left_join(access_avgs_tbl_agg, 
-                by = c("mode", "time", "type"), 
-                suffix = c("_MPO","_Agg")) %>% 
-      select(-starts_with("region"))
+    t <- c()
+    if (1 %in% time) { t<- c(t, 15)}
+    if (2 %in% time) { t<- c(t, 30)}
+    if (3 %in% time) { t<- c(t, 45)}
+    if (4 %in% time) { t<- c(t, 60)}
     
-    reactable(access_avgs_tbl, compact = TRUE)
+    a <- c()
+    if (agg == 1) { a <- c(a, "Developing Suburbs: Maturing New England Towns")}
+    if (agg == 2) { a <- c(a, "Inner Core: Streetcar Suburbs")}
+    if (agg == 3) { a <- c(a, "Developing Suburbs: Country Suburbs")}
+    if (agg == 4) { a <- c(a, "Maturing Suburbs: Established Suburbs and Cape Cod Towns")}
+    if (agg == 5) { a <- c(a, "Maturing Suburbs: Mature Suburban Towns")}
+    if (agg == 6) { a <- c(a, "Inner Core: Metro Core Communities")}
+    if (agg == 7) { a <- c(a, "Regional Urban Centers: Sub-Regional Urban Centers")}
+    if (agg == 8) { a <- c(a, "MPO")}
+    
+    dem <- c()
+    if (0 %in% demo) { dem <- c(dem, "Total population, adult", "Total population" , "Total households" )}
+    if (3 %in% demo) { dem <- c(dem, "Minority Status, adult", "Total population, adult")}
+    if (4 %in% demo) { dem <- c(dem, "Minority Status","Total population"  )}
+    if (5 %in% demo) { dem <- c(dem, "Income status, adult", "Total population, adult")}
+    if (6 %in% demo) { dem <- c(dem, "Income status", "Total population")}
+    if (7 %in% demo) { dem <- c(dem, "Household vehicles" ,"Total households"   )}
+    
+    access_tbl <- access_all_comp %>% 
+      filter( destination == d) %>% 
+      filter(mode %in% m) %>%
+      filter(time %in% t) %>% 
+      filter(region %in% a) %>% 
+      filter(type %in% dem) %>% 
+      rename(`Population Group`= type,
+             `Destination` = destination,
+             `Mode` = mode,
+             `Travel Time (minutes)`= time,
+             `Aggregation Area`=  region)
+    reactable(access_tbl, compact = TRUE, 
+              highlight = T, 
+              columns = list(
+                `Destination`= colDef(minWidth = 150),
+                `Aggregation Area` = colDef(minWidth = 200),
+                `Travel Time (minutes)`= colDef(format = colFormat(suffix = " min")),
+                Total = colDef(filterable = F,  format = colFormat(separators = T)),
+                EJ = colDef(filterable = F, format = colFormat(separators = T)),
+                `Non-EJ` = colDef(filterable  = F, format = colFormat(separators = T)),
+                `Ratio Aggregation Area`=  colDef(filterable =F,
+                                                  style = JS("function(rowInfo) {
+      const value = rowInfo.values['Ratio Aggregation Area']
+      let color
+      let weight
+      if (value < 1) {
+        color = '#e00000'
+        weight =  'bold'
+      } else {
+        color = '#000'
+        weight= 'normal'
+      }
+      return { color: color, fontWeight: weight }
+    }")
+                ),
+                `Ratio MPO`= colDef(filterable= F,
+                                    # count inequity flags
+                                    style = JS("function(rowInfo) {
+      const value = rowInfo.values['Ratio MPO']
+      let color
+      let weight
+      if (value < 1) {
+        color = '#e00000'
+        weight= 'bold'
+      } else {
+        color = '#000'
+        weight = 'normal'
+      }
+      return { color: color, fontWeight: weight }
+    }"))),
+              columnGroups = list(
+                colGroup(name = "Average opportunities accessible per person, by population",
+                         columns= c("Total", "EJ", "Non-EJ")))
+    )
   })
   
   output$access_all <- renderReactable({
@@ -338,44 +419,5 @@ shinyServer(function(input, output, session) {
              )
   })
   
-  # ranges2 <- reactiveValues(x = NULL, y = NULL)
-    output$map <- renderGirafe({
-
-        overview_map <- ggplot()+
-          geom_sf(data = mpoBoundary, color = "black", size = 1.4, fill = "white")+
-          geom_sf_interactive(data = commTypes, aes(fill = communityType, 
-                                                    tooltip= communityType))+
-          theme_void()+ 
-        theme(legend.position="none")
-        girafe(ggobj = overview_map)
-
-    })
-    output$mapZoom <- renderGirafe({
-      detail_map <- ggplot()+
-        geom_sf(data = mpoBoundary, color = "black", size = 1.4, fill = "white")+
-        geom_sf_interactive(data = commTypes, aes(fill = communityType, tooltip = communityType))+
-        geom_sf(data = higherEd, aes(size = enrollment), color= 'light gray', fill = 'transparent', alpha = .6)+
-        geom_sf(data = essentialPlace_poly, fill= "white", alpha =.8)+
-        geom_sf(data = healthcare, aes(shape = type), size= 2, color= 'brown', alpha= .7)+
-        # coord_sf(xlim = ranges2$x, ylim = ranges2$y, expand = FALSE)+
-        theme_void()+
-        #theme(legend.title = element_text( size=10), legend.text=element_text(size=10))
-        theme(legend.position="none")
-        
-      detail_map <- girafe(ggobj= detail_map)
-      # detail_map <- girafe_options(detail_map,opts_zoom(min = .7, max = 10))
-      detail_map
-    })
-    # observe({
-    #   brush <- input$map_zoom
-    #   if (!is.null(brush)) {
-    #     ranges2$x <- c(brush$xmin, brush$xmax)
-    #     ranges2$y <- c(brush$ymin, brush$ymax)
-    #     
-    #   } else {
-    #     ranges2$x <- NULL
-    #     ranges2$y <- NULL
-    #   }
-    # })
 
 })

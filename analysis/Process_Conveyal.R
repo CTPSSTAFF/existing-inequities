@@ -289,5 +289,7 @@ access_all_comp <- access_all_ratios %>%
             by = c("destination", "mode", "time", "type"),
             suffix = c(" Aggregation Area", " MPO")) %>% 
   bind_rows(rename(access_all_ratios_MPO, `Ratio MPO`  = Ratio))
+
+# SAVE RESULTS ####
 write_csv(access_all_comp, "app/data/access_all_comp.csv")
 write_csv(access_all_comp, "output/access_all_comp.csv")

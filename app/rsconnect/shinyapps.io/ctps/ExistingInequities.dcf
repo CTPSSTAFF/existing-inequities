@@ -5,9 +5,9 @@ account: ctps
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 6506562
-bundleId: 6078818
+bundleId: 6082367
 url: https://ctps.shinyapps.io/ExistingInequities/
-when: 1657210214.83189
-lastSyncTime: 1657210214.83189
+when: 1657302496.15446
+lastSyncTime: 1657302496.15448
 asMultiple: FALSE
 asStatic: FALSE

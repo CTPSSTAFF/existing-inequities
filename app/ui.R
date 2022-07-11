@@ -1,4 +1,4 @@
-library(ggiraph)
+
 library(shiny)
 library(shinyWidgets)
 library(reactable)
@@ -38,14 +38,21 @@ shinyUI(fluidPage(
                         #multiple = T,
                         #selected= c(1,2,3,4)),
                         selected = c(3)),
-            # pickerInput("demo", label= h4("Demographic Overlay"),
-            #             choices= list("None"= 0,
-            #                           "Minority Status (Adults)"= 1,
-            #                           "Minority Status" = 2,
-            #                           "Income Status (Adults)" = 3,
-            #                           "Income Status" = 4,
-            #                           "Vehicle Availability" = 5),
-            #             selected = c(0)),
+            pickerInput("demo", label= h4("Demographic Overlay"),
+                        choices= list("None"= 0,
+                                      #"Total Population" = 1,
+                                      #"Total Population (Adults)" = 2,
+                                      "Minority Status (Adults)"= 3,
+                                      "Minority Status" = 4,
+                                      "Income Status (Adults)" = 5,
+                                      "Income Status" = 6,
+                                      "Vehicle Availability" = 7),
+                        # multiple = T,
+                        # options =  list(
+                        #   "max-options" = 2,
+                        #   "max-options-text" = "Limit two demographic groups"
+                        # ),
+                        selected = c(0)),
             pickerInput('aggArea', label= h4("Aggregation Areas"),
                                choices = list(
                                               "Developing Suburbs: Maturing New England Towns"= 1,
@@ -66,13 +73,12 @@ shinyUI(fluidPage(
           tabsetPanel(type = "tabs",
                       tabPanel(strong("Access Plots"),
                                fluidRow(
-                                 plotOutput("access_plots", height = 800),
-                                 h4("Weighted Avg Access Opportunities for Boston Region MPO and Aggregation Area"),
+                                 plotOutput("access_plots", height = 900),
                                  reactableOutput("avgs"),
-                                 #girafeOutput("mapZoom", height = 800)
                                )
                                ),
                       tabPanel(strong("Compare Access"),
+                               h4("Weighted Avg Access Opportunities for Boston Region MPO and Aggregation Area"),
                                reactableOutput("access_all"),
                               ),
                       # tabPanel(strong("Travel Costs"),
