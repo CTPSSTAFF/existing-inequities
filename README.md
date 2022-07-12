@@ -72,6 +72,16 @@ Used Sept2019_Streetlight(v.5.3) data which has traffic impedences by time perio
       * Metro West: https://transitfeeds.com/p/massdot/101/20190831
       * Montachusett: https://transitfeeds.com/p/massdot/102/20190921
    * Note: not including TMA shuttles due to GTFS availability and inconsistent public access.
+* Conveyal settings were selected to align with the Travel Demand Model where possible. Select settings for differnt modes and time periods are recorded here: [`data/ConveyalRuns/`](https://github.com/CTPSSTAFF/existing-inequities/tree/main/data/ConveyalRuns).
+
+![image](https://user-images.githubusercontent.com/56197359/178547072-19015164-df70-4d37-ac9f-f4fda300b277.png)
 
 ## Processing Conveyal Outputs
+Conveyal access rasters are downloaded and processes in the script here: [`/analysis/Process_Conveyal.R`](https://github.com/CTPSSTAFF/existing-inequities/blob/main/analysis/Process_Conveyal.R). This process uses the dasymetric raster output to weight access results by differnt demographic populations and aggregation areas prepared here: [`/analysis/AggregationBoundaries.R`](https://github.com/CTPSSTAFF/existing-inequities/blob/main/analysis/AggregationBoundaries.R). To summarize the access for the entire MPO and within aggregation areas, we find average of access opportunities avaialable to a population where access opportunities within a grid cell are weighted by the population estimated to live within that grid cell. 
+* Note: When applying the dasymetric weighting, we do not reccommend aggregating at a sub-municipal geographic unit, as the demographic inputs from the census not appropriate at that scale. 
+
+To compare average access opptunities by population, we calculate a **ratio** where the numberator is the average opportunities accessible by a population of concern (low-income/minoity/zero-vehicle-households) and the denominator is the average opportunities accessible by the non-protected population. When a ratio is 1, that indicates partity where both populations have equal access. When the ratio is below 1, this indicates better access to the non-protected population. When the ratio is above 1, this indicates better access to the protected population. All Conveyal runs are recorded here: [`output/access_all_comp.csv`](https://github.com/CTPSSTAFF/existing-inequities/blob/main/output/access_all_comp.csv). 
+
 ## Interactive App
+To summarize and visualize results, we developed an interactive app which is here: [`/app`](https://github.com/CTPSSTAFF/existing-inequities/tree/main/app). And is hosted online here: (http://shinyapps.ctps.org/ExistingInequities/).
+![image](https://user-images.githubusercontent.com/56197359/178550685-1dfda3ad-f546-423f-9036-47776e5f6152.png)
