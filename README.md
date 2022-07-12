@@ -50,37 +50,37 @@ This project studies access to various types of destinations throughout the MPO 
 
     * **Open Space**: Open space areas are identified as publicly accessible open spaces with a primary purpose of conservation or recreation. Open spaces must be at least partially within an MPO municipality and have an area greater than a half-acre. Access points to these spaces are then identified based on where the boundary of the open space overlaps with the pedestrian and/or road network.
     * **Open Space, Paths**: For shared use paths at least partially within the MPO region, a destination point is identified every 500 feet along the path with at least one point per path segment.
-    * **Open Space, Conservation**: To identify access to large parks, we alsoidentified access to large open spaces. Large/Conservation open space access points correspond to open spaces that have an area greater than 124 acres.   
+    * **Open Space, Conservation**: To identify access to large parks, we also identified access to large open spaces. Large/Conservation open space access points correspond to open spaces that have an area greater than 124 acres.   
 
    Open spaces are not weighted by the amount of open space in a polygon, instead, open spaces are represented by how accessible they are from the transportation network. 
 
 * **Employment Opportunities**: Jobs data comes from the 2018 LODES (LEHD Origin-Destination Employment Statistics) data which is prepared in the [Conveyal application](https://docs.conveyal.com/prepare-inputs/upload-spatial-data#lodes-dataset-import). Analyses are run with the total jobs reported in the Lodes dataset.
 
 ## Conveyal Access Analysis
-Access to destinations was calcluated with [Conveyal's regional analysis](https://docs.conveyal.com/analysis/regional) for a typical day in fall 2019. In order to compare results, seperate regional analyses were run for different mode and destination combinations. Outputs of the coveyal runs are saved here: [`data/ConveyalRuns/Sept2019`](https://github.com/CTPSSTAFF/existing-inequities/tree/main/data/ConveyalRuns/Sept2019). There are three key components of the Conveyal analysis: 1) origins/destinations, 2) representation of the transportation network, and 3) analysis settings.
+Access to destinations was calculated with [Conveyal's regional analysis](https://docs.conveyal.com/analysis/regional) for a typical day in fall 2019. In order to compare results, separate regional analyses were run for different mode and destination combinations. Outputs of the Coveyal runs are saved here: [`data/ConveyalRuns/Sept2019`](https://github.com/CTPSSTAFF/existing-inequities/tree/main/data/ConveyalRuns/Sept2019). There are three key components of the Conveyal analysis: 1) origins/destinations, 2) representation of the transportation network, and 3) analysis settings.
 * Origins used for this analysis are the center points of a rectangular grid covering the MPO service area. Destinations were uploaded to Conveyal as free form points.
 * The transportation network in Conveyal is a network bundle is a combination of GTFS files and an OpenStreetMap extract.
-   * **OSM Extract**: For this work we used the Open Street Map layer prepared by Conveyal and OPMI that uses impedences pull from Streetlight data.
-Used Sept2019_Streetlight(v.5.3) data which has traffic impedences by time period. The 6am-9am file was used when the analysis time period was the AM Peak.The 12pm-3pm file was used when the analysis time period was Midday. No impedences were used for the weekend travel.
+   * **OSM Extract**: For this work we used the Open Street Map layer prepared by Conveyal and OPMI that uses impedances pull from Streetlight data.
+Used Sept2019_Streetlight(v.5.3) data which has traffic impedances by time period. The 6am-9am file was used when the analysis time period was the AM Peak. The 12pm-3pm file was used when the analysis time period was Midday. No impedances were used for the weekend travel.
    * **GTFS file sources**: 
       * MBTA: from MBTA GTFS [archive](https://cdn.mbta.com/archive/archived_feeds.txt), https://cdn.mbtace.com/archive/20190919.zip
       * Brockton: https://transitfeeds.com/p/massdot/94/20190904
-      * Cape Ann:https://transitfeeds.com/p/massdot/95/20190920
+      * Cape Ann: https://transitfeeds.com/p/massdot/95/20190920
       * Greater Attleboro: https://transitfeeds.com/p/massdot/98/20190921
       * Lowell: https://transitfeeds.com/p/massdot/99/20190920
       * Merrimack Valley: https://transitfeeds.com/p/massdot/100/20190914
       * Metro West: https://transitfeeds.com/p/massdot/101/20190831
       * Montachusett: https://transitfeeds.com/p/massdot/102/20190921
    * Note: not including TMA shuttles due to GTFS availability and inconsistent public access.
-* Conveyal settings were selected to align with the Travel Demand Model where possible. Select settings for differnt modes and time periods are recorded here: [`data/ConveyalRuns/`](https://github.com/CTPSSTAFF/existing-inequities/tree/main/data/ConveyalRuns).
+* Conveyal settings were selected to align with the Travel Demand Model where possible. Select settings for different modes and time periods are recorded here: [`data/ConveyalRuns/`](https://github.com/CTPSSTAFF/existing-inequities/tree/main/data/ConveyalRuns).
 
 ![image](https://user-images.githubusercontent.com/56197359/178547072-19015164-df70-4d37-ac9f-f4fda300b277.png)
 
 ## Processing Conveyal Outputs
-Conveyal access rasters are downloaded and processes in the script here: [`/analysis/Process_Conveyal.R`](https://github.com/CTPSSTAFF/existing-inequities/blob/main/analysis/Process_Conveyal.R). This process uses the dasymetric raster output to weight access results by differnt demographic populations and aggregation areas prepared here: [`/analysis/AggregationBoundaries.R`](https://github.com/CTPSSTAFF/existing-inequities/blob/main/analysis/AggregationBoundaries.R). To summarize the access for the entire MPO and within aggregation areas, we find average of access opportunities avaialable to a population where access opportunities within a grid cell are weighted by the population estimated to live within that grid cell. 
-* Note: When applying the dasymetric weighting, we do not reccommend aggregating at a sub-municipal geographic unit, as the demographic inputs from the census not appropriate at that scale. 
+Conveyal access rasters are downloaded and processes in the script here: [`/analysis/Process_Conveyal.R`](https://github.com/CTPSSTAFF/existing-inequities/blob/main/analysis/Process_Conveyal.R). This process uses the dasymetric raster output to weight access results by different demographic populations and aggregation areas prepared here: [`/analysis/AggregationBoundaries.R`](https://github.com/CTPSSTAFF/existing-inequities/blob/main/analysis/AggregationBoundaries.R). To summarize the access for the entire MPO and within aggregation areas, we find average of access opportunities available to a population where access opportunities within a grid cell are weighted by the population estimated to live within that grid cell. 
+* Note: When applying the dasymetric weighting, we do not recommend aggregating at a sub-municipal geographic unit, as the demographic inputs from the census not appropriate at that scale. 
 
-To compare average access opptunities by population, we calculate a **ratio** where the numberator is the average opportunities accessible by a population of concern (low-income/minoity/zero-vehicle-households) and the denominator is the average opportunities accessible by the non-protected population. When a ratio is 1, that indicates partity where both populations have equal access. When the ratio is below 1, this indicates better access to the non-protected population. When the ratio is above 1, this indicates better access to the protected population. All Conveyal runs are recorded here: [`output/access_all_comp.csv`](https://github.com/CTPSSTAFF/existing-inequities/blob/main/output/access_all_comp.csv). 
+To compare average access opportunities by population, we calculate a **ratio** where the numerator is the average opportunities accessible by a population of concern (low-income/minority/zero-vehicle-households) and the denominator is the average opportunities accessible by the non-protected population. When a ratio is 1, that indicates parity where both populations have equal access. When the ratio is below 1, this indicates better access to the non-protected population. When the ratio is above 1, this indicates better access to the protected population. All Conveyal runs are recorded here: [`output/access_all_comp.csv`](https://github.com/CTPSSTAFF/existing-inequities/blob/main/output/access_all_comp.csv). 
 
 ## Interactive App
 To summarize and visualize results, we developed an interactive app which is here: [`/app`](https://github.com/CTPSSTAFF/existing-inequities/tree/main/app). And is hosted online here: (http://shinyapps.ctps.org/ExistingInequities/).
