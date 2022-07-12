@@ -57,3 +57,6 @@ This project studies access to various types of destinations throughout the MPO 
 * **Employment Opportunities**: Jobs data comes from the 2018 LODES (LEHD Origin-Destination Employment Statistics) data which is prepared in the [Conveyal application](https://docs.conveyal.com/prepare-inputs/upload-spatial-data#lodes-dataset-import). Analyses are run with the total jobs reported in the Lodes dataset.
 
 ## Conveyal Access Analysis
+Access to destinations was calcluated with [Conveyal's regional analysis](https://docs.conveyal.com/analysis/regional) for a typical day in fall 2019. In order to compare results, seperate regional analyses were run for different mode and destination combinations. Outputs of the coveyal runs are saved here: [`data/ConveyalRuns/Sept2019`](https://github.com/CTPSSTAFF/existing-inequities/tree/main/data/ConveyalRuns/Sept2019). There are three key components of the Conveyal analysis: 1) origins/destinations, 2) representation of the transportation network, and 3) analysis settings.
+## Processing Conveyal Outputs
+## Interactive App
