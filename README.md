@@ -58,5 +58,20 @@ This project studies access to various types of destinations throughout the MPO 
 
 ## Conveyal Access Analysis
 Access to destinations was calcluated with [Conveyal's regional analysis](https://docs.conveyal.com/analysis/regional) for a typical day in fall 2019. In order to compare results, seperate regional analyses were run for different mode and destination combinations. Outputs of the coveyal runs are saved here: [`data/ConveyalRuns/Sept2019`](https://github.com/CTPSSTAFF/existing-inequities/tree/main/data/ConveyalRuns/Sept2019). There are three key components of the Conveyal analysis: 1) origins/destinations, 2) representation of the transportation network, and 3) analysis settings.
+* Origins used for this analysis are the center points of a rectangular grid covering the MPO service area. Destinations were uploaded to Conveyal as free form points.
+* The transportation network in Conveyal is a network bundle is a combination of GTFS files and an OpenStreetMap extract.
+   * **OSM Extract**: For this work we used the Open Street Map layer prepared by Conveyal and OPMI that uses impedences pull from Streetlight data.
+Used Sept2019_Streetlight(v.5.3) data which has traffic impedences by time period. The 6am-9am file was used when the analysis time period was the AM Peak.The 12pm-3pm file was used when the analysis time period was Midday. No impedences were used for the weekend travel.
+   * **GTFS file sources**: 
+      * MBTA: from MBTA GTFS [archive](https://cdn.mbta.com/archive/archived_feeds.txt), https://cdn.mbtace.com/archive/20190919.zip
+      * Brockton: https://transitfeeds.com/p/massdot/94/20190904
+      * Cape Ann:https://transitfeeds.com/p/massdot/95/20190920
+      * Greater Attleboro: https://transitfeeds.com/p/massdot/98/20190921
+      * Lowell: https://transitfeeds.com/p/massdot/99/20190920
+      * Merrimack Valley: https://transitfeeds.com/p/massdot/100/20190914
+      * Metro West: https://transitfeeds.com/p/massdot/101/20190831
+      * Montachusett: https://transitfeeds.com/p/massdot/102/20190921
+   * Note: not including TMA shuttles due to GTFS availability and inconsistent public access.
+
 ## Processing Conveyal Outputs
 ## Interactive App
