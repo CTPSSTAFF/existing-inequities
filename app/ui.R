@@ -3,6 +3,14 @@ library(shiny)
 library(shinyWidgets)
 library(reactable)
 
+aggAreaIcons<- c(
+  'ct1.png', 'ct2.png','ct3.png','ct4.png','ct5.png','ct6.png', 'ct7.png','ct8.png')
+aggAreaNames <- c("Developing Suburbs: <br>Maturing New England Towns","Inner Core: Streetcar Suburbs",
+                   "Developing Suburbs: Country Suburbs", "Maturing Suburbs: Established Suburbs and Cape Cod Towns",
+                   "Maturing Suburbs: Mature Suburban Towns" , "Inner Core: Metro Core Communities",
+                   "Regional Urban Centers: Sub-Regional Urban Centers", "MPO")
+  
+
 shinyUI(fluidPage(
 
     # Application title
@@ -54,6 +62,7 @@ shinyUI(fluidPage(
                         # ),
                         selected = c(0)),
             pickerInput('aggArea', label= h4("Aggregation Areas"),
+      
                                choices = list(
                                               "Developing Suburbs: Maturing New England Towns"= 1,
                                               "Inner Core: Streetcar Suburbs"= 2,
@@ -63,9 +72,18 @@ shinyUI(fluidPage(
                                               "Inner Core: Metro Core Communities" = 6,
                                               "Regional Urban Centers: Sub-Regional Urban Centers" = 7,
                                               "Boston Region MPO"= 8),
-                              # multiple= T,
-                               selected = 8
-                               )
+                        choicesOpt = list(
+                          # TODO: https://stackoverflow.com/questions/20391156/multiple-lines-of-text-next-to-image-css-html
+                          content = mapply(aggAreaNames, 
+                                           aggAreaIcons, 
+                                           FUN = function(area, icon){
+                          HTML(paste(tags$img(src= icon, alt = area, width = 75, height = 75), area))}, 
+                          SIMPLIFY = F, 
+                          USE.NAMES = F
+                          )),
+                        selected = 8)
+                             
+                    
         ),
 
         # Show a plot of the generated distribution

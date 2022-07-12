@@ -68,6 +68,7 @@ sub_regions <- mpo_subregions %>%
 community_types <- br_mpo_geog %>% 
   left_join(mapc_commtypes)
 
+
 # the MAPC housing subregions use 2010 census tracts
 ma_tract10_geog <- get_decennial(geography= "tract", 
                               variables = "P002001",
@@ -101,3 +102,36 @@ st_write(boundary, "output/AggregationAreas.gpkg", "MPO_Boundary")
 st_write(sub_regions, "output/AggregationAreas.gpkg", "MPO_SubRegions", append = T)
 st_write(community_types, "output/AggregationAreas.gpkg", "CommunityTypes", append = T)
 st_write(submarkets, "output/AggregationAreas.gpkg", "HousingSubmarkets", append = T)
+
+
+
+# make community type descriptions and icons ####
+
+comm_types<- unique(paste0(community_types$communityType, ": ", community_types$subtype))
+ids <- read_rds( "app/data/comm_types_id.rds")
+for (i in 1:length(comm_types)){
+  # i <- 4
+  typ <- word(comm_types[i], 1,sep = ": ")
+  sub <- word(comm_types[i], 2, sep = ": ")
+  
+  id <- ids[ids$communityType==typ & ids$subtype==sub,]$id[[1]]
+  munis <- community_types %>% 
+    filter(communityType== typ & subtype== sub)
+  
+  plot <- ggplot()+
+    geom_sf(data = community_types, fill = "transparent", color= 'light gray', size = .25)+
+    geom_sf(data = boundary, size = .5, color = "light gray", fill = 'transparent')+
+    geom_sf(data = munis, fill = "black")+
+    coord_sf()+
+    theme_void()
+  ggsave(paste0("app/www/ct", id, ".png"), plot, width= 100, height = 100, units = "px", dpi = "screen", bg = "white")
+  
+}
+
+
+mpo_plot <- ggplot()+
+  geom_sf(data = community_types, fill = "black", color= 'light gray', size = .25)+
+  geom_sf(data = boundary, size = .5, color = "light gray", fill = 'transparent')+
+  coord_sf()+
+  theme_void()
+ggsave(paste0("app/www/ct", 8, ".png"), mpo_plot, width= 100, height = 100, units = "px", dpi = "screen", bg = "white")

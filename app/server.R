@@ -9,8 +9,8 @@ library(sf)
 library(Cairo)
 library(stars)
 library(reactable)
-
-# shiny.useragg = TRUE
+library(htmltools)
+#library(knitr)
 
 mpoBoundary <- st_read("data/AggregationAreas.gpkg", "MPO_Boundary") %>%
   st_transform(3857)
@@ -359,7 +359,28 @@ shinyServer(function(input, output, session) {
              groupBy = c("Destination", "Mode", "Travel Time (minutes)"),
              columns = list(
                `Destination`= colDef(minWidth = 150),
-               `Aggregation Area` = colDef(minWidth = 200),
+               `Aggregation Area` = colDef(minWidth = 200,
+                                           # cell = function(value){
+                                           #   if(value == "MPO"){
+                                           #     #img_src <- knitr::image_uri(sprintf('ct%s.png', 8))
+                                           #     img_src <- sprintf("ct%s.png", 8)
+                                           #   } else{
+                                           #     typ <- word(value, 1,sep = ": ")
+                                           #     sub <- word(value, 2, sep = ": ")
+                                           #     id <- comm_types_id[comm_types_id$communityType==typ & comm_types_id$subtype==sub,]$id[[1]]
+                                           #      # img_src <- knitr::image_uri(sprintf('ct%s.png', id))
+                                           #      img_src <- sprintf("ct%s.png", id)
+                                           #   }
+                                           #   image <- img(src= img_src,
+                                           #                style = "height: 24px;",
+                                           #                align= "center",
+                                           #                alt = value)
+                                           #   tagList(
+                                           #     value,
+                                           #     div(style = "display: inline-block; width: 24px;", image)
+                                           #   )
+                                           # }
+                                           ),
                `Travel Time (minutes)`= colDef(format = colFormat(suffix = " min")),
                Total = colDef(filterable = F,  format = colFormat(separators = T)),
                EJ = colDef(filterable = F, format = colFormat(separators = T)),

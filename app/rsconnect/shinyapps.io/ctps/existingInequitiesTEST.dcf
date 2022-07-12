@@ -1,0 +1,13 @@
+name: existingInequitiesTEST
+title: existingInequitiesTEST
+username:
+account: ctps
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 6626209
+bundleId: 6089108
+url: https://ctps.shinyapps.io/existingInequitiesTEST/
+when: 1657569946.40209
+lastSyncTime: 1657569946.4021
+asMultiple: FALSE
+asStatic: FALSE
