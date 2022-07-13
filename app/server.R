@@ -54,7 +54,9 @@ weights_all_for_plot <- dasy_raster %>%
         pct_pop_adult = pop_dec_adult/ total_pop_adult) %>% 
   select(starts_with("pct"))
 
-access_all_comp <- read_csv("data/access_all_comp.csv")
+trcts <- read_rds("data/hta_index_tracts.rds")
+vars <- read_rds("data/hta_index_vars.rds")
+
 visualize_for_access_w_demo <- function(access, demo, dests,modes, cols = 4 ){
   if (dests == 1) {d <- "Healthcare opportunities, Non-emergency"
   time_period <- "AM Peak"}
@@ -440,5 +442,23 @@ shinyServer(function(input, output, session) {
              )
   })
   
+  output$index_plot <- renderPlot({
+    
+    trcts3 <- trcts %>% 
+      select(var = ht_ami)
+    name <- vars["ht_ami"]
+    brks <- classIntervals(c(min(trcts3$var) - .00001,
+                             trcts3$var), n = 5, style = "jenks")
+    trcts3 <- trcts3 %>% 
+      mutate( var_cat = cut(var, brks$brks)) 
+    
+    ggplot()+
+      geom_sf(data= trcts3,color = "white", size =.1, aes(fill = var_cat))+
+      geom_sf(data= munis2, color = "white", size = .2, fill = "transparent")+
+      #geom_sf(data = mpoBoundary, color = "pink", size = 1, fill = "transparent")+
+      scale_fill_brewer(palette = "YlGnBu", name = str_wrap(name, width = 10))+
+      coord_sf(xlim = c(bb[1], bb[3]), ylim = c(bb[2], bb[4]))+
+      theme_void()
+  })
 
 })

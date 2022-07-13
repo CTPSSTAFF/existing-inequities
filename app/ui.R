@@ -5,7 +5,7 @@ library(reactable)
 
 aggAreaIcons<- c(
   'ct1.png', 'ct2.png','ct3.png','ct4.png','ct5.png','ct6.png', 'ct7.png','ct8.png')
-aggAreaNames <- c("Developing Suburbs: <br>Maturing New England Towns","Inner Core: Streetcar Suburbs",
+aggAreaNames <- c("Developing Suburbs: Maturing New England Towns","Inner Core: Streetcar Suburbs",
                    "Developing Suburbs: Country Suburbs", "Maturing Suburbs: Established Suburbs and Cape Cod Towns",
                    "Maturing Suburbs: Mature Suburban Towns" , "Inner Core: Metro Core Communities",
                    "Regional Urban Centers: Sub-Regional Urban Centers", "MPO")
@@ -99,8 +99,11 @@ shinyUI(fluidPage(
                                h4("Weighted Avg Access Opportunities for Boston Region MPO and Aggregation Area"),
                                reactableOutput("access_all"),
                               ),
-                      # tabPanel(strong("Travel Costs"),
-                      #          ),
+                      tabPanel(strong("Travel Costs"),
+                               h4(),
+                               p("From the Center for Neighborhood Technology"),
+                               plotOutput("index_plot", height = 500),
+                               ),
                       tabPanel(strong("About Project"),
                                p("The purpose of this study is to develop a baseline assessment of existing transportation
                                inequities in the Boston region. While the equity policies applied by the MPO and other
