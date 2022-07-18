@@ -109,8 +109,9 @@ st_write(submarkets, "output/AggregationAreas.gpkg", "HousingSubmarkets", append
 
 comm_types<- unique(paste0(community_types$communityType, ": ", community_types$subtype))
 ids <- read_rds( "app/data/comm_types_id.rds")
+
+
 for (i in 1:length(comm_types)){
-  # i <- 4
   typ <- word(comm_types[i], 1,sep = ": ")
   sub <- word(comm_types[i], 2, sep = ": ")
   
@@ -119,19 +120,23 @@ for (i in 1:length(comm_types)){
     filter(communityType== typ & subtype== sub)
   
   plot <- ggplot()+
-    geom_sf(data = community_types, fill = "transparent", color= 'light gray', size = .25)+
+    geom_sf(data = community_types, fill = "transparent", color= 'light gray', size = .1)+
     geom_sf(data = boundary, size = .5, color = "light gray", fill = 'transparent')+
     geom_sf(data = munis, fill = "black")+
     coord_sf()+
     theme_void()
-  ggsave(paste0("app/www/ct", id, ".png"), plot, width= 100, height = 100, units = "px", dpi = "screen", bg = "white")
+  ggsave(paste0("app/www/ct", id, ".png"), plot, width= 85, height = 85, units = "px", dpi = "screen", bg = "white")
   
 }
 
-
+no_hull <- community_types %>% 
+  filter(municipality != "Hull")
 mpo_plot <- ggplot()+
-  geom_sf(data = community_types, fill = "black", color= 'light gray', size = .25)+
-  geom_sf(data = boundary, size = .5, color = "light gray", fill = 'transparent')+
+  geom_sf(data = community_types, fill = "black", color= 'transparent', size = .09)+
+  geom_sf(data = no_hull , fill = "transparent", color = "light gray", size = .1)+
+  # geom_sf(data = boundary, size = .5, color = "light gray", fill = 'transparent')+
   coord_sf()+
   theme_void()
-ggsave(paste0("app/www/ct", 8, ".png"), mpo_plot, width= 100, height = 100, units = "px", dpi = "screen", bg = "white")
+mpo_plot
+ggsave(paste0("app/www/ct", 8, ".png"), mpo_plot, width= 85, height = 85, units = "px", dpi = "screen", bg = "white")
+
