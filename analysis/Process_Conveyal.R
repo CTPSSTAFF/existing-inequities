@@ -28,7 +28,23 @@ dasy_demo <- st_read("notebooks/pop_output/dasy_demo.gpkg", layer = 'interpolate
 dasy_raster <- dasy_demo %>% 
   st_rasterize(template = prep_grid)
 # write_rds(dasy_raster, "app/data/dasy_raster.rds")
-
+total_pop_dec <- sum(as.vector(dasy_raster$pop_dec), na.rm = T)
+total_pop_adult <- sum(as.vector(dasy_raster$pop_dec_adult), na.rm = T)
+weights_all_for_plot <- dasy_raster %>% 
+  mutate(pct_min = minority/(minority+nonminority),
+         pct_nonmin = nonminority/(minority+nonminority),
+         pct_min_adult = minority_adult/(minority_adult+nonminority_adult),
+         pct_nonmin_adult = nonminority_adult/(minority_adult+nonminority_adult),
+         pct_lowinc = lowinc/ (lowinc+ nonlowinc),
+         pct_nonlowinc = nonlowinc/ (lowinc +nonlowinc),
+         pct_lowinc_adult = lowinc_adult/ (lowinc_adult+ nonlowinc_adult),
+         pct_nonlowinc_adult = nonlowinc_adult/ (lowinc_adult +nonlowinc_adult),
+         pct_zvhh = zero_veh_hh/(zero_veh_hh+ non_zero_veh_hh),
+         pct_nonzvhh = non_zero_veh_hh/(zero_veh_hh+ non_zero_veh_hh),
+         pct_pop = pop_dec/total_pop_dec,
+         pct_pop_adult = pop_dec_adult/ total_pop_adult) %>% 
+  select(starts_with("pct"))
+#write_rds(weights_all_for_plot, "app/data/weights_for_all_plot.rds")
 # Check demographic totals
 # make sure that populations in census tract demo are account for in the dasymetric mapping process
 demo_summary <- demo %>% 
@@ -170,8 +186,8 @@ get_weighted_avgs <- function(access_layer, weights){
     mutate(
       type = str_split(pop, "_")[[1]][1],
       type = case_when(
-        grepl("minority_adult", pop) ~ "Minority Status, adult",
-        grepl("min", pop) ~ "Minority Status",
+        grepl("minority_adult", pop) ~ "Minority status, adult",
+        grepl("min", pop) ~ "Minority status",
         grepl("inc_adult", pop) ~ "Income status, adult",
         grepl("inc", pop) ~ "Income status",
         grepl("veh_hh", pop) ~ "Household vehicles",
@@ -187,8 +203,8 @@ get_weighted_avgs <- function(access_layer, weights){
         pop == "nonlowinc" ~ "Non-low-income",
         pop == "lowinc_adult" ~ "Low-income, adult",
         pop == "nonlowinc_adult" ~ "Non-low-income, adult",
-        pop == "zero_veh_hh" ~ "Zero vehicle households",
-        pop == "non_zero_veh_hh" ~ "Non-zero vehicle households",
+        pop == "zero_veh_hh" ~ "Zero-vehicle households",
+        pop == "non_zero_veh_hh" ~ "Non-zero-vehicle households",
         grepl("pop_dec_adult", pop)~ "Total population, adult",
         grepl("pop_dec", pop) ~ "Total population",
         grepl("hh_dec", pop) ~ "Total households"))
@@ -249,14 +265,14 @@ access_all_avgs2 <- access_all_avgs %>%
   rowwise() %>% 
   mutate(time= str_sub(.id, start= -5, end = -4),
          destination = case_when(
-           grepl('HealthCare_NonEmergency', .id) ~ "Healthcare, Non-emergency",
-           grepl('HealthCare_Emergency', .id) ~ "Healthcare, Emergency",
+           grepl('HealthCare_NonEmergency', .id) ~ "Healthcare, non-emergency",
+           grepl('HealthCare_Emergency', .id) ~ "Healthcare, emergency",
            grepl('Jobs', .id) ~"Jobs", 
            grepl("EssentialPlaces", .id) ~ "Essential Places",
            grepl("HigherEd", .id) ~ "Higher Education",
-           grepl("OpenSpace_Conservation", .id) ~ "Open Space, Conservation",
-           grepl("OpenSpacePaths", .id) ~ "Open Space, Paths",
-           grepl("OpenSpace", .id) ~ "Open Space",
+           grepl("OpenSpace_Conservation", .id) ~ "Open Space, large parks",
+           grepl("OpenSpacePaths", .id) ~ "Open Space, paths",
+           grepl("OpenSpace", .id) ~ "Open Space, all parks",
            TRUE ~ NA_character_),
          mode = case_when(
            grepl("Walk", .id) ~ "Walk",
@@ -291,5 +307,60 @@ access_all_comp <- access_all_ratios %>%
   bind_rows(rename(access_all_ratios_MPO, `Ratio MPO`  = Ratio))
 
 # SAVE RESULTS ####
-write_csv(access_all_comp, "app/data/access_all_comp.csv")
 write_csv(access_all_comp, "output/access_all_comp.csv")
+
+access_all_comp <- read_csv("output/access_all_comp.csv")
+access_ratios_for_app <- access_all_comp %>% 
+  mutate(app = case_when(
+    destination == "Healthcare, non-emergency" & 
+      time == 45 & 
+      mode %in% c("Drive", "Transit (All modes)") &
+      type %in% c("Total population", "Minority status", "Income status", "Household vehicles") ~ T,
+    destination == "Healthcare, emergency" &
+      time == 45 &
+      mode %in% c("Drive", "Transit (All modes)") &
+      type %in% c("Total population", "Minority status", "Income status", "Household vehicles") ~ T,
+    destination == "Jobs" &
+      time == 45 & 
+      mode %in% c("Drive", "Transit (All modes)") &
+      type %in% c("Total population", "Minority status", "Income status", "Household vehicles") ~ T,
+    destination == "Essential Places" &
+      time == 30 &
+      mode %in% c("Drive", "Transit (All modes)") &
+      type %in% c("Total population", "Minority status", "Income status", "Household vehicles") ~ T,
+    destination == "Essential Places" &
+      time == 15 &
+      mode %in% c("Walk", "Bike") &
+      type %in% c("Total population", "Minority status", "Income status", "Household vehicles") ~ T,
+    destination == "Higher Education" &
+      time == 45 &
+      mode %in% c("Drive", "Transit (All modes)") &
+      type %in% c("Total population", "Minority status", "Income status", "Household vehicles") ~ T,
+    destination == "Open Space, all parks" &
+      time == 15 &
+      mode %in% c("Walk", "Bike") &
+      type %in% c("Total population", "Minority status", "Income status", "Household vehicles") ~ T,
+    destination == "Open Space, paths" &
+      time == 15 &
+      mode %in% c("Walk", "Bike") &
+      type %in% c("Total population", "Minority status", "Income status", "Household vehicles") ~ T,
+    destination == "Open Space, large parks" &
+      time == 45 &
+      mode %in% c("Drive", "Transit (All modes)") &
+      type %in% c("Total population", "Minority status", "Income status", "Household vehicles") ~ T,
+    TRUE ~ F
+    ))%>% 
+  mutate(app = ifelse(mode == "Drive" & type == "Household vehicles", F, app)) %>% 
+  filter(app == T) %>% 
+  #arrange(factor(Reg, levels = LETTERS[c(3, 1, 2)]), desc(Res), desc(Pop))
+  arrange(destination, time, factor(region, levels = c("MPO" ,"Developing Suburbs: Country Suburbs",
+                                                       "Developing Suburbs: Maturing New England Towns",
+                                                       "Inner Core: Metro Core Communities" ,
+                                                       "Inner Core: Streetcar Suburbs",
+                                                       "Maturing Suburbs: Established Suburbs and Cape Cod Towns",
+                                                       "Maturing Suburbs: Mature Suburban Towns" ,
+                                                       "Regional Urban Centers: Sub-Regional Urban Centers"  
+                                                        ))) %>% 
+  select(-app)
+write_csv(access_ratios_for_app, "app/data/access_ratios.csv")
+

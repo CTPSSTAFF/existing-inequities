@@ -1,0 +1,529 @@
+destination,mode,time,region,type,Total,EJ,Non-EJ,Ratio Aggregation Area,Ratio MPO
+Essential Places,Bike,15,MPO,Total population,21.623,NA,NA,NA,NA
+Essential Places,Bike,15,MPO,Minority status,NA,31.552,16.624,NA,1.898
+Essential Places,Bike,15,MPO,Income status,NA,33.438,18.662,NA,1.792
+Essential Places,Bike,15,MPO,Household vehicles,NA,48.545,17.994,NA,2.698
+Essential Places,Walk,15,MPO,Total population,6.982,NA,NA,NA,NA
+Essential Places,Walk,15,MPO,Minority status,NA,10.022,5.451,NA,1.839
+Essential Places,Walk,15,MPO,Income status,NA,10.801,6.025,NA,1.793
+Essential Places,Walk,15,MPO,Household vehicles,NA,17.397,5.788,NA,3.006
+Essential Places,Bike,15,Developing Suburbs: Country Suburbs,Total population,0.889,NA,NA,NA,NA
+Essential Places,Bike,15,Developing Suburbs: Country Suburbs,Minority status,NA,0.543,0.946,0.573,1.898
+Essential Places,Bike,15,Developing Suburbs: Country Suburbs,Income status,NA,1.513,0.84,1.802,1.792
+Essential Places,Bike,15,Developing Suburbs: Country Suburbs,Household vehicles,NA,1.474,0.904,1.63,2.698
+Essential Places,Walk,15,Developing Suburbs: Country Suburbs,Total population,0.386,NA,NA,NA,NA
+Essential Places,Walk,15,Developing Suburbs: Country Suburbs,Minority status,NA,0.211,0.414,0.508,1.839
+Essential Places,Walk,15,Developing Suburbs: Country Suburbs,Income status,NA,0.636,0.366,1.737,1.793
+Essential Places,Walk,15,Developing Suburbs: Country Suburbs,Household vehicles,NA,0.574,0.384,1.495,3.006
+Essential Places,Bike,15,Developing Suburbs: Maturing New England Towns,Total population,1.98,NA,NA,NA,NA
+Essential Places,Bike,15,Developing Suburbs: Maturing New England Towns,Minority status,NA,1.752,2.012,0.871,1.898
+Essential Places,Bike,15,Developing Suburbs: Maturing New England Towns,Income status,NA,2.338,1.937,1.207,1.792
+Essential Places,Bike,15,Developing Suburbs: Maturing New England Towns,Household vehicles,NA,2.64,2.087,1.265,2.698
+Essential Places,Walk,15,Developing Suburbs: Maturing New England Towns,Total population,0.884,NA,NA,NA,NA
+Essential Places,Walk,15,Developing Suburbs: Maturing New England Towns,Minority status,NA,0.771,0.899,0.857,1.839
+Essential Places,Walk,15,Developing Suburbs: Maturing New England Towns,Income status,NA,1.065,0.862,1.235,1.793
+Essential Places,Walk,15,Developing Suburbs: Maturing New England Towns,Household vehicles,NA,1.238,0.931,1.33,3.006
+Essential Places,Bike,15,Inner Core: Metro Core Communities,Total population,49.981,NA,NA,NA,NA
+Essential Places,Bike,15,Inner Core: Metro Core Communities,Minority status,NA,51.332,48.53,1.058,1.898
+Essential Places,Bike,15,Inner Core: Metro Core Communities,Income status,NA,54.207,48.089,1.127,1.792
+Essential Places,Bike,15,Inner Core: Metro Core Communities,Household vehicles,NA,64.037,45.826,1.397,2.698
+Essential Places,Walk,15,Inner Core: Metro Core Communities,Total population,15.702,NA,NA,NA,NA
+Essential Places,Walk,15,Inner Core: Metro Core Communities,Minority status,NA,15.465,15.962,0.969,1.839
+Essential Places,Walk,15,Inner Core: Metro Core Communities,Income status,NA,16.4,15.391,1.066,1.793
+Essential Places,Walk,15,Inner Core: Metro Core Communities,Household vehicles,NA,22.667,14.317,1.583,3.006
+Essential Places,Bike,15,Inner Core: Streetcar Suburbs,Total population,13.509,NA,NA,NA,NA
+Essential Places,Bike,15,Inner Core: Streetcar Suburbs,Minority status,NA,15.51,12.711,1.22,1.898
+Essential Places,Bike,15,Inner Core: Streetcar Suburbs,Income status,NA,18.095,12.692,1.426,1.792
+Essential Places,Bike,15,Inner Core: Streetcar Suburbs,Household vehicles,NA,36.465,11.525,3.164,2.698
+Essential Places,Walk,15,Inner Core: Streetcar Suburbs,Total population,3.23,NA,NA,NA,NA
+Essential Places,Walk,15,Inner Core: Streetcar Suburbs,Minority status,NA,3.952,2.942,1.343,1.839
+Essential Places,Walk,15,Inner Core: Streetcar Suburbs,Income status,NA,4.771,2.956,1.614,1.793
+Essential Places,Walk,15,Inner Core: Streetcar Suburbs,Household vehicles,NA,9.535,2.71,3.518,3.006
+Essential Places,Bike,15,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Total population,3.025,NA,NA,NA,NA
+Essential Places,Bike,15,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Minority status,NA,3.41,2.925,1.166,1.898
+Essential Places,Bike,15,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Income status,NA,2.896,3.037,0.954,1.792
+Essential Places,Bike,15,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Household vehicles,NA,3.468,2.881,1.204,2.698
+Essential Places,Walk,15,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Total population,0.824,NA,NA,NA,NA
+Essential Places,Walk,15,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Minority status,NA,0.839,0.82,1.024,1.839
+Essential Places,Walk,15,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Income status,NA,0.752,0.831,0.905,1.793
+Essential Places,Walk,15,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Household vehicles,NA,0.906,0.804,1.127,3.006
+Essential Places,Bike,15,Maturing Suburbs: Mature Suburban Towns,Total population,4.89,NA,NA,NA,NA
+Essential Places,Bike,15,Maturing Suburbs: Mature Suburban Towns,Minority status,NA,4.686,4.945,0.948,1.898
+Essential Places,Bike,15,Maturing Suburbs: Mature Suburban Towns,Income status,NA,5.028,4.869,1.033,1.792
+Essential Places,Bike,15,Maturing Suburbs: Mature Suburban Towns,Household vehicles,NA,5.524,4.931,1.12,2.698
+Essential Places,Walk,15,Maturing Suburbs: Mature Suburban Towns,Total population,1.731,NA,NA,NA,NA
+Essential Places,Walk,15,Maturing Suburbs: Mature Suburban Towns,Minority status,NA,1.7,1.739,0.977,1.839
+Essential Places,Walk,15,Maturing Suburbs: Mature Suburban Towns,Income status,NA,1.859,1.712,1.086,1.793
+Essential Places,Walk,15,Maturing Suburbs: Mature Suburban Towns,Household vehicles,NA,2.02,1.763,1.145,3.006
+Essential Places,Bike,15,Regional Urban Centers: Sub-Regional Urban Centers,Total population,13.533,NA,NA,NA,NA
+Essential Places,Bike,15,Regional Urban Centers: Sub-Regional Urban Centers,Minority status,NA,18.019,11.223,1.606,1.898
+Essential Places,Bike,15,Regional Urban Centers: Sub-Regional Urban Centers,Income status,NA,18.208,12.127,1.501,1.792
+Essential Places,Bike,15,Regional Urban Centers: Sub-Regional Urban Centers,Household vehicles,NA,18.509,12.664,1.462,2.698
+Essential Places,Walk,15,Regional Urban Centers: Sub-Regional Urban Centers,Total population,5.885,NA,NA,NA,NA
+Essential Places,Walk,15,Regional Urban Centers: Sub-Regional Urban Centers,Minority status,NA,8.67,4.451,1.948,1.839
+Essential Places,Walk,15,Regional Urban Centers: Sub-Regional Urban Centers,Income status,NA,9.033,4.938,1.829,1.793
+Essential Places,Walk,15,Regional Urban Centers: Sub-Regional Urban Centers,Household vehicles,NA,10.303,5.257,1.96,3.006
+Essential Places,Drive,30,MPO,Total population,427.823,NA,NA,NA,NA
+Essential Places,Drive,30,MPO,Minority status,NA,530.488,376.124,NA,1.41
+Essential Places,Drive,30,MPO,Income status,NA,533.97,401.207,NA,1.331
+Essential Places,Transit (All modes),30,MPO,Total population,48.759,NA,NA,NA,NA
+Essential Places,Transit (All modes),30,MPO,Minority status,NA,68.949,38.593,NA,1.787
+Essential Places,Transit (All modes),30,MPO,Income status,NA,76.115,41.9,NA,1.817
+Essential Places,Transit (All modes),30,MPO,Household vehicles,NA,118.86,39.692,NA,2.995
+Essential Places,Drive,30,Developing Suburbs: Country Suburbs,Total population,95.04,NA,NA,NA,NA
+Essential Places,Drive,30,Developing Suburbs: Country Suburbs,Minority status,NA,98.111,94.537,1.038,1.41
+Essential Places,Drive,30,Developing Suburbs: Country Suburbs,Income status,NA,89.193,95.506,0.934,1.331
+Essential Places,Transit (All modes),30,Developing Suburbs: Country Suburbs,Total population,1.107,NA,NA,NA,NA
+Essential Places,Transit (All modes),30,Developing Suburbs: Country Suburbs,Minority status,NA,0.709,1.172,0.605,1.787
+Essential Places,Transit (All modes),30,Developing Suburbs: Country Suburbs,Income status,NA,1.78,1.053,1.69,1.817
+Essential Places,Transit (All modes),30,Developing Suburbs: Country Suburbs,Household vehicles,NA,1.717,1.113,1.543,2.995
+Essential Places,Drive,30,Developing Suburbs: Maturing New England Towns,Total population,105.688,NA,NA,NA,NA
+Essential Places,Drive,30,Developing Suburbs: Maturing New England Towns,Minority status,NA,104.247,105.889,0.984,1.41
+Essential Places,Drive,30,Developing Suburbs: Maturing New England Towns,Income status,NA,100.278,106.341,0.943,1.331
+Essential Places,Transit (All modes),30,Developing Suburbs: Maturing New England Towns,Total population,2.842,NA,NA,NA,NA
+Essential Places,Transit (All modes),30,Developing Suburbs: Maturing New England Towns,Minority status,NA,2.568,2.88,0.892,1.787
+Essential Places,Transit (All modes),30,Developing Suburbs: Maturing New England Towns,Income status,NA,3.248,2.793,1.163,1.817
+Essential Places,Transit (All modes),30,Developing Suburbs: Maturing New England Towns,Household vehicles,NA,3.535,2.958,1.195,2.995
+Essential Places,Drive,30,Inner Core: Metro Core Communities,Total population,764.651,NA,NA,NA,NA
+Essential Places,Drive,30,Inner Core: Metro Core Communities,Minority status,NA,754.879,775.318,0.974,1.41
+Essential Places,Drive,30,Inner Core: Metro Core Communities,Income status,NA,774.073,760.48,1.018,1.331
+Essential Places,Transit (All modes),30,Inner Core: Metro Core Communities,Total population,124.059,NA,NA,NA,NA
+Essential Places,Transit (All modes),30,Inner Core: Metro Core Communities,Minority status,NA,118.707,129.876,0.914,1.787
+Essential Places,Transit (All modes),30,Inner Core: Metro Core Communities,Income status,NA,132.041,120.489,1.096,1.817
+Essential Places,Transit (All modes),30,Inner Core: Metro Core Communities,Household vehicles,NA,166.857,112.917,1.478,2.995
+Essential Places,Drive,30,Inner Core: Streetcar Suburbs,Total population,531.645,NA,NA,NA,NA
+Essential Places,Drive,30,Inner Core: Streetcar Suburbs,Minority status,NA,543.935,526.752,1.033,1.41
+Essential Places,Drive,30,Inner Core: Streetcar Suburbs,Income status,NA,548.726,528.609,1.038,1.331
+Essential Places,Transit (All modes),30,Inner Core: Streetcar Suburbs,Total population,21.974,NA,NA,NA,NA
+Essential Places,Transit (All modes),30,Inner Core: Streetcar Suburbs,Minority status,NA,25.118,20.72,1.212,1.787
+Essential Places,Transit (All modes),30,Inner Core: Streetcar Suburbs,Income status,NA,29.549,20.625,1.433,1.817
+Essential Places,Transit (All modes),30,Inner Core: Streetcar Suburbs,Household vehicles,NA,52.631,19.681,2.674,2.995
+Essential Places,Drive,30,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Total population,174.688,NA,NA,NA,NA
+Essential Places,Drive,30,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Minority status,NA,193.416,169.837,1.139,1.41
+Essential Places,Drive,30,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Income status,NA,183.24,173.848,1.054,1.331
+Essential Places,Transit (All modes),30,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Total population,3.917,NA,NA,NA,NA
+Essential Places,Transit (All modes),30,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Minority status,NA,4.377,3.798,1.152,1.787
+Essential Places,Transit (All modes),30,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Income status,NA,4.042,3.905,1.035,1.817
+Essential Places,Transit (All modes),30,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Household vehicles,NA,5.159,3.783,1.364,2.995
+Essential Places,Drive,30,Maturing Suburbs: Mature Suburban Towns,Total population,226.996,NA,NA,NA,NA
+Essential Places,Drive,30,Maturing Suburbs: Mature Suburban Towns,Minority status,NA,216.688,229.793,0.943,1.41
+Essential Places,Drive,30,Maturing Suburbs: Mature Suburban Towns,Income status,NA,225.392,227.231,0.992,1.331
+Essential Places,Transit (All modes),30,Maturing Suburbs: Mature Suburban Towns,Total population,8.913,NA,NA,NA,NA
+Essential Places,Transit (All modes),30,Maturing Suburbs: Mature Suburban Towns,Minority status,NA,9.206,8.834,1.042,1.787
+Essential Places,Transit (All modes),30,Maturing Suburbs: Mature Suburban Towns,Income status,NA,9.605,8.812,1.09,1.817
+Essential Places,Transit (All modes),30,Maturing Suburbs: Mature Suburban Towns,Household vehicles,NA,10.179,8.933,1.14,2.995
+Essential Places,Drive,30,Regional Urban Centers: Sub-Regional Urban Centers,Total population,258.672,NA,NA,NA,NA
+Essential Places,Drive,30,Regional Urban Centers: Sub-Regional Urban Centers,Minority status,NA,286.388,244.399,1.172,1.41
+Essential Places,Drive,30,Regional Urban Centers: Sub-Regional Urban Centers,Income status,NA,273.363,254.251,1.075,1.331
+Essential Places,Transit (All modes),30,Regional Urban Centers: Sub-Regional Urban Centers,Total population,20.405,NA,NA,NA,NA
+Essential Places,Transit (All modes),30,Regional Urban Centers: Sub-Regional Urban Centers,Minority status,NA,28.427,16.275,1.747,1.787
+Essential Places,Transit (All modes),30,Regional Urban Centers: Sub-Regional Urban Centers,Income status,NA,27.638,18.229,1.516,1.817
+Essential Places,Transit (All modes),30,Regional Urban Centers: Sub-Regional Urban Centers,Household vehicles,NA,27.542,18.961,1.453,2.995
+"Healthcare, emergency",Drive,45,MPO,Total population,17.824,NA,NA,NA,NA
+"Healthcare, emergency",Drive,45,MPO,Minority status,NA,20.568,16.441,NA,1.251
+"Healthcare, emergency",Drive,45,MPO,Income status,NA,20.141,17.242,NA,1.168
+"Healthcare, emergency",Transit (All modes),45,MPO,Total population,2.444,NA,NA,NA,NA
+"Healthcare, emergency",Transit (All modes),45,MPO,Minority status,NA,3.357,1.984,NA,1.693
+"Healthcare, emergency",Transit (All modes),45,MPO,Income status,NA,3.612,2.151,NA,1.68
+"Healthcare, emergency",Transit (All modes),45,MPO,Household vehicles,NA,5.596,2.03,NA,2.757
+"Healthcare, emergency",Drive,45,Developing Suburbs: Country Suburbs,Total population,4.093,NA,NA,NA,NA
+"Healthcare, emergency",Drive,45,Developing Suburbs: Country Suburbs,Minority status,NA,4.408,4.042,1.091,1.251
+"Healthcare, emergency",Drive,45,Developing Suburbs: Country Suburbs,Income status,NA,3.673,4.127,0.89,1.168
+"Healthcare, emergency",Transit (All modes),45,Developing Suburbs: Country Suburbs,Total population,0,NA,NA,NA,NA
+"Healthcare, emergency",Transit (All modes),45,Developing Suburbs: Country Suburbs,Minority status,NA,0.001,0,1.663,1.693
+"Healthcare, emergency",Transit (All modes),45,Developing Suburbs: Country Suburbs,Income status,NA,0,0,0.34,1.68
+"Healthcare, emergency",Transit (All modes),45,Developing Suburbs: Country Suburbs,Household vehicles,NA,0,0,0.249,2.757
+"Healthcare, emergency",Drive,45,Developing Suburbs: Maturing New England Towns,Total population,4.868,NA,NA,NA,NA
+"Healthcare, emergency",Drive,45,Developing Suburbs: Maturing New England Towns,Minority status,NA,4.912,4.862,1.01,1.251
+"Healthcare, emergency",Drive,45,Developing Suburbs: Maturing New England Towns,Income status,NA,4.529,4.909,0.923,1.168
+"Healthcare, emergency",Transit (All modes),45,Developing Suburbs: Maturing New England Towns,Total population,0.046,NA,NA,NA,NA
+"Healthcare, emergency",Transit (All modes),45,Developing Suburbs: Maturing New England Towns,Minority status,NA,0.053,0.045,1.185,1.693
+"Healthcare, emergency",Transit (All modes),45,Developing Suburbs: Maturing New England Towns,Income status,NA,0.044,0.046,0.944,1.68
+"Healthcare, emergency",Transit (All modes),45,Developing Suburbs: Maturing New England Towns,Household vehicles,NA,0.039,0.046,0.845,2.757
+"Healthcare, emergency",Drive,45,Inner Core: Metro Core Communities,Total population,26.06,NA,NA,NA,NA
+"Healthcare, emergency",Drive,45,Inner Core: Metro Core Communities,Minority status,NA,25.628,26.528,0.966,1.251
+"Healthcare, emergency",Drive,45,Inner Core: Metro Core Communities,Income status,NA,26.083,26.05,1.001,1.168
+"Healthcare, emergency",Transit (All modes),45,Inner Core: Metro Core Communities,Total population,6.17,NA,NA,NA,NA
+"Healthcare, emergency",Transit (All modes),45,Inner Core: Metro Core Communities,Minority status,NA,5.871,6.495,0.904,1.693
+"Healthcare, emergency",Transit (All modes),45,Inner Core: Metro Core Communities,Income status,NA,6.415,6.061,1.058,1.68
+"Healthcare, emergency",Transit (All modes),45,Inner Core: Metro Core Communities,Household vehicles,NA,7.788,5.734,1.358,2.757
+"Healthcare, emergency",Drive,45,Inner Core: Streetcar Suburbs,Total population,26.355,NA,NA,NA,NA
+"Healthcare, emergency",Drive,45,Inner Core: Streetcar Suburbs,Minority status,NA,26.62,26.249,1.014,1.251
+"Healthcare, emergency",Drive,45,Inner Core: Streetcar Suburbs,Income status,NA,26.545,26.321,1.008,1.168
+"Healthcare, emergency",Transit (All modes),45,Inner Core: Streetcar Suburbs,Total population,2.288,NA,NA,NA,NA
+"Healthcare, emergency",Transit (All modes),45,Inner Core: Streetcar Suburbs,Minority status,NA,2.443,2.227,1.097,1.693
+"Healthcare, emergency",Transit (All modes),45,Inner Core: Streetcar Suburbs,Income status,NA,2.607,2.232,1.168,1.68
+"Healthcare, emergency",Transit (All modes),45,Inner Core: Streetcar Suburbs,Household vehicles,NA,4.321,2.109,2.05,2.757
+"Healthcare, emergency",Drive,45,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Total population,11.939,NA,NA,NA,NA
+"Healthcare, emergency",Drive,45,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Minority status,NA,14.084,11.383,1.237,1.251
+"Healthcare, emergency",Drive,45,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Income status,NA,11.875,11.945,0.994,1.168
+"Healthcare, emergency",Transit (All modes),45,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Total population,0.142,NA,NA,NA,NA
+"Healthcare, emergency",Transit (All modes),45,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Minority status,NA,0.182,0.131,1.385,1.693
+"Healthcare, emergency",Transit (All modes),45,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Income status,NA,0.192,0.137,1.407,1.68
+"Healthcare, emergency",Transit (All modes),45,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Household vehicles,NA,0.198,0.135,1.465,2.757
+"Healthcare, emergency",Drive,45,Maturing Suburbs: Mature Suburban Towns,Total population,13.452,NA,NA,NA,NA
+"Healthcare, emergency",Drive,45,Maturing Suburbs: Mature Suburban Towns,Minority status,NA,13.192,13.523,0.975,1.251
+"Healthcare, emergency",Drive,45,Maturing Suburbs: Mature Suburban Towns,Income status,NA,12.784,13.55,0.943,1.168
+"Healthcare, emergency",Transit (All modes),45,Maturing Suburbs: Mature Suburban Towns,Total population,0.309,NA,NA,NA,NA
+"Healthcare, emergency",Transit (All modes),45,Maturing Suburbs: Mature Suburban Towns,Minority status,NA,0.41,0.282,1.452,1.693
+"Healthcare, emergency",Transit (All modes),45,Maturing Suburbs: Mature Suburban Towns,Income status,NA,0.299,0.311,0.963,1.68
+"Healthcare, emergency",Transit (All modes),45,Maturing Suburbs: Mature Suburban Towns,Household vehicles,NA,0.312,0.299,1.044,2.757
+"Healthcare, emergency",Drive,45,Regional Urban Centers: Sub-Regional Urban Centers,Total population,11.564,NA,NA,NA,NA
+"Healthcare, emergency",Drive,45,Regional Urban Centers: Sub-Regional Urban Centers,Minority status,NA,12.478,11.093,1.125,1.251
+"Healthcare, emergency",Drive,45,Regional Urban Centers: Sub-Regional Urban Centers,Income status,NA,11.742,11.51,1.02,1.168
+"Healthcare, emergency",Transit (All modes),45,Regional Urban Centers: Sub-Regional Urban Centers,Total population,0.431,NA,NA,NA,NA
+"Healthcare, emergency",Transit (All modes),45,Regional Urban Centers: Sub-Regional Urban Centers,Minority status,NA,0.415,0.439,0.945,1.693
+"Healthcare, emergency",Transit (All modes),45,Regional Urban Centers: Sub-Regional Urban Centers,Income status,NA,0.457,0.423,1.08,1.68
+"Healthcare, emergency",Transit (All modes),45,Regional Urban Centers: Sub-Regional Urban Centers,Household vehicles,NA,0.43,0.436,0.985,2.757
+"Healthcare, non-emergency",Drive,45,MPO,Total population,146.666,NA,NA,NA,NA
+"Healthcare, non-emergency",Drive,45,MPO,Minority status,NA,170.405,134.708,NA,1.265
+"Healthcare, non-emergency",Drive,45,MPO,Income status,NA,167.116,141.535,NA,1.181
+"Healthcare, non-emergency",Transit (All modes),45,MPO,Total population,21.903,NA,NA,NA,NA
+"Healthcare, non-emergency",Transit (All modes),45,MPO,Minority status,NA,30.775,17.436,NA,1.765
+"Healthcare, non-emergency",Transit (All modes),45,MPO,Income status,NA,32.539,19.237,NA,1.692
+"Healthcare, non-emergency",Transit (All modes),45,MPO,Household vehicles,NA,48.541,18.542,NA,2.618
+"Healthcare, non-emergency",Drive,45,Developing Suburbs: Country Suburbs,Total population,34.392,NA,NA,NA,NA
+"Healthcare, non-emergency",Drive,45,Developing Suburbs: Country Suburbs,Minority status,NA,35.159,34.267,1.026,1.265
+"Healthcare, non-emergency",Drive,45,Developing Suburbs: Country Suburbs,Income status,NA,31.431,34.628,0.908,1.181
+"Healthcare, non-emergency",Transit (All modes),45,Developing Suburbs: Country Suburbs,Total population,0.038,NA,NA,NA,NA
+"Healthcare, non-emergency",Transit (All modes),45,Developing Suburbs: Country Suburbs,Minority status,NA,0.019,0.041,0.448,1.765
+"Healthcare, non-emergency",Transit (All modes),45,Developing Suburbs: Country Suburbs,Income status,NA,0.075,0.035,2.126,1.692
+"Healthcare, non-emergency",Transit (All modes),45,Developing Suburbs: Country Suburbs,Household vehicles,NA,0.072,0.04,1.818,2.618
+"Healthcare, non-emergency",Drive,45,Developing Suburbs: Maturing New England Towns,Total population,35.198,NA,NA,NA,NA
+"Healthcare, non-emergency",Drive,45,Developing Suburbs: Maturing New England Towns,Minority status,NA,35.522,35.152,1.011,1.265
+"Healthcare, non-emergency",Drive,45,Developing Suburbs: Maturing New England Towns,Income status,NA,33.13,35.447,0.935,1.181
+"Healthcare, non-emergency",Transit (All modes),45,Developing Suburbs: Maturing New England Towns,Total population,0.273,NA,NA,NA,NA
+"Healthcare, non-emergency",Transit (All modes),45,Developing Suburbs: Maturing New England Towns,Minority status,NA,0.29,0.27,1.075,1.765
+"Healthcare, non-emergency",Transit (All modes),45,Developing Suburbs: Maturing New England Towns,Income status,NA,0.3,0.269,1.115,1.692
+"Healthcare, non-emergency",Transit (All modes),45,Developing Suburbs: Maturing New England Towns,Household vehicles,NA,0.29,0.275,1.054,2.618
+"Healthcare, non-emergency",Drive,45,Inner Core: Metro Core Communities,Total population,216.795,NA,NA,NA,NA
+"Healthcare, non-emergency",Drive,45,Inner Core: Metro Core Communities,Minority status,NA,213.603,220.258,0.97,1.265
+"Healthcare, non-emergency",Drive,45,Inner Core: Metro Core Communities,Income status,NA,217.112,216.659,1.002,1.181
+"Healthcare, non-emergency",Transit (All modes),45,Inner Core: Metro Core Communities,Total population,54.448,NA,NA,NA,NA
+"Healthcare, non-emergency",Transit (All modes),45,Inner Core: Metro Core Communities,Minority status,NA,52.09,57.011,0.914,1.765
+"Healthcare, non-emergency",Transit (All modes),45,Inner Core: Metro Core Communities,Income status,NA,55.712,53.888,1.034,1.692
+"Healthcare, non-emergency",Transit (All modes),45,Inner Core: Metro Core Communities,Household vehicles,NA,66.977,51.531,1.3,2.618
+"Healthcare, non-emergency",Drive,45,Inner Core: Streetcar Suburbs,Total population,209.257,NA,NA,NA,NA
+"Healthcare, non-emergency",Drive,45,Inner Core: Streetcar Suburbs,Minority status,NA,211.389,208.408,1.014,1.265
+"Healthcare, non-emergency",Drive,45,Inner Core: Streetcar Suburbs,Income status,NA,211.198,208.912,1.011,1.181
+"Healthcare, non-emergency",Transit (All modes),45,Inner Core: Streetcar Suburbs,Total population,17.21,NA,NA,NA,NA
+"Healthcare, non-emergency",Transit (All modes),45,Inner Core: Streetcar Suburbs,Minority status,NA,18.563,16.671,1.114,1.765
+"Healthcare, non-emergency",Transit (All modes),45,Inner Core: Streetcar Suburbs,Income status,NA,20.425,16.637,1.228,1.692
+"Healthcare, non-emergency",Transit (All modes),45,Inner Core: Streetcar Suburbs,Household vehicles,NA,30.532,16.522,1.848,2.618
+"Healthcare, non-emergency",Drive,45,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Total population,95.685,NA,NA,NA,NA
+"Healthcare, non-emergency",Drive,45,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Minority status,NA,110.999,91.718,1.21,1.265
+"Healthcare, non-emergency",Drive,45,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Income status,NA,95.743,95.679,1.001,1.181
+"Healthcare, non-emergency",Transit (All modes),45,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Total population,1.19,NA,NA,NA,NA
+"Healthcare, non-emergency",Transit (All modes),45,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Minority status,NA,1.506,1.108,1.359,1.765
+"Healthcare, non-emergency",Transit (All modes),45,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Income status,NA,1.428,1.167,1.225,1.692
+"Healthcare, non-emergency",Transit (All modes),45,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Household vehicles,NA,1.696,1.151,1.473,2.618
+"Healthcare, non-emergency",Drive,45,Maturing Suburbs: Mature Suburban Towns,Total population,115.712,NA,NA,NA,NA
+"Healthcare, non-emergency",Drive,45,Maturing Suburbs: Mature Suburban Towns,Minority status,NA,114.732,115.978,0.989,1.265
+"Healthcare, non-emergency",Drive,45,Maturing Suburbs: Mature Suburban Towns,Income status,NA,111.807,116.285,0.961,1.181
+"Healthcare, non-emergency",Transit (All modes),45,Maturing Suburbs: Mature Suburban Towns,Total population,2.792,NA,NA,NA,NA
+"Healthcare, non-emergency",Transit (All modes),45,Maturing Suburbs: Mature Suburban Towns,Minority status,NA,2.645,2.832,0.934,1.765
+"Healthcare, non-emergency",Transit (All modes),45,Maturing Suburbs: Mature Suburban Towns,Income status,NA,3.145,2.74,1.148,1.692
+"Healthcare, non-emergency",Transit (All modes),45,Maturing Suburbs: Mature Suburban Towns,Household vehicles,NA,3.125,2.784,1.123,2.618
+"Healthcare, non-emergency",Drive,45,Regional Urban Centers: Sub-Regional Urban Centers,Total population,96.09,NA,NA,NA,NA
+"Healthcare, non-emergency",Drive,45,Regional Urban Centers: Sub-Regional Urban Centers,Minority status,NA,106.001,90.985,1.165,1.265
+"Healthcare, non-emergency",Drive,45,Regional Urban Centers: Sub-Regional Urban Centers,Income status,NA,99.078,95.19,1.041,1.181
+"Healthcare, non-emergency",Transit (All modes),45,Regional Urban Centers: Sub-Regional Urban Centers,Total population,7.991,NA,NA,NA,NA
+"Healthcare, non-emergency",Transit (All modes),45,Regional Urban Centers: Sub-Regional Urban Centers,Minority status,NA,11.746,6.058,1.939,1.765
+"Healthcare, non-emergency",Transit (All modes),45,Regional Urban Centers: Sub-Regional Urban Centers,Income status,NA,10.63,7.197,1.477,1.692
+"Healthcare, non-emergency",Transit (All modes),45,Regional Urban Centers: Sub-Regional Urban Centers,Household vehicles,NA,10.907,7.359,1.482,2.618
+Higher Education,Drive,45,MPO,Total population,167830.898,NA,NA,NA,NA
+Higher Education,Drive,45,MPO,Minority status,NA,183587.609,159893.732,NA,1.148
+Higher Education,Drive,45,MPO,Income status,NA,177772.316,165336.024,NA,1.075
+Higher Education,Transit (All modes),45,MPO,Total population,24707.089,NA,NA,NA,NA
+Higher Education,Transit (All modes),45,MPO,Minority status,NA,33601.836,20228.645,NA,1.661
+Higher Education,Transit (All modes),45,MPO,Income status,NA,36868.058,21658.332,NA,1.702
+Higher Education,Transit (All modes),45,MPO,Household vehicles,NA,61407.744,20270.291,NA,3.029
+Higher Education,Drive,45,Developing Suburbs: Country Suburbs,Total population,74785.397,NA,NA,NA,NA
+Higher Education,Drive,45,Developing Suburbs: Country Suburbs,Minority status,NA,77684.126,74310.885,1.045,1.148
+Higher Education,Drive,45,Developing Suburbs: Country Suburbs,Income status,NA,65303.892,75541.027,0.864,1.075
+Higher Education,Transit (All modes),45,Developing Suburbs: Country Suburbs,Total population,9.392,NA,NA,NA,NA
+Higher Education,Transit (All modes),45,Developing Suburbs: Country Suburbs,Minority status,NA,9.991,9.294,1.075,1.661
+Higher Education,Transit (All modes),45,Developing Suburbs: Country Suburbs,Income status,NA,9.283,9.401,0.987,1.702
+Higher Education,Transit (All modes),45,Developing Suburbs: Country Suburbs,Household vehicles,NA,8.497,9.409,0.903,3.029
+Higher Education,Drive,45,Developing Suburbs: Maturing New England Towns,Total population,56695.658,NA,NA,NA,NA
+Higher Education,Drive,45,Developing Suburbs: Maturing New England Towns,Minority status,NA,61395.869,56038.014,1.096,1.148
+Higher Education,Drive,45,Developing Suburbs: Maturing New England Towns,Income status,NA,59162.536,56397.751,1.049,1.075
+Higher Education,Transit (All modes),45,Developing Suburbs: Maturing New England Towns,Total population,36.386,NA,NA,NA,NA
+Higher Education,Transit (All modes),45,Developing Suburbs: Maturing New England Towns,Minority status,NA,36.778,36.331,1.012,1.661
+Higher Education,Transit (All modes),45,Developing Suburbs: Maturing New England Towns,Income status,NA,21.846,38.142,0.573,1.702
+Higher Education,Transit (All modes),45,Developing Suburbs: Maturing New England Towns,Household vehicles,NA,21.278,35.422,0.601,3.029
+Higher Education,Drive,45,Inner Core: Metro Core Communities,Total population,200739.188,NA,NA,NA,NA
+Higher Education,Drive,45,Inner Core: Metro Core Communities,Minority status,NA,199882.099,201667.101,0.991,1.148
+Higher Education,Drive,45,Inner Core: Metro Core Communities,Income status,NA,200595.455,200804.189,0.999,1.075
+Higher Education,Transit (All modes),45,Inner Core: Metro Core Communities,Total population,64731.082,NA,NA,NA,NA
+Higher Education,Transit (All modes),45,Inner Core: Metro Core Communities,Minority status,NA,59452.949,70455.459,0.844,1.661
+Higher Education,Transit (All modes),45,Inner Core: Metro Core Communities,Income status,NA,66405.191,63988.141,1.038,1.702
+Higher Education,Transit (All modes),45,Inner Core: Metro Core Communities,Household vehicles,NA,85428.583,60314.947,1.416,3.029
+Higher Education,Drive,45,Inner Core: Streetcar Suburbs,Total population,200670.55,NA,NA,NA,NA
+Higher Education,Drive,45,Inner Core: Streetcar Suburbs,Minority status,NA,201013.988,200533.726,1.002,1.148
+Higher Education,Drive,45,Inner Core: Streetcar Suburbs,Income status,NA,201111.889,200592.034,1.003,1.075
+Higher Education,Transit (All modes),45,Inner Core: Streetcar Suburbs,Total population,24031.898,NA,NA,NA,NA
+Higher Education,Transit (All modes),45,Inner Core: Streetcar Suburbs,Minority status,NA,26286.202,23133.979,1.136,1.661
+Higher Education,Transit (All modes),45,Inner Core: Streetcar Suburbs,Income status,NA,28191.537,23291.68,1.21,1.702
+Higher Education,Transit (All modes),45,Inner Core: Streetcar Suburbs,Household vehicles,NA,51557.97,21769.493,2.368,3.029
+Higher Education,Drive,45,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Total population,155730.867,NA,NA,NA,NA
+Higher Education,Drive,45,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Minority status,NA,169007.041,152291.917,1.11,1.148
+Higher Education,Drive,45,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Income status,NA,152083.046,156089.126,0.974,1.075
+Higher Education,Transit (All modes),45,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Total population,225.784,NA,NA,NA,NA
+Higher Education,Transit (All modes),45,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Minority status,NA,297.225,207.279,1.434,1.661
+Higher Education,Transit (All modes),45,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Income status,NA,259.615,222.461,1.167,1.702
+Higher Education,Transit (All modes),45,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Household vehicles,NA,266.18,228.346,1.166,3.029
+Higher Education,Drive,45,Maturing Suburbs: Mature Suburban Towns,Total population,174970.633,NA,NA,NA,NA
+Higher Education,Drive,45,Maturing Suburbs: Mature Suburban Towns,Minority status,NA,183754.767,172586.785,1.065,1.148
+Higher Education,Drive,45,Maturing Suburbs: Mature Suburban Towns,Income status,NA,175944.81,174827.88,1.006,1.075
+Higher Education,Transit (All modes),45,Maturing Suburbs: Mature Suburban Towns,Total population,569.326,NA,NA,NA,NA
+Higher Education,Transit (All modes),45,Maturing Suburbs: Mature Suburban Towns,Minority status,NA,512.196,584.831,0.876,1.661
+Higher Education,Transit (All modes),45,Maturing Suburbs: Mature Suburban Towns,Income status,NA,691.535,551.418,1.254,1.702
+Higher Education,Transit (All modes),45,Maturing Suburbs: Mature Suburban Towns,Household vehicles,NA,803.498,561.479,1.431,3.029
+Higher Education,Drive,45,Regional Urban Centers: Sub-Regional Urban Centers,Total population,145983.411,NA,NA,NA,NA
+Higher Education,Drive,45,Regional Urban Centers: Sub-Regional Urban Centers,Minority status,NA,158021.553,139783.309,1.13,1.148
+Higher Education,Drive,45,Regional Urban Centers: Sub-Regional Urban Centers,Income status,NA,146278.442,145893.812,1.003,1.075
+Higher Education,Transit (All modes),45,Regional Urban Centers: Sub-Regional Urban Centers,Total population,2486.866,NA,NA,NA,NA
+Higher Education,Transit (All modes),45,Regional Urban Centers: Sub-Regional Urban Centers,Minority status,NA,3640.155,1893.02,1.923,1.661
+Higher Education,Transit (All modes),45,Regional Urban Centers: Sub-Regional Urban Centers,Income status,NA,3193.043,2274.443,1.404,1.702
+Higher Education,Transit (All modes),45,Regional Urban Centers: Sub-Regional Urban Centers,Household vehicles,NA,3486.927,2323.743,1.501,3.029
+Jobs,Drive,45,MPO,Total population,1265642.539,NA,NA,NA,NA
+Jobs,Drive,45,MPO,Minority status,NA,1434598.941,1180525.126,NA,1.215
+Jobs,Drive,45,MPO,Income status,NA,1389673.827,1234512.026,NA,1.126
+Jobs,Transit (All modes),45,MPO,Total population,176272.239,NA,NA,NA,NA
+Jobs,Transit (All modes),45,MPO,Minority status,NA,238850.315,144764.451,NA,1.65
+Jobs,Transit (All modes),45,MPO,Income status,NA,255979.091,156289.536,NA,1.638
+Jobs,Transit (All modes),45,MPO,Household vehicles,NA,398237.884,149267.442,NA,2.668
+Jobs,Drive,45,Developing Suburbs: Country Suburbs,Total population,429799.014,NA,NA,NA,NA
+Jobs,Drive,45,Developing Suburbs: Country Suburbs,Minority status,NA,463739.821,424243.015,1.093,1.215
+Jobs,Drive,45,Developing Suburbs: Country Suburbs,Income status,NA,411315.741,431272.042,0.954,1.126
+Jobs,Transit (All modes),45,Developing Suburbs: Country Suburbs,Total population,991.161,NA,NA,NA,NA
+Jobs,Transit (All modes),45,Developing Suburbs: Country Suburbs,Minority status,NA,819.48,1019.265,0.804,1.65
+Jobs,Transit (All modes),45,Developing Suburbs: Country Suburbs,Income status,NA,1102.371,982.298,1.122,1.638
+Jobs,Transit (All modes),45,Developing Suburbs: Country Suburbs,Household vehicles,NA,1114.461,987.427,1.129,2.668
+Jobs,Drive,45,Developing Suburbs: Maturing New England Towns,Total population,403400.435,NA,NA,NA,NA
+Jobs,Drive,45,Developing Suburbs: Maturing New England Towns,Minority status,NA,425550.075,400301.302,1.063,1.215
+Jobs,Drive,45,Developing Suburbs: Maturing New England Towns,Income status,NA,390637.767,404941.692,0.965,1.126
+Jobs,Transit (All modes),45,Developing Suburbs: Maturing New England Towns,Total population,2629.143,NA,NA,NA,NA
+Jobs,Transit (All modes),45,Developing Suburbs: Maturing New England Towns,Minority status,NA,2885.49,2593.276,1.113,1.65
+Jobs,Transit (All modes),45,Developing Suburbs: Maturing New England Towns,Income status,NA,2827.214,2605.223,1.085,1.638
+Jobs,Transit (All modes),45,Developing Suburbs: Maturing New England Towns,Household vehicles,NA,2814.386,2661.582,1.057,2.668
+Jobs,Drive,45,Inner Core: Metro Core Communities,Total population,1759585.552,NA,NA,NA,NA
+Jobs,Drive,45,Inner Core: Metro Core Communities,Minority status,NA,1726784.997,1795088.983,0.962,1.215
+Jobs,Drive,45,Inner Core: Metro Core Communities,Income status,NA,1750272.71,1763782.176,0.992,1.126
+Jobs,Transit (All modes),45,Inner Core: Metro Core Communities,Total population,446801.608,NA,NA,NA,NA
+Jobs,Transit (All modes),45,Inner Core: Metro Core Communities,Minority status,NA,413732.747,482673.337,0.857,1.65
+Jobs,Transit (All modes),45,Inner Core: Metro Core Communities,Income status,NA,450527.372,445190.965,1.012,1.638
+Jobs,Transit (All modes),45,Inner Core: Metro Core Communities,Household vehicles,NA,551824.434,424139.325,1.301,2.668
+Jobs,Drive,45,Inner Core: Streetcar Suburbs,Total population,1831696.429,NA,NA,NA,NA
+Jobs,Drive,45,Inner Core: Streetcar Suburbs,Minority status,NA,1856341.061,1821871.099,1.019,1.215
+Jobs,Drive,45,Inner Core: Streetcar Suburbs,Income status,NA,1838110.798,1830556.453,1.004,1.126
+Jobs,Transit (All modes),45,Inner Core: Streetcar Suburbs,Total population,169269.905,NA,NA,NA,NA
+Jobs,Transit (All modes),45,Inner Core: Streetcar Suburbs,Minority status,NA,182533.619,163987.815,1.113,1.65
+Jobs,Transit (All modes),45,Inner Core: Streetcar Suburbs,Income status,NA,199179.855,163946.952,1.215,1.638
+Jobs,Transit (All modes),45,Inner Core: Streetcar Suburbs,Household vehicles,NA,306000.681,161189.861,1.898,2.668
+Jobs,Drive,45,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Total population,964491.338,NA,NA,NA,NA
+Jobs,Drive,45,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Minority status,NA,1128357.58,922044.772,1.224,1.215
+Jobs,Drive,45,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Income status,NA,964780.662,964462.487,1,1.126
+Jobs,Transit (All modes),45,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Total population,6867.437,NA,NA,NA,NA
+Jobs,Transit (All modes),45,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Minority status,NA,8489.801,6447.197,1.317,1.65
+Jobs,Transit (All modes),45,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Income status,NA,7061.088,6848.415,1.031,1.638
+Jobs,Transit (All modes),45,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Household vehicles,NA,8846.364,6707.757,1.319,2.668
+Jobs,Drive,45,Maturing Suburbs: Mature Suburban Towns,Total population,1062628.167,NA,NA,NA,NA
+Jobs,Drive,45,Maturing Suburbs: Mature Suburban Towns,Minority status,NA,1074134.653,1059505.499,1.014,1.215
+Jobs,Drive,45,Maturing Suburbs: Mature Suburban Towns,Income status,NA,1018512.554,1069092.704,0.953,1.126
+Jobs,Transit (All modes),45,Maturing Suburbs: Mature Suburban Towns,Total population,14859.708,NA,NA,NA,NA
+Jobs,Transit (All modes),45,Maturing Suburbs: Mature Suburban Towns,Minority status,NA,15672.44,14639.147,1.071,1.65
+Jobs,Transit (All modes),45,Maturing Suburbs: Mature Suburban Towns,Income status,NA,15892.755,14708.328,1.081,1.638
+Jobs,Transit (All modes),45,Maturing Suburbs: Mature Suburban Towns,Household vehicles,NA,16567.02,14623.468,1.133,2.668
+Jobs,Drive,45,Regional Urban Centers: Sub-Regional Urban Centers,Total population,801704.372,NA,NA,NA,NA
+Jobs,Drive,45,Regional Urban Centers: Sub-Regional Urban Centers,Minority status,NA,877376.567,762722.643,1.15,1.215
+Jobs,Drive,45,Regional Urban Centers: Sub-Regional Urban Centers,Income status,NA,804514.639,800847.037,1.005,1.126
+Jobs,Transit (All modes),45,Regional Urban Centers: Sub-Regional Urban Centers,Total population,33452.779,NA,NA,NA,NA
+Jobs,Transit (All modes),45,Regional Urban Centers: Sub-Regional Urban Centers,Minority status,NA,44282.192,27876.46,1.589,1.65
+Jobs,Transit (All modes),45,Regional Urban Centers: Sub-Regional Urban Centers,Income status,NA,39610.414,31600.469,1.253,1.638
+Jobs,Transit (All modes),45,Regional Urban Centers: Sub-Regional Urban Centers,Household vehicles,NA,45739.289,32511.781,1.407,2.668
+"Open Space, all parks",Bike,15,MPO,Total population,73.974,NA,NA,NA,NA
+"Open Space, all parks",Bike,15,MPO,Minority status,NA,84.512,68.667,NA,1.231
+"Open Space, all parks",Bike,15,MPO,Income status,NA,88.111,70.429,NA,1.251
+"Open Space, all parks",Bike,15,MPO,Household vehicles,NA,124.705,68.246,NA,1.827
+"Open Space, all parks",Walk,15,MPO,Total population,21.572,NA,NA,NA,NA
+"Open Space, all parks",Walk,15,MPO,Minority status,NA,25.01,19.841,NA,1.261
+"Open Space, all parks",Walk,15,MPO,Income status,NA,27.412,20.108,NA,1.363
+"Open Space, all parks",Walk,15,MPO,Household vehicles,NA,41.824,19.284,NA,2.169
+"Open Space, all parks",Bike,15,Developing Suburbs: Country Suburbs,Total population,20.021,NA,NA,NA,NA
+"Open Space, all parks",Bike,15,Developing Suburbs: Country Suburbs,Minority status,NA,23.9,19.386,1.233,1.231
+"Open Space, all parks",Bike,15,Developing Suburbs: Country Suburbs,Income status,NA,20.309,19.998,1.016,1.251
+"Open Space, all parks",Bike,15,Developing Suburbs: Country Suburbs,Household vehicles,NA,16.078,20.268,0.793,1.827
+"Open Space, all parks",Walk,15,Developing Suburbs: Country Suburbs,Total population,4.611,NA,NA,NA,NA
+"Open Space, all parks",Walk,15,Developing Suburbs: Country Suburbs,Minority status,NA,5.046,4.54,1.112,1.261
+"Open Space, all parks",Walk,15,Developing Suburbs: Country Suburbs,Income status,NA,4.56,4.615,0.988,1.363
+"Open Space, all parks",Walk,15,Developing Suburbs: Country Suburbs,Household vehicles,NA,3.844,4.641,0.828,2.169
+"Open Space, all parks",Bike,15,Developing Suburbs: Maturing New England Towns,Total population,12.387,NA,NA,NA,NA
+"Open Space, all parks",Bike,15,Developing Suburbs: Maturing New England Towns,Minority status,NA,12.41,12.384,1.002,1.231
+"Open Space, all parks",Bike,15,Developing Suburbs: Maturing New England Towns,Income status,NA,11.99,12.435,0.964,1.251
+"Open Space, all parks",Bike,15,Developing Suburbs: Maturing New England Towns,Household vehicles,NA,12.937,12.447,1.039,1.827
+"Open Space, all parks",Walk,15,Developing Suburbs: Maturing New England Towns,Total population,3.635,NA,NA,NA,NA
+"Open Space, all parks",Walk,15,Developing Suburbs: Maturing New England Towns,Minority status,NA,3.47,3.659,0.949,1.261
+"Open Space, all parks",Walk,15,Developing Suburbs: Maturing New England Towns,Income status,NA,3.626,3.637,0.997,1.363
+"Open Space, all parks",Walk,15,Developing Suburbs: Maturing New England Towns,Household vehicles,NA,3.938,3.697,1.065,2.169
+"Open Space, all parks",Bike,15,Inner Core: Metro Core Communities,Total population,135.184,NA,NA,NA,NA
+"Open Space, all parks",Bike,15,Inner Core: Metro Core Communities,Minority status,NA,116.726,155.17,0.752,1.231
+"Open Space, all parks",Bike,15,Inner Core: Metro Core Communities,Income status,NA,127.794,138.518,0.923,1.251
+"Open Space, all parks",Bike,15,Inner Core: Metro Core Communities,Household vehicles,NA,158.327,131.262,1.206,1.827
+"Open Space, all parks",Walk,15,Inner Core: Metro Core Communities,Total population,42.572,NA,NA,NA,NA
+"Open Space, all parks",Walk,15,Inner Core: Metro Core Communities,Minority status,NA,36.087,49.594,0.728,1.261
+"Open Space, all parks",Walk,15,Inner Core: Metro Core Communities,Income status,NA,41.275,43.159,0.956,1.363
+"Open Space, all parks",Walk,15,Inner Core: Metro Core Communities,Household vehicles,NA,54.94,39.807,1.38,2.169
+"Open Space, all parks",Bike,15,Inner Core: Streetcar Suburbs,Total population,116.615,NA,NA,NA,NA
+"Open Space, all parks",Bike,15,Inner Core: Streetcar Suburbs,Minority status,NA,121.742,114.575,1.063,1.231
+"Open Space, all parks",Bike,15,Inner Core: Streetcar Suburbs,Income status,NA,124.463,115.221,1.08,1.251
+"Open Space, all parks",Bike,15,Inner Core: Streetcar Suburbs,Household vehicles,NA,133.537,117.962,1.132,1.827
+"Open Space, all parks",Walk,15,Inner Core: Streetcar Suburbs,Total population,27.547,NA,NA,NA,NA
+"Open Space, all parks",Walk,15,Inner Core: Streetcar Suburbs,Minority status,NA,29.878,26.619,1.122,1.261
+"Open Space, all parks",Walk,15,Inner Core: Streetcar Suburbs,Income status,NA,31.412,26.859,1.169,1.363
+"Open Space, all parks",Walk,15,Inner Core: Streetcar Suburbs,Household vehicles,NA,33.733,28.159,1.198,2.169
+"Open Space, all parks",Bike,15,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Total population,35.351,NA,NA,NA,NA
+"Open Space, all parks",Bike,15,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Minority status,NA,41.331,33.802,1.223,1.231
+"Open Space, all parks",Bike,15,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Income status,NA,32.918,35.59,0.925,1.251
+"Open Space, all parks",Bike,15,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Household vehicles,NA,35.786,33.883,1.056,1.827
+"Open Space, all parks",Walk,15,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Total population,8.345,NA,NA,NA,NA
+"Open Space, all parks",Walk,15,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Minority status,NA,9.94,7.932,1.253,1.261
+"Open Space, all parks",Walk,15,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Income status,NA,7.889,8.39,0.94,1.363
+"Open Space, all parks",Walk,15,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Household vehicles,NA,8.758,7.962,1.1,2.169
+"Open Space, all parks",Bike,15,Maturing Suburbs: Mature Suburban Towns,Total population,25.756,NA,NA,NA,NA
+"Open Space, all parks",Bike,15,Maturing Suburbs: Mature Suburban Towns,Minority status,NA,23.354,26.408,0.884,1.231
+"Open Space, all parks",Bike,15,Maturing Suburbs: Mature Suburban Towns,Income status,NA,24.337,25.964,0.937,1.251
+"Open Space, all parks",Bike,15,Maturing Suburbs: Mature Suburban Towns,Household vehicles,NA,25.772,25.498,1.011,1.827
+"Open Space, all parks",Walk,15,Maturing Suburbs: Mature Suburban Towns,Total population,7.525,NA,NA,NA,NA
+"Open Space, all parks",Walk,15,Maturing Suburbs: Mature Suburban Towns,Minority status,NA,6.756,7.733,0.874,1.261
+"Open Space, all parks",Walk,15,Maturing Suburbs: Mature Suburban Towns,Income status,NA,7.469,7.533,0.992,1.363
+"Open Space, all parks",Walk,15,Maturing Suburbs: Mature Suburban Towns,Household vehicles,NA,7.677,7.556,1.016,2.169
+"Open Space, all parks",Bike,15,Regional Urban Centers: Sub-Regional Urban Centers,Total population,30.106,NA,NA,NA,NA
+"Open Space, all parks",Bike,15,Regional Urban Centers: Sub-Regional Urban Centers,Minority status,NA,35.055,27.558,1.272,1.231
+"Open Space, all parks",Bike,15,Regional Urban Centers: Sub-Regional Urban Centers,Income status,NA,34.177,28.882,1.183,1.251
+"Open Space, all parks",Bike,15,Regional Urban Centers: Sub-Regional Urban Centers,Household vehicles,NA,37.339,29.337,1.273,1.827
+"Open Space, all parks",Walk,15,Regional Urban Centers: Sub-Regional Urban Centers,Total population,9.32,NA,NA,NA,NA
+"Open Space, all parks",Walk,15,Regional Urban Centers: Sub-Regional Urban Centers,Minority status,NA,11.065,8.422,1.314,1.261
+"Open Space, all parks",Walk,15,Regional Urban Centers: Sub-Regional Urban Centers,Income status,NA,11.212,8.751,1.281,1.363
+"Open Space, all parks",Walk,15,Regional Urban Centers: Sub-Regional Urban Centers,Household vehicles,NA,12.913,9.041,1.428,2.169
+"Open Space, large parks",Drive,45,MPO,Total population,2815.574,NA,NA,NA,NA
+"Open Space, large parks",Drive,45,MPO,Minority status,NA,2980.486,2732.49,NA,1.091
+"Open Space, large parks",Drive,45,MPO,Income status,NA,2909.53,2791.982,NA,1.042
+"Open Space, large parks",Transit (All modes),45,MPO,Total population,89.456,NA,NA,NA,NA
+"Open Space, large parks",Transit (All modes),45,MPO,Minority status,NA,113.754,77.222,NA,1.473
+"Open Space, large parks",Transit (All modes),45,MPO,Income status,NA,122.356,81.208,NA,1.507
+"Open Space, large parks",Transit (All modes),45,MPO,Household vehicles,NA,201.917,76.721,NA,2.632
+"Open Space, large parks",Drive,45,Developing Suburbs: Country Suburbs,Total population,2046.896,NA,NA,NA,NA
+"Open Space, large parks",Drive,45,Developing Suburbs: Country Suburbs,Minority status,NA,2221.455,2018.321,1.101,1.091
+"Open Space, large parks",Drive,45,Developing Suburbs: Country Suburbs,Income status,NA,1995.43,2050.998,0.973,1.042
+"Open Space, large parks",Transit (All modes),45,Developing Suburbs: Country Suburbs,Total population,8.574,NA,NA,NA,NA
+"Open Space, large parks",Transit (All modes),45,Developing Suburbs: Country Suburbs,Minority status,NA,9.531,8.418,1.132,1.473
+"Open Space, large parks",Transit (All modes),45,Developing Suburbs: Country Suburbs,Income status,NA,8.045,8.616,0.934,1.507
+"Open Space, large parks",Transit (All modes),45,Developing Suburbs: Country Suburbs,Household vehicles,NA,7.198,8.617,0.835,2.632
+"Open Space, large parks",Drive,45,Developing Suburbs: Maturing New England Towns,Total population,1932.111,NA,NA,NA,NA
+"Open Space, large parks",Drive,45,Developing Suburbs: Maturing New England Towns,Minority status,NA,2036.987,1917.437,1.062,1.091
+"Open Space, large parks",Drive,45,Developing Suburbs: Maturing New England Towns,Income status,NA,1868.089,1939.842,0.963,1.042
+"Open Space, large parks",Transit (All modes),45,Developing Suburbs: Maturing New England Towns,Total population,3.728,NA,NA,NA,NA
+"Open Space, large parks",Transit (All modes),45,Developing Suburbs: Maturing New England Towns,Minority status,NA,3.987,3.691,1.08,1.473
+"Open Space, large parks",Transit (All modes),45,Developing Suburbs: Maturing New England Towns,Income status,NA,3.448,3.761,0.917,1.507
+"Open Space, large parks",Transit (All modes),45,Developing Suburbs: Maturing New England Towns,Household vehicles,NA,3.666,3.687,0.994,2.632
+"Open Space, large parks",Drive,45,Inner Core: Metro Core Communities,Total population,3250.521,NA,NA,NA,NA
+"Open Space, large parks",Drive,45,Inner Core: Metro Core Communities,Minority status,NA,3207.726,3296.802,0.973,1.091
+"Open Space, large parks",Drive,45,Inner Core: Metro Core Communities,Income status,NA,3242.121,3254.284,0.996,1.042
+"Open Space, large parks",Transit (All modes),45,Inner Core: Metro Core Communities,Total population,220.457,NA,NA,NA,NA
+"Open Space, large parks",Transit (All modes),45,Inner Core: Metro Core Communities,Minority status,NA,192.723,250.506,0.769,1.473
+"Open Space, large parks",Transit (All modes),45,Inner Core: Metro Core Communities,Income status,NA,212.751,223.951,0.95,1.507
+"Open Space, large parks",Transit (All modes),45,Inner Core: Metro Core Communities,Household vehicles,NA,279.499,209.463,1.334,2.632
+"Open Space, large parks",Drive,45,Inner Core: Streetcar Suburbs,Total population,3290.12,NA,NA,NA,NA
+"Open Space, large parks",Drive,45,Inner Core: Streetcar Suburbs,Minority status,NA,3327.41,3275.244,1.016,1.091
+"Open Space, large parks",Drive,45,Inner Core: Streetcar Suburbs,Income status,NA,3299.281,3288.485,1.003,1.042
+"Open Space, large parks",Transit (All modes),45,Inner Core: Streetcar Suburbs,Total population,101.428,NA,NA,NA,NA
+"Open Space, large parks",Transit (All modes),45,Inner Core: Streetcar Suburbs,Minority status,NA,110.895,97.656,1.136,1.473
+"Open Space, large parks",Transit (All modes),45,Inner Core: Streetcar Suburbs,Income status,NA,118.947,98.31,1.21,1.507
+"Open Space, large parks",Transit (All modes),45,Inner Core: Streetcar Suburbs,Household vehicles,NA,169.761,100.135,1.695,2.632
+"Open Space, large parks",Drive,45,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Total population,2637.85,NA,NA,NA,NA
+"Open Space, large parks",Drive,45,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Minority status,NA,2888.477,2572.93,1.123,1.091
+"Open Space, large parks",Drive,45,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Income status,NA,2567.19,2644.79,0.971,1.042
+"Open Space, large parks",Transit (All modes),45,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Total population,8.581,NA,NA,NA,NA
+"Open Space, large parks",Transit (All modes),45,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Minority status,NA,10.258,8.147,1.259,1.473
+"Open Space, large parks",Transit (All modes),45,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Income status,NA,9.384,8.502,1.104,1.507
+"Open Space, large parks",Transit (All modes),45,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Household vehicles,NA,9.905,8.444,1.173,2.632
+"Open Space, large parks",Drive,45,Maturing Suburbs: Mature Suburban Towns,Total population,2613.952,NA,NA,NA,NA
+"Open Space, large parks",Drive,45,Maturing Suburbs: Mature Suburban Towns,Minority status,NA,2648.065,2604.694,1.017,1.091
+"Open Space, large parks",Drive,45,Maturing Suburbs: Mature Suburban Towns,Income status,NA,2533.675,2625.716,0.965,1.042
+"Open Space, large parks",Transit (All modes),45,Maturing Suburbs: Mature Suburban Towns,Total population,8.907,NA,NA,NA,NA
+"Open Space, large parks",Transit (All modes),45,Maturing Suburbs: Mature Suburban Towns,Minority status,NA,12.083,8.045,1.502,1.473
+"Open Space, large parks",Transit (All modes),45,Maturing Suburbs: Mature Suburban Towns,Income status,NA,9.209,8.863,1.039,1.507
+"Open Space, large parks",Transit (All modes),45,Maturing Suburbs: Mature Suburban Towns,Household vehicles,NA,9.355,8.477,1.104,2.632
+"Open Space, large parks",Drive,45,Regional Urban Centers: Sub-Regional Urban Centers,Total population,2436.73,NA,NA,NA,NA
+"Open Space, large parks",Drive,45,Regional Urban Centers: Sub-Regional Urban Centers,Minority status,NA,2522.164,2392.731,1.054,1.091
+"Open Space, large parks",Drive,45,Regional Urban Centers: Sub-Regional Urban Centers,Income status,NA,2406.335,2445.871,0.984,1.042
+"Open Space, large parks",Transit (All modes),45,Regional Urban Centers: Sub-Regional Urban Centers,Total population,10.097,NA,NA,NA,NA
+"Open Space, large parks",Transit (All modes),45,Regional Urban Centers: Sub-Regional Urban Centers,Minority status,NA,12.387,8.917,1.389,1.473
+"Open Space, large parks",Transit (All modes),45,Regional Urban Centers: Sub-Regional Urban Centers,Income status,NA,10.712,9.911,1.081,1.507
+"Open Space, large parks",Transit (All modes),45,Regional Urban Centers: Sub-Regional Urban Centers,Household vehicles,NA,12.722,9.924,1.282,2.632
+"Open Space, paths",Bike,15,MPO,Total population,8.244,NA,NA,NA,NA
+"Open Space, paths",Bike,15,MPO,Minority status,NA,9.577,7.573,NA,1.265
+"Open Space, paths",Bike,15,MPO,Income status,NA,10.036,7.795,NA,1.287
+"Open Space, paths",Bike,15,MPO,Household vehicles,NA,13.373,7.758,NA,1.724
+"Open Space, paths",Walk,15,MPO,Total population,1.961,NA,NA,NA,NA
+"Open Space, paths",Walk,15,MPO,Minority status,NA,2.37,1.755,NA,1.35
+"Open Space, paths",Walk,15,MPO,Income status,NA,2.648,1.789,NA,1.48
+"Open Space, paths",Walk,15,MPO,Household vehicles,NA,3.452,1.787,NA,1.932
+"Open Space, paths",Bike,15,Developing Suburbs: Country Suburbs,Total population,1.569,NA,NA,NA,NA
+"Open Space, paths",Bike,15,Developing Suburbs: Country Suburbs,Minority status,NA,1.761,1.537,1.146,1.265
+"Open Space, paths",Bike,15,Developing Suburbs: Country Suburbs,Income status,NA,1.389,1.583,0.878,1.287
+"Open Space, paths",Bike,15,Developing Suburbs: Country Suburbs,Household vehicles,NA,1.582,1.557,1.016,1.724
+"Open Space, paths",Walk,15,Developing Suburbs: Country Suburbs,Total population,0.411,NA,NA,NA,NA
+"Open Space, paths",Walk,15,Developing Suburbs: Country Suburbs,Minority status,NA,0.452,0.404,1.119,1.35
+"Open Space, paths",Walk,15,Developing Suburbs: Country Suburbs,Income status,NA,0.373,0.414,0.902,1.48
+"Open Space, paths",Walk,15,Developing Suburbs: Country Suburbs,Household vehicles,NA,0.395,0.408,0.968,1.932
+"Open Space, paths",Bike,15,Developing Suburbs: Maturing New England Towns,Total population,2.323,NA,NA,NA,NA
+"Open Space, paths",Bike,15,Developing Suburbs: Maturing New England Towns,Minority status,NA,2.43,2.308,1.053,1.265
+"Open Space, paths",Bike,15,Developing Suburbs: Maturing New England Towns,Income status,NA,2.468,2.306,1.07,1.287
+"Open Space, paths",Bike,15,Developing Suburbs: Maturing New England Towns,Household vehicles,NA,2.7,2.357,1.146,1.724
+"Open Space, paths",Walk,15,Developing Suburbs: Maturing New England Towns,Total population,0.675,NA,NA,NA,NA
+"Open Space, paths",Walk,15,Developing Suburbs: Maturing New England Towns,Minority status,NA,0.704,0.67,1.05,1.35
+"Open Space, paths",Walk,15,Developing Suburbs: Maturing New England Towns,Income status,NA,0.744,0.666,1.117,1.48
+"Open Space, paths",Walk,15,Developing Suburbs: Maturing New England Towns,Household vehicles,NA,0.712,0.677,1.051,1.932
+"Open Space, paths",Bike,15,Inner Core: Metro Core Communities,Total population,15.551,NA,NA,NA,NA
+"Open Space, paths",Bike,15,Inner Core: Metro Core Communities,Minority status,NA,13.553,17.715,0.765,1.265
+"Open Space, paths",Bike,15,Inner Core: Metro Core Communities,Income status,NA,14.627,15.968,0.916,1.287
+"Open Space, paths",Bike,15,Inner Core: Metro Core Communities,Household vehicles,NA,17.199,15.608,1.102,1.724
+"Open Space, paths",Walk,15,Inner Core: Metro Core Communities,Total population,3.839,NA,NA,NA,NA
+"Open Space, paths",Walk,15,Inner Core: Metro Core Communities,Minority status,NA,3.441,4.27,0.806,1.35
+"Open Space, paths",Walk,15,Inner Core: Metro Core Communities,Income status,NA,3.988,3.773,1.057,1.48
+"Open Space, paths",Walk,15,Inner Core: Metro Core Communities,Household vehicles,NA,4.525,3.669,1.233,1.932
+"Open Space, paths",Bike,15,Inner Core: Streetcar Suburbs,Total population,10.535,NA,NA,NA,NA
+"Open Space, paths",Bike,15,Inner Core: Streetcar Suburbs,Minority status,NA,11.254,10.249,1.098,1.265
+"Open Space, paths",Bike,15,Inner Core: Streetcar Suburbs,Income status,NA,11.594,10.347,1.12,1.287
+"Open Space, paths",Bike,15,Inner Core: Streetcar Suburbs,Household vehicles,NA,10.984,10.943,1.004,1.724
+"Open Space, paths",Walk,15,Inner Core: Streetcar Suburbs,Total population,1.938,NA,NA,NA,NA
+"Open Space, paths",Walk,15,Inner Core: Streetcar Suburbs,Minority status,NA,2.212,1.829,1.21,1.35
+"Open Space, paths",Walk,15,Inner Core: Streetcar Suburbs,Income status,NA,2.361,1.863,1.267,1.48
+"Open Space, paths",Walk,15,Inner Core: Streetcar Suburbs,Household vehicles,NA,2.15,2.048,1.05,1.932
+"Open Space, paths",Bike,15,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Total population,3.614,NA,NA,NA,NA
+"Open Space, paths",Bike,15,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Minority status,NA,4.54,3.374,1.346,1.265
+"Open Space, paths",Bike,15,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Income status,NA,3.593,3.616,0.994,1.287
+"Open Space, paths",Bike,15,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Household vehicles,NA,3.841,3.479,1.104,1.724
+"Open Space, paths",Walk,15,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Total population,0.82,NA,NA,NA,NA
+"Open Space, paths",Walk,15,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Minority status,NA,1.066,0.756,1.41,1.35
+"Open Space, paths",Walk,15,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Income status,NA,0.835,0.818,1.021,1.48
+"Open Space, paths",Walk,15,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Household vehicles,NA,0.889,0.785,1.132,1.932
+"Open Space, paths",Bike,15,Maturing Suburbs: Mature Suburban Towns,Total population,2.869,NA,NA,NA,NA
+"Open Space, paths",Bike,15,Maturing Suburbs: Mature Suburban Towns,Minority status,NA,2.513,2.965,0.847,1.265
+"Open Space, paths",Bike,15,Maturing Suburbs: Mature Suburban Towns,Income status,NA,2.902,2.864,1.013,1.287
+"Open Space, paths",Bike,15,Maturing Suburbs: Mature Suburban Towns,Household vehicles,NA,3.085,2.916,1.058,1.724
+"Open Space, paths",Walk,15,Maturing Suburbs: Mature Suburban Towns,Total population,0.714,NA,NA,NA,NA
+"Open Space, paths",Walk,15,Maturing Suburbs: Mature Suburban Towns,Minority status,NA,0.618,0.74,0.836,1.35
+"Open Space, paths",Walk,15,Maturing Suburbs: Mature Suburban Towns,Income status,NA,0.736,0.711,1.035,1.48
+"Open Space, paths",Walk,15,Maturing Suburbs: Mature Suburban Towns,Household vehicles,NA,0.816,0.727,1.122,1.932
+"Open Space, paths",Bike,15,Regional Urban Centers: Sub-Regional Urban Centers,Total population,4.227,NA,NA,NA,NA
+"Open Space, paths",Bike,15,Regional Urban Centers: Sub-Regional Urban Centers,Minority status,NA,4.668,4,1.167,1.265
+"Open Space, paths",Bike,15,Regional Urban Centers: Sub-Regional Urban Centers,Income status,NA,4.781,4.061,1.177,1.287
+"Open Space, paths",Bike,15,Regional Urban Centers: Sub-Regional Urban Centers,Household vehicles,NA,5.024,4.117,1.22,1.724
+"Open Space, paths",Walk,15,Regional Urban Centers: Sub-Regional Urban Centers,Total population,1.114,NA,NA,NA,NA
+"Open Space, paths",Walk,15,Regional Urban Centers: Sub-Regional Urban Centers,Minority status,NA,1.275,1.032,1.235,1.35
+"Open Space, paths",Walk,15,Regional Urban Centers: Sub-Regional Urban Centers,Income status,NA,1.308,1.056,1.238,1.48
+"Open Space, paths",Walk,15,Regional Urban Centers: Sub-Regional Urban Centers,Household vehicles,NA,1.395,1.089,1.281,1.932
