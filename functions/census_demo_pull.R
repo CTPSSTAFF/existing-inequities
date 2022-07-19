@@ -547,5 +547,5 @@ get_median_inc <- function(year_acs, state, service_area, type){
   } else {
     print("Specify earnings or income revenue type.")
   }
-  return(median_income_service_area)
+  return(median_money_service_area)
 }

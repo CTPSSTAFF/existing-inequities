@@ -83,4 +83,6 @@ st_write(mpo_tract_geog, "output/DemographicData.gpkg","tracts_acs_dec_2020", dr
 
 
 median_earnings_mpo <- get_median_inc(2020, "MA", br_mpo_geog, "earnings-worker")
+# median earnings mpo $56,507.64
 median_incHH_mpo <- get_median_inc(2020, "MA", br_mpo_geog, "income-household")
+# median hh inc mpo $97,085.11
