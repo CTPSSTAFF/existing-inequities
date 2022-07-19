@@ -2,6 +2,8 @@
 library(shiny)
 library(shinyWidgets)
 library(reactable)
+library(readr)
+library(leaflet)
 
 # Prep agg area names and icon files. note, order must match the choices list
 aggAreaIcons<- c('ct8.png','ct3.png','ct1.png','ct6.png','ct2.png','ct4.png','ct5.png','ct7.png')
@@ -11,9 +13,18 @@ aggAreaNames <- c(
   "Maturing Suburbs: Established Suburbs and Cape Cod Towns","Maturing Suburbs: Mature Suburban Towns" ,
   "Regional Urban Centers: Sub-Regional Urban Centers"
   )
-  
+index_vars <- read_rds("data/hta_index_vars.rds")
 
 shinyUI(fluidPage(
+  tags$head(
+    tags$style(HTML(
+      "
+        .leaflet-container {
+    background-color: white;
+  }
+      "
+    ))
+  ),
 
     # Application title
     titlePanel("Identifying Existing Destination Access Inequities in the Boston Region "),
@@ -133,10 +144,23 @@ shinyUI(fluidPage(
                                reactableOutput("access_all"),
                               ),
                       tabPanel(strong("Travel Costs"),
-                               h4(),
-                               p("From the Center for Neighborhood Technology"),
-                               plotOutput("index_plot", height = 500),
-                               ),
+                               column(12,  
+                                      br(),
+                                      p(strong("Instructions:")," This map answers the question: ",
+                                        em(strong("how does travel cost differ?")), 
+                                        " U"),
+                                      p(strong("How to Interpret the Maps:"), "The a"),
+                                      p("From the Center for Neighborhood Technology"),
+                                      br()),
+                               column(5, 
+                                     selectInput("index_var", label= "select variable:", 
+                                                 choices = index_vars, 
+                                                 selected = "ht_ami"),
+                                      ),
+                               column(7,
+                                      fluidRow(
+                                        leafletOutput("index_map", height = 700),
+                                      ))),
                       tabPanel(strong("About Project"),
                                column(2),
                                column(8,
@@ -211,11 +235,7 @@ shinyUI(fluidPage(
                                  Sources of error include the data source (American Community Survey data are estimates) and the allocation of demographic data from 
                                  vector polygons to raster cells. For more information on the methodology, see the study’s GitHub page,", 
                                  a("here", href= "https://github.com/CTPSSTAFF/existing-inequities", target="_blank" ), ".")
-                               ),
-
-
-
-#                                
+                               ), 
                           column(2)
                                
                                )

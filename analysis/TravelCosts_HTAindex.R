@@ -2,8 +2,6 @@
 library(classInt)
 
 # cost data from Center for Neighborhood Technology
-costs <- read_csv("data/TravelCost/htaindex_data_blkgrps_25.csv") %>% 
-  mutate(blkgrp = as.character(blkgrp))
 costs_tract <- read_csv("data/TravelCost/htaindex_data_tracts_25.csv") %>% 
   mutate(tract= str_sub(tract,start =2, end= -2))
 # https://htaindex.cnt.org/download/data-dictionary.php
@@ -16,14 +14,12 @@ vars <- c(t_cost_ami = 'Annual Transportation Cost for the Regional Typical Hous
           auto_ownership_cost_ami  = 'Annual Auto Ownership Cost for the Regional Typical Household',
           transit_cost_ami = 'Annual Transit Cost for the Regional Typical Household')
 
+vars
+names <- unname(vars)
+vals <- names(vars)
+names(vals)<- names
 
-
-blkgs <- tidycensus::get_decennial(geography= "block group", 
-                                       variables = "H010001",
-                                       year = 2010,
-                                       state = "MA",
-                                       geometry = T)
-trcts <- tidycensus::get_decennial(geography = "tract",
+tracts <- tidycensus::get_decennial(geography = "tract",
                                    variables = "H010001",
                                    year = 2010,
                                    state = "MA",
@@ -42,44 +38,78 @@ munis2 <- munis %>% filter(GEOID %in% br_mpo_munis$GEOID10) %>%
 mpoBoundary <- st_read("app/data/AggregationAreas.gpkg", "MPO_Boundary") 
 bb <- st_bbox(mpoBoundary)
 
-blkgs2 <- blkgs %>% 
-  select(GEOID, popDec10 = value) %>% 
-  left_join(costs, by = c("GEOID"= "blkgrp")) %>% 
-  st_transform(26986) %>% 
-  st_filter(mpoBoundary) 
 
-
-trcts2 <- trcts %>% 
+tracts2 <- tracts %>% 
   select(GEOID, popDec10 = value) %>% 
   left_join(costs_tract, by = c("GEOID"= "tract")) %>% 
   st_transform(26986) 
-t2141 <- trcts2%>%
+t2141 <- tracts2%>%
   filter(GEOID == "25009214100")
-trcts2 <- trcts2 %>%   
+tracts2 <- tracts2 %>%   
   st_filter(st_union(munis2), .predicate = st_within) %>% 
   bind_rows(t2141) %>% 
   st_as_sf() %>%
   select(GEOID, t_cost_ami, h_cost, h_ami, t_ami, ht_ami, auto_ownership_cost_ami, transit_cost_ami)
 
-write_rds(trcts2, "app/data/hta_index_tracts.rds")
-write_rds(vars, "app/data/hta_index_vars.rds")
+#write_rds(tracts2, "app/data/hta_index_tracts.rds")
+#write_rds(vars, "app/data/hta_index_vars.rds")
 
-trcts3 <- trcts2 %>% 
+tracts_classed <- tracts2 %>% 
   select(var = transit_cost_ami)
 name <- vars["transit_cost_ami"]
-brks <- classIntervals(c(min(trcts3$var) - .00001,
-                         trcts3$var), n = 5, style = "jenks")
-trcts3 <- trcts3 %>% 
+brks <- classIntervals(c(min(tracts_classed$var) - .00001,
+                         tracts_classed$var), n = 5, style = "jenks")
+tracts_classed <- tracts_classed %>% 
   mutate( var_cat = cut(var, brks$brks)) 
 
 ggplot()+
-  geom_sf(data= trcts3,color = "white", size =.1, aes(fill = var_cat))+
+  geom_sf(data= tracts_classed,color = "white", size =.1, aes(fill = var_cat))+
   geom_sf(data= munis2, color = "white", size = .2, fill = "transparent")+
   geom_sf(data = mpoBoundary, color = "pink", size = 1, fill = "transparent")+
   scale_fill_brewer(palette = "YlGnBu", name = str_wrap(name, width = 10))+
   coord_sf(xlim = c(bb[1], bb[3]), ylim = c(bb[2], bb[4]))+
   theme_void()
 
+t <- tracts2%>% st_transform(4326)
+m <- munis2 %>% st_transform(4326)
+
+write_rds(t, "app/data/hta_index_tracts.rds")
+write_rds(m, "app/data/hta_index_munis.rds")
+write_rds(vals, "app/data/hta_index_vars.rds")
+
+library(leaflet)
+
+pal <- colorBin("YlGnBu", t$ht_ami, 5, pretty = F, na.color = "white",)
+leaflet() %>% 
+  addPolygons(data = t,
+              color = "white",
+              weight= .5,
+              smoothFactor = .6,
+              opacity = 1, 
+              fillOpacity = 1,
+              fillColor = ~pal(ht_ami),
+              popup = paste0()
+              
+              ) %>% 
+  addPolygons(data = m,
+              color = "white",
+              weight = 1,
+              smoothFactor = .6, 
+              fillColor = "tranparent") %>% 
+  addPolygons(data = t,
+              color = "transparent",
+              weight= .5,
+              smoothFactor = .6,
+              opacity = 1, 
+              fillOpacity = 1,
+              fillColor ="transparent",
+              popup = paste0(t$GEOID, "<br>",
+                             t$ht_ami)
+              
+  ) %>% 
+  addLegend(position = "bottomright",
+            pal = pal, values = t$ht_ami,
+            opacity = 1)
 
 
   # select(`Annual Transportation Cost for the Regional Typical Household` = t_cost_ami ,

@@ -13,6 +13,8 @@ library(htmltools)
 library(classInt)
 library(scales)
 #library(knitr)
+library(leaflet)
+library(leaflet.extras)
 
 mpoBoundary <- st_read("data/AggregationAreas.gpkg", "MPO_Boundary") %>%
   st_transform(3857)
@@ -41,8 +43,9 @@ comm_types_id<- read_rds("data/comm_types_id.rds")
 `%notin%` <- Negate(`%in%`)
 
 
-trcts <- read_rds("data/hta_index_tracts.rds")
-vars <- read_rds("data/hta_index_vars.rds")
+t <- read_rds("data/hta_index_tracts.rds")
+m <- read_rds("data/hta_index_munis.rds")
+index_vars <- read_rds("data/hta_index_vars.rds")
 
 access_all_comp <- read_csv("data/access_ratios.csv")
 
@@ -473,5 +476,71 @@ shinyServer(function(input, output, session) {
       coord_sf(xlim = c(bb[1], bb[3]), ylim = c(bb[2], bb[4]))+
       theme_void()
   })
+  
+  output$index_map <- renderLeaflet({
+    t_m <- t %>% mutate(v = ht_ami)
+    pal <- colorBin("YlGnBu", t_m$v, 5, pretty = F, na.color = "white")
+    map <- leaflet(options = leafletOptions(preferCanvas = TRUE,
+                                            minZoom= 8,
+                                            maxZoom= 15, 
+                                            attributionConrol= FALSE,
+                                            closePopupOnClick= FALSE)) %>% 
+      setView(lng = -71.059, lat = 42.35, zoom = 10) %>%
+      addResetMapButton() %>%
+      addPolygons(data = t_m,
+                  group = "map data",
+                  color = "white",
+                  weight= .5,
+                  smoothFactor = .6,
+                  opacity = 1, 
+                  fillOpacity = 1,
+                  fillColor = ~pal(v)) %>% 
+      addLegend(position = "bottomright",
+                title= "ht_ami",
+                group = "map data",
+                pal = pal, values = t_m$v,
+                opacity = 1) %>% 
+      addPolygons(data = m,
+                  color = "white",
+                  weight = 1,
+                  smoothFactor = .6,
+                  fillColor = "tranparent",
+                  fillOpacity = 0) 
+  })
+  
+  observe({
+    var <- input$index_var
+    # legend_name <- unname(index_vars[var])
+    # legend_title <- str_replace_all(str_wrap(unname(legend_name), width =10), "\n", "<br>")
+    t_map <- t %>% 
+      mutate(v = case_when(
+        var == "t_cost_ami" ~ t_cost_ami,
+        var == "h_cost" ~ h_cost,
+        var == "h_ami" ~ h_ami,
+        var == "t_ami" ~ t_ami,
+        var == "ht_ami" ~ ht_ami,
+        var == "auto_ownership_cost_ami" ~ auto_ownership_cost_ami,
+        var == "transit_cost_ami" ~ transit_cost_ami
+      ))
+    pal <- colorBin("YlGnBu", t_map$v, 5, pretty = F, na.color = "white")
+    
+    leafletProxy("index_map") %>% 
+      clearControls() %>%
+      clearGroup(group= "map data" )%>%
+      addPolygons(data = t_map,
+                  group = "map data",
+                  color = "white",
+                  weight= .5,
+                  smoothFactor = .6,
+                  opacity = 1, 
+                  fillOpacity = 1,
+                  fillColor = ~pal(v)) %>% 
+      addLegend(position = "bottomright",
+                title= var,
+                group = "map data",
+                pal = pal, values = t_map$v,
+                opacity = 1)
+  })
+
 
 })
