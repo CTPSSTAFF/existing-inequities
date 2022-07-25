@@ -4,6 +4,7 @@ library(shinyWidgets)
 library(reactable)
 library(readr)
 library(leaflet)
+library(ggiraph)
 
 # Prep agg area names and icon files. note, order must match the choices list
 aggAreaIcons<- c('ct8.png','ct3.png','ct1.png','ct6.png','ct2.png','ct4.png','ct5.png','ct7.png')
@@ -119,7 +120,8 @@ shinyUI(fluidPage(
                                                                selected = 8)),
                          column(9,
                                fluidRow(
-                                 plotOutput("access_plots", height = 900),
+                                 # plotOutput("access_plots", height = 900),
+                                 girafeOutput("access_plots", height = 900),
                                  # reactableOutput("avgs"),
                                ))
                                ),

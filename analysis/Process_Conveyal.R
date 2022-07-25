@@ -11,7 +11,7 @@ boundary<-st_read("output/AggregationAreas.gpkg", layer= "MPO_Boundary") %>%
 mpoBoundary <- boundary
 comm_types <- st_read("output/AggregationAreas.gpkg", layer= "CommunityTypes") %>%
   st_transform(3857)
-
+commTypes_byMuni<- comm_types
 # Prep demographic data ####
 prep_grid <- read_stars("data/lodes-data-2018 Workers total conveyal.tif") %>% 
    st_crop(boundary) #%>% 
@@ -163,9 +163,46 @@ visualize_for_access <- function(access){
   }
 }
 
+library(ggiraph)
+visualize_for_access2 <- function(access){
+  if (length(names(access))>1 ){
+    #access <- jobs %>% select(contains("30min"))
+    access <- access %>% st_redimension()
+    g<- ggplot()+
+      geom_stars(data = access)+
+      geom_sf(data= mpoBoundary,size=.5,color='gray', fill= 'transparent')+
+      geom_sf_interactive(data = commTypes_byMuni, size=.2,
+                          color = 'light gray',
+                          fill = 'transparent',
+                          aes(tooltip = municipality, data_id = municipality))+
+      coord_sf()+
+      scale_fill_gradient(low= 'white', high= '#871F78' ,trans="sqrt", #'log1p',
+                          na.value = "transparent",
+                          name = "Opportunities Accessible")+
+      facet_wrap(~new_dim)+
+      theme_void()
+    
+    girafe(ggobj = g,
+          options = list(
+     opts_hover(css = "fill:white !important ;fill-opacity: 1; stroke:blue !important; ")
+    ) 
+    )
+  } else {
+    ggplot()+
+      geom_stars(data = access)+
+      geom_sf(data = commTypes_byMuni, size=.2, color = 'light gray', fill = 'transparent')+
+      geom_sf(data= mpoBoundary,size=.5,color='gray', fill= 'transparent')+
+      coord_sf()+
+      scale_fill_gradient(low= 'white', high= '#871F78' ,trans="sqrt",#trans= 'log1p',
+                          na.value = "transparent",
+                          name = "Opportunities Accessible")+
+      # scale_fill_steps(n.breaks = 30,na.value = 'transparent')+
+      theme_void()+
+      theme(text=element_text(family="Helvetica"))
+  }
+}
 
-
-jobs_access_vis <- visualize_for_access(jobs)
+jobs_access_vis <- visualize_for_access2(jobs %>% select(contains("30min")))
 jobs_access_vis
 highered_access_vis <- visualize_for_access(highered)
 highered_access_vis
