@@ -118,7 +118,6 @@ shinyUI(fluidPage(
                                               "Regional Urban Centers: Sub-Regional Urban Centers" = 7
                                                                  ),
                                                                choicesOpt = list(
-                                                                 # TODO: https://stackoverflow.com/questions/20391156/multiple-lines-of-text-next-to-image-css-html
                                                                  content = mapply(aggAreaNames, 
                                                                                   aggAreaIcons, 
                                                                                   FUN = function(area, icon){
@@ -130,7 +129,7 @@ shinyUI(fluidPage(
                          column(9,
                                fluidRow(
                                  # plotOutput("access_plots", height = 900),
-                                 girafeOutput("access_plots", height = 900),
+                                 girafeOutput("access_plots", height = 1000),
                                  # reactableOutput("avgs"),
                                ))
                                ),

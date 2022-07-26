@@ -267,7 +267,7 @@ visualize_for_access_w_demo_w_tooltip <- function(access, demo, dests,modes, col
   plot_start <- function(access_weighted) {
     ggplot()+
       geom_stars(data = access_weighted)+
-      geom_sf(data = outside_agg, size=0, fill = '#F2F2F2', color = "transparent")+
+      #geom_sf(data = outside_agg, size=0, fill = '#F2F2F2', color = "transparent")+
       geom_sf(data= mpoBoundary,size=.5,color='gray', fill= 'transparent')+
       geom_sf_interactive(data = commTypes_byMuni, size=.2, 
                           color = 'light gray',
@@ -279,12 +279,16 @@ visualize_for_access_w_demo_w_tooltip <- function(access, demo, dests,modes, col
                           name = "Number of \nopportunities",
                           labels = comma)+
       # facet_wrap(~new_dim, ncol = cols)+
-      ggtitle(paste0("Access to \n", d))+
+      ggtitle(paste0("Access to \n", d),
+              subtitle = " ")+
       labs(caption= paste0("Time period: ", time_period))+
       theme_void()+
-      theme(text=element_text(size=8, family = 'sans'),
-            plot.title = element_text(hjust = 0.5, size = 15),
-            legend.text=element_text(size=8))
+      theme(text=element_text(size=11, family = 'sans'),
+            plot.title = element_text(hjust = 0.5, size = 15, face = "bold"),
+            plot.subtitle = element_text(hjust = 0.5, face = "bold"),
+            legend.text=element_text(size=10),
+            strip.text = element_text(face = "bold", size = 10),
+            strip.placement = "inside") #legend.position = "bottom")
   }
   
   if (demo == 0 &length(names(access_weighted))>1 & length(modes)>1){
@@ -304,15 +308,17 @@ visualize_for_access_w_demo_w_tooltip <- function(access, demo, dests,modes, col
       facet_wrap(~new_dim)
   } else {
     # plots when only one mode and no demo (only one layer to map)
-    plot <- plot_start(access_weighted )
+    name <- names(access_weighted)
+    plot <- plot_start(access_weighted )+labs(subtitle = name)
+    
   }
   return(plot)
 }
 
 shinyServer(function(input, output, session) {
-  access_rv <- reactiveValues()
-  access_rv$access <- NULL
-  access_rv$access_mpo <- NULL
+  # access_rv <- reactiveValues()
+  # access_rv$access <- NULL
+  # access_rv$access_mpo <- NULL
   
   observeEvent(input$dest,{
   mt_choices <- app_inputs %>% filter(dest_id == input$dest )
@@ -349,7 +355,7 @@ shinyServer(function(input, output, session) {
     if (3 %notin% time) { access <- access %>% select(-ends_with("45min"))}
     if (4 %notin% time) { access <- access %>% select(-ends_with("60min"))}
 
-    access_rv$access_mpo <- access
+    # access_rv$access_mpo <- access
 
     if (agg == 1) { access <- access * (comm_types_rast %>% select(id1))
     outside_agg <- commTypes %>% filter(id != 1)
@@ -370,11 +376,20 @@ shinyServer(function(input, output, session) {
       outside_agg <- commTypes %>% filter(id == 8)
     }
     
-    access_rv$access <- access
+    # access_rv$access <- access
+    # test_access <<-access
+    # test_demo <<- demo
+    # test_dests <<- dests
+    # test_modes <<- modes
+    # test_cols <<- length(modes)
+    # test_outside_agg <<- outside_agg
+    
     plot <- visualize_for_access_w_demo_w_tooltip(access,demo,dests,modes, cols= length(modes), outside_agg) 
     girafe(ggobj = plot,
+           width_svg = 12, height_svg = 7,
            options = list(
              opts_selection(type= "none"),
+             opts_sizing(rescale = TRUE, width = 1) ,
              opts_hover(css = "fill:gray !important ;fill-opacity: .7; stroke:darkgray !important; ")))
     
   })
