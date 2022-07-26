@@ -33,16 +33,17 @@ total_pop_adult <- sum(as.vector(dasy_raster$pop_dec_adult), na.rm = T)
 weights_all_for_plot <- dasy_raster %>% 
   mutate(pct_min = minority/(minority+nonminority),
          pct_nonmin = nonminority/(minority+nonminority),
-         pct_min_adult = minority_adult/(minority_adult+nonminority_adult),
-         pct_nonmin_adult = nonminority_adult/(minority_adult+nonminority_adult),
+         # pct_min_adult = minority_adult/(minority_adult+nonminority_adult),
+         # pct_nonmin_adult = nonminority_adult/(minority_adult+nonminority_adult),
          pct_lowinc = lowinc/ (lowinc+ nonlowinc),
          pct_nonlowinc = nonlowinc/ (lowinc +nonlowinc),
-         pct_lowinc_adult = lowinc_adult/ (lowinc_adult+ nonlowinc_adult),
-         pct_nonlowinc_adult = nonlowinc_adult/ (lowinc_adult +nonlowinc_adult),
+         # pct_lowinc_adult = lowinc_adult/ (lowinc_adult+ nonlowinc_adult),
+         # pct_nonlowinc_adult = nonlowinc_adult/ (lowinc_adult +nonlowinc_adult),
          pct_zvhh = zero_veh_hh/(zero_veh_hh+ non_zero_veh_hh),
          pct_nonzvhh = non_zero_veh_hh/(zero_veh_hh+ non_zero_veh_hh),
          pct_pop = pop_dec/total_pop_dec,
-         pct_pop_adult = pop_dec_adult/ total_pop_adult) %>% 
+         # pct_pop_adult = pop_dec_adult/ total_pop_adult
+         ) %>% 
   select(starts_with("pct"))
 #write_rds(weights_all_for_plot, "app/data/weights_for_all_plot.rds")
 # Check demographic totals
@@ -125,14 +126,14 @@ openspace <- openspace %>% select(starts_with("OpenSpace_Weekend"))
 rm(openspacepaths)
 
 # write to app data
-write_rds(healthcareNonEmg, "app/data/healthcareNonEmg_access.rds")
-write_rds(healthcareEmg, "app/data/healthcareEmg_access.rds")
-write_rds(jobs, "app/data/jobs_access.rds")
-write_rds(essentialplaces, "app/data/essentialplaces_access.rds")
-write_rds(highered, "app/data/highered_access.rds")
-write_rds(openspace, "app/data/openspace_access.rds")
-write_rds(openspace_conservation, "app/data/openspace_conservation_access.rds")
-write_rds(openspace_paths, "app/data/openspace_paths_access.rds")
+write_rds(healthcareNonEmg, "data/ConveyalRuns/Sept2019_Processed/healthcareNonEmg_access.rds")
+write_rds(healthcareEmg, "data/ConveyalRuns/Sept2019_Processed/healthcareEmg_access.rds")
+write_rds(jobs, "data/ConveyalRuns/Sept2019_Processed/jobs_access.rds")
+write_rds(essentialplaces, "data/ConveyalRuns/Sept2019_Processed/essentialplaces_access.rds")
+write_rds(highered, "data/ConveyalRuns/Sept2019_Processed/highered_access.rds")
+write_rds(openspace, "data/ConveyalRuns/Sept2019_Processed/openspace_access.rds")
+write_rds(openspace_conservation, "data/ConveyalRuns/Sept2019_Processed/openspace_conservation_access.rds")
+write_rds(openspace_paths, "data/ConveyalRuns/Sept2019_Processed/openspace_paths_access.rds")
 
 # Visualize by access type ####
 visualize_for_access <- function(access){
@@ -345,59 +346,4 @@ access_all_comp <- access_all_ratios %>%
 
 # SAVE RESULTS ####
 write_csv(access_all_comp, "output/access_all_comp.csv")
-
-access_all_comp <- read_csv("output/access_all_comp.csv")
-access_ratios_for_app <- access_all_comp %>% 
-  mutate(app = case_when(
-    destination == "Healthcare, non-emergency" & 
-      time == 45 & 
-      mode %in% c("Drive", "Transit (All modes)") &
-      type %in% c("Total population", "Minority status", "Income status", "Household vehicles") ~ T,
-    destination == "Healthcare, emergency" &
-      time == 45 &
-      mode %in% c("Drive", "Transit (All modes)") &
-      type %in% c("Total population", "Minority status", "Income status", "Household vehicles") ~ T,
-    destination == "Jobs" &
-      time == 45 & 
-      mode %in% c("Drive", "Transit (All modes)") &
-      type %in% c("Total population", "Minority status", "Income status", "Household vehicles") ~ T,
-    destination == "Essential Places" &
-      time == 30 &
-      mode %in% c("Drive", "Transit (All modes)") &
-      type %in% c("Total population", "Minority status", "Income status", "Household vehicles") ~ T,
-    destination == "Essential Places" &
-      time == 15 &
-      mode %in% c("Walk", "Bike") &
-      type %in% c("Total population", "Minority status", "Income status", "Household vehicles") ~ T,
-    destination == "Higher Education" &
-      time == 45 &
-      mode %in% c("Drive", "Transit (All modes)") &
-      type %in% c("Total population", "Minority status", "Income status", "Household vehicles") ~ T,
-    destination == "Open Space, all parks" &
-      time == 15 &
-      mode %in% c("Walk", "Bike") &
-      type %in% c("Total population", "Minority status", "Income status", "Household vehicles") ~ T,
-    destination == "Open Space, paths" &
-      time == 15 &
-      mode %in% c("Walk", "Bike") &
-      type %in% c("Total population", "Minority status", "Income status", "Household vehicles") ~ T,
-    destination == "Open Space, large parks" &
-      time == 45 &
-      mode %in% c("Drive", "Transit (All modes)") &
-      type %in% c("Total population", "Minority status", "Income status", "Household vehicles") ~ T,
-    TRUE ~ F
-    ))%>% 
-  mutate(app = ifelse(mode == "Drive" & type == "Household vehicles", F, app)) %>% 
-  filter(app == T) %>% 
-  #arrange(factor(Reg, levels = LETTERS[c(3, 1, 2)]), desc(Res), desc(Pop))
-  arrange(destination, time, factor(region, levels = c("MPO" ,"Developing Suburbs: Country Suburbs",
-                                                       "Developing Suburbs: Maturing New England Towns",
-                                                       "Inner Core: Metro Core Communities" ,
-                                                       "Inner Core: Streetcar Suburbs",
-                                                       "Maturing Suburbs: Established Suburbs and Cape Cod Towns",
-                                                       "Maturing Suburbs: Mature Suburban Towns" ,
-                                                       "Regional Urban Centers: Sub-Regional Urban Centers"  
-                                                        ))) %>% 
-  select(-app)
-write_csv(access_ratios_for_app, "app/data/access_ratios.csv")
 

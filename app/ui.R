@@ -1,4 +1,3 @@
-
 library(shiny)
 library(shinyWidgets)
 library(reactable)
@@ -22,6 +21,9 @@ shinyUI(fluidPage(
       "
         .leaflet-container {
     background-color: white;
+        }
+  text {
+  font-family: sans-serif;
   }
       "
     ))
@@ -57,27 +59,34 @@ shinyUI(fluidPage(
                                                                  "Open Space, large parks"= 7,
                                                                  "Open Space, paths"= 8),
                                                                selected = 5),
-                                pickerInput("modes", label =  p(h4(strong('Travel Modes')),
-                                                                h5('Select one or more travel modes to compare from the dropdown menu:')
-                                                                ),
-                                                               choices = list("Bike" =2,
-                                                                              "Drive"= 5,
-                                                                              #"Transit (bus and rapid transit only)"= 3,
-                                                                              "Transit"= 4,
-                                                                              "Walk"=1
-                                                               ),
-                                                               multiple= T,
-                                                               selected = c(1,2,4,5)),
-                                pickerInput("time", label = p(h4(strong('Travel Times')),
-                                                              h5("Select a travel time threshold from the dropdown menu:")
-                                                              ),
-                                                               choices = list("15 minutes"= 1,
-                                                                              "30 minutes"= 2,
-                                                                              "45 minutes"= 3,
-                                                                              "60 minutes"= 4),
-                                                               #multiple = T,
-                                                               #selected= c(1,2,3,4)),
-                                                               selected = c(3)),
+                                pickerInput(inputId = "mode_time", label = p(h4(strong("Travel times and modes")),
+                                                                   h5('Select one or more travel combinations from the dropdown menu:')),
+                                            choices =  c("15 minute Bike"= 1," 15 minute Walk"= 2),#choice_list,
+                                            multiple  =  T,
+                                            # options = list(`actions-box` = T, `none-selected-text` = "Please make a selection!"#,# "max-options" = 3
+                                            #                ),
+                                            selected = c(1,2)),
+                                # pickerInput("modes", label =  p(h4(strong('Travel Modes')),
+                                #                                 h5('Select one or more travel modes to compare from the dropdown menu:')
+                                #                                 ),
+                                #                                choices = list("Bike" =2,
+                                #                                               "Drive"= 5,
+                                #                                               #"Transit (bus and rapid transit only)"= 3,
+                                #                                                "Transit"= 4,
+                                #                                               "Walk"=1
+                                #                                ),
+                                #                                multiple= T,
+                                #                                selected = c(1,2,4,5)),
+                                # pickerInput("time", label = p(h4(strong('Travel Times')),
+                                #                               h5("Select a travel time threshold from the dropdown menu:")
+                                #                               ),
+                                #                                choices = list("15 minutes"= 1,
+                                #                                               "30 minutes"= 2,
+                                #                                               "45 minutes"= 3,
+                                #                                               "60 minutes"= 4),
+                                #                                #multiple = T,
+                                #                                #selected= c(1,2,3,4)),
+                                #                                selected = c(3)),
                                                    pickerInput("demo", label= p(h4(strong('Equity Population Filter')),
                                                                                 h5("Select a demographic group from the dropdown menu:")
                                                                                 ),

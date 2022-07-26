@@ -17,12 +17,18 @@ library(leaflet)
 library(leaflet.extras)
 library(ggiraph)
 
+app_inputs <- read_rds("data/app_inputs.rds")
+
 mpoBoundary <- st_read("data/AggregationAreas.gpkg", "MPO_Boundary") %>%
   st_transform(3857)
+
+comm_types_id<- read_rds("data/comm_types_id.rds")
 commTypes_byMuni <- st_read("data/AggregationAreas.gpkg", "CommunityTypes") %>% st_transform(3857)
-# commTypes<- commTypes_byMuni %>% 
-#   group_by(communityType) %>% 
-#   summarize(geometry = st_union(geom))
+commTypes<- commTypes_byMuni %>%
+  group_by(communityType, subtype) %>%
+  summarize(geometry = st_union(geom)) %>% 
+  st_as_sf() %>% 
+  left_join(comm_types_id)
 # higherEd <- st_read("data/DestinationData.gpkg", "higherEd_PT")
 # healthcare <- st_read("data/DestinationData.gpkg", "healthcare_PT")
 # essentialPlace_poly <- st_read("data/DestinationData.gpkg", "essentialPlace_Final_POLY")
@@ -40,7 +46,7 @@ openspace_paths_access <- read_rds("data/openspace_paths_access.rds")
 dasy_raster<- read_rds("data/dasy_raster.rds")
 weights_all_for_plot <- read_rds("data/weights_for_all_plot.rds")
 comm_types_rast<- read_rds("data/comm_types_rast.rds")
-comm_types_id<- read_rds("data/comm_types_id.rds")
+
 `%notin%` <- Negate(`%in%`)
 
 
@@ -187,7 +193,7 @@ visualize_for_access_w_demo <- function(access, demo, dests,modes, cols = 4 ){
     plot
   }
 }
-visualize_for_access_w_demo_w_tooltip <- function(access, demo, dests,modes, cols = 4 ){
+visualize_for_access_w_demo_w_tooltip <- function(access, demo, dests,modes, cols = 4 , outside_agg){
   if (dests == 1) {d <- "Healthcare opportunities, \nnon-emergency"
   time_period <- "AM Peak"}
   if (dests == 2) {d <- "Healthcare opportunities, \nemergency"
@@ -226,20 +232,6 @@ visualize_for_access_w_demo_w_tooltip <- function(access, demo, dests,modes, col
     access_w <- access*weight
     names(access_w)<- paste("Population weighted,\n", names(access_w))
     access_weighted <- c( access_w)
-  } else if (demo == 2){
-    weight <-select(weights_all_for_plot, pct_pop_adult)
-    access_w <- access*weight
-    names(access_w)<- paste("Adult population weighted,\n", names(access_w))
-    access_weighted <- c( access_w)
-  } else if (demo == 3){
-    weight_ej <- select(weights_all_for_plot, pct_min_adult)
-    weight_nonej <- select(weights_all_for_plot, pct_nonmin_adult)
-    
-    access_ej <- access*weight_ej
-    names(access_ej)<- paste("Minorirty (Adult),\n", names(access_ej))
-    access_nonej <- access*weight_nonej
-    names(access_nonej)<- paste("Nonminority (Adult),\n", names(access_nonej))
-    access_weighted <- c( access_ej, access_nonej)
   } else if (demo == 4){
     weight_ej <- select(weights_all_for_plot, pct_min)
     weight_nonej <- select(weights_all_for_plot, pct_nonmin)
@@ -248,15 +240,6 @@ visualize_for_access_w_demo_w_tooltip <- function(access, demo, dests,modes, col
     names(access_ej)<- paste("Minorirty,\n", names(access_ej))
     access_nonej <- access*weight_nonej
     names(access_nonej)<- paste("Nonminority,\n", names(access_nonej))
-    access_weighted <- c( access_ej, access_nonej)
-  } else if (demo == 5){
-    weight_ej <- select(weights_all_for_plot, pct_lowinc_adult)
-    weight_nonej <- select(weights_all_for_plot, pct_nonlowinc_adult)
-    
-    access_ej <- access*weight_ej
-    names(access_ej)<- paste("Low-income (Adult),\n", names(access_ej))
-    access_nonej <- access*weight_nonej
-    names(access_nonej)<- paste("Non-low-income (Adult),\n", names(access_nonej))
     access_weighted <- c( access_ej, access_nonej)
   } else if (demo == 6){
     weight_ej <- select(weights_all_for_plot, pct_lowinc)
@@ -284,7 +267,7 @@ visualize_for_access_w_demo_w_tooltip <- function(access, demo, dests,modes, col
   plot_start <- function(access_weighted) {
     ggplot()+
       geom_stars(data = access_weighted)+
-      # geom_sf(data = commTypes_byMuni, size=.2, color = 'light gray', fill = 'transparent')+
+      geom_sf(data = outside_agg, size=0, fill = '#F2F2F2', color = "transparent")+
       geom_sf(data= mpoBoundary,size=.5,color='gray', fill= 'transparent')+
       geom_sf_interactive(data = commTypes_byMuni, size=.2, 
                           color = 'light gray',
@@ -299,7 +282,7 @@ visualize_for_access_w_demo_w_tooltip <- function(access, demo, dests,modes, col
       ggtitle(paste0("Access to \n", d))+
       labs(caption= paste0("Time period: ", time_period))+
       theme_void()+
-      theme(text=element_text(size=8),
+      theme(text=element_text(size=8, family = 'sans'),
             plot.title = element_text(hjust = 0.5, size = 15),
             legend.text=element_text(size=8))
   }
@@ -331,10 +314,19 @@ shinyServer(function(input, output, session) {
   access_rv$access <- NULL
   access_rv$access_mpo <- NULL
   
+  observeEvent(input$dest,{
+  mt_choices <- app_inputs %>% filter(dest_id == input$dest )
+  choice_list <-mt_choices$mt_id
+  names(choice_list)<- mt_choices$mode_time
+  updatePickerInput(session = session, inputId = "mode_time",
+                    choices = choice_list, selected = c(1,2))
+  })
+  
   output$access_plots <- renderGirafe({
     dests <- input$dest
-    modes <- input$modes
-    time <- input$time
+    mts <- app_inputs %>% filter(dest_id == dests)%>% filter(mt_id %in% input$mode_time)
+    modes <- mts$mode_id#input$modes
+    time <- mts$time_id#input$time
     agg <- input$aggArea
     demo <- as.numeric(input$demo)
     if (dests == 1) {access <- healthcare_nonemg_access}
@@ -359,16 +351,27 @@ shinyServer(function(input, output, session) {
 
     access_rv$access_mpo <- access
 
-    if (agg == 1) { access <- access * (comm_types_rast %>% select(id1))}
-    if (agg == 2) { access <- access * (comm_types_rast %>% select(id2))}
-    if (agg == 3) { access <- access * (comm_types_rast %>% select(id3))}
-    if (agg == 4) { access <- access * (comm_types_rast %>% select(id4))}
-    if (agg == 5) { access <- access * (comm_types_rast %>% select(id5))}
-    if (agg == 6) { access <- access * (comm_types_rast %>% select(id6))}
-    if (agg == 7) { access <- access * (comm_types_rast %>% select(id7))}
+    if (agg == 1) { access <- access * (comm_types_rast %>% select(id1))
+    outside_agg <- commTypes %>% filter(id != 1)
+    }
+    if (agg == 2) { access <- access * (comm_types_rast %>% select(id2))
+    outside_agg <- commTypes %>% filter(id != 2)}
+    if (agg == 3) { access <- access * (comm_types_rast %>% select(id3))
+    outside_agg <- commTypes %>% filter(id != 3)}
+    if (agg == 4) { access <- access * (comm_types_rast %>% select(id4))
+    outside_agg <- commTypes %>% filter(id != 4)}
+    if (agg == 5) { access <- access * (comm_types_rast %>% select(id5))
+    outside_agg <- commTypes %>% filter(id != 5)}
+    if (agg == 6) { access <- access * (comm_types_rast %>% select(id6))
+    outside_agg <- commTypes %>% filter(id != 6)}
+    if (agg == 7) { access <- access * (comm_types_rast %>% select(id7))
+    outside_agg <- commTypes %>% filter(id != 7)}
+    if (agg == 8) {
+      outside_agg <- commTypes %>% filter(id == 8)
+    }
     
     access_rv$access <- access
-    plot <- visualize_for_access_w_demo_w_tooltip(access,demo,dests,modes, cols= length(modes)) 
+    plot <- visualize_for_access_w_demo_w_tooltip(access,demo,dests,modes, cols= length(modes), outside_agg) 
     girafe(ggobj = plot,
            options = list(
              opts_selection(type= "none"),
@@ -378,8 +381,9 @@ shinyServer(function(input, output, session) {
   
   output$avgs<- renderReactable({
     dests <- input$dest
-    modes <- input$modes
-    time <- input$time
+    mts <- app_inputs %>% filter(dest_id == dests)%>% filter(mt_id %in% input$mode_time)
+    modes <- mts$mode_id#input$modes
+    time <- mts$time_id#input$time
     agg <- input$aggArea
     demo <- as.numeric(input$demo)
     
