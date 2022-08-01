@@ -62,31 +62,7 @@ shinyUI(fluidPage(
                                 pickerInput(inputId = "mode_time", label = p(h4(strong("Travel times and modes")),
                                                                    h5('Select one or more travel combinations from the dropdown menu:')),
                                             choices =  c("15 minute Bike"= 1," 15 minute Walk"= 2),#choice_list,
-                                            multiple  =  T,
-                                            # options = list(`actions-box` = T, `none-selected-text` = "Please make a selection!"#,# "max-options" = 3
-                                            #                ),
-                                            selected = c(1,2)),
-                                # pickerInput("modes", label =  p(h4(strong('Travel Modes')),
-                                #                                 h5('Select one or more travel modes to compare from the dropdown menu:')
-                                #                                 ),
-                                #                                choices = list("Bike" =2,
-                                #                                               "Drive"= 5,
-                                #                                               #"Transit (bus and rapid transit only)"= 3,
-                                #                                                "Transit"= 4,
-                                #                                               "Walk"=1
-                                #                                ),
-                                #                                multiple= T,
-                                #                                selected = c(1,2,4,5)),
-                                # pickerInput("time", label = p(h4(strong('Travel Times')),
-                                #                               h5("Select a travel time threshold from the dropdown menu:")
-                                #                               ),
-                                #                                choices = list("15 minutes"= 1,
-                                #                                               "30 minutes"= 2,
-                                #                                               "45 minutes"= 3,
-                                #                                               "60 minutes"= 4),
-                                #                                #multiple = T,
-                                #                                #selected= c(1,2,3,4)),
-                                #                                selected = c(3)),
+                                            multiple  =  T, selected = c(1,2)),
                                                    pickerInput("demo", label= p(h4(strong('Equity Population Filter')),
                                                                                 h5("Select a demographic group from the dropdown menu:")
                                                                                 ),
@@ -98,11 +74,6 @@ shinyUI(fluidPage(
                                                                              #"Income Status (Adults)" = 5,
                                                                              "Low-income population" = 6,
                                                                              "Zero-vehicle households" = 7),
-                                                               # multiple = T,
-                                                               # options =  list(
-                                                               #   "max-options" = 2,
-                                                               #   "max-options-text" = "Limit two demographic groups"
-                                                               # ),
                                                                selected = c(0)),
                                 pickerInput('aggArea', label=p(h4(strong('Aggregation Areas')),
                                                                h5("Select an aggregation area from the dropdown menu:")
@@ -128,9 +99,7 @@ shinyUI(fluidPage(
                                                                selected = 8)),
                          column(9,
                                fluidRow(
-                                 # plotOutput("access_plots", height = 900),
                                  girafeOutput("access_plots", height = 1000),
-                                 # reactableOutput("avgs"),
                                ))
                                ),
                       tabPanel(strong("Compare Access"),
@@ -156,6 +125,14 @@ shinyUI(fluidPage(
                       tabPanel(strong("Travel Costs"),
                                column(12,  
                                       br(),
+                                      p("This tab shows two different ways to analyze transportation costs in the region. The first map shows several variables related to 
+                                        transportation and housing costs for Census tracts in the Boston region. These are based on housing cost data from the Census Bureau 
+                                        and the modeled transportation costs from the ", a("Center for Neighborhood Technology", href = "https://cnt.org/"), ". The second map shows the monetized value of travel 
+                                        time (VTT) for trips to/from the Longwood Medical Area (LMA). VTT takes into account the perceived cost of a trip (as opposed to the 
+                                        objective clock time of that trip) based on the opportunity cost of time spent on the trip."),
+                                      
+                                      
+                  
                                       p(strong("Instructions:")," This map answers the question: ",
                                         em(strong("how does travel cost differ?")), 
                                         " U"),
@@ -163,32 +140,35 @@ shinyUI(fluidPage(
                                       p("From the Center for Neighborhood Technology"),
                                       br()),
                                column(5, 
-                                     selectInput("index_var", label= "select variable:", 
+                                    h4(strong('Housing and Transportation Costs in the Boston Region')),
+                                    p(strong("Instructions:")," This map answers the question: ",
+                                      em(strong("how do household transportation and/or housing costs differ across the MPO region?")), 
+                                      " Use the drop-down menu to select the variable to display on the map, and hover over a Census tract to view housing and transportation cost data. See the About the Project tab for data sources."),
+                                     selectInput("index_var", label= "Select Variable:", 
                                                  choices = index_vars, 
                                                  selected = "ht_ami"),
                                       ),
                                column(7,
                                       fluidRow(
-                                        leafletOutput("index_map", height = 700),
+                                        leafletOutput("index_map", height = 500),
                                       ))),
                       tabPanel(strong("About Project"),
                                column(2),
                                column(8,
                                 br(), 
                                 h4(strong("Introduction")),
-                               p("In 2022, the Boston Region Metropolitan Planning Organization (MPO) conducted a study called Identifying Transportation Inequities in the Boston Region. 
-                                 The purpose of the study was to develop a baseline assessment of existing transportation inequities in the Boston region. MPO policies related to equity 
-                                 align with federal civil rights and EJ requirements that focus on preventing future discrimination that may result from MPO investments. To improve the 
-                                 effectiveness of current policies and ultimately the transportation outcomes of environmental justice (EJ) populations in the Boston region, this study 
-                                 sought to quantify existing transportation inequities among EJ populations using several destination access and transportation cost metrics. This application 
-                                 shows the results for that study. Detailed methodological information can be found at the study’s GitHub page,", 
-                                 a("here", href= "https://github.com/CTPSSTAFF/existing-inequities", target="_blank" ), "."),
+                               p("In 2022, the Boston Region Metropolitan Planning Organization (MPO) conducted a study called Identifying Transportation Inequities 
+                                 in the Boston Region.  The study sought to quantify existing transportation inequities among environmental justice (EJ)—minority and 
+                                 low-income—populations and zero-vehicle households in the Boston region using several destination access metrics. In addition, the study 
+                                 explored two methodologies for analyzing transportation costs. This application shows the results of that study. Detailed methodology 
+                                 can be found at the study’s GitHub page,", 
+                                 a("here.", href= "https://github.com/CTPSSTAFF/existing-inequities", target="_blank" )),
                                br(),
                                h4(strong("Definitions")),
                                p(strong("Aggregation Area:"), "These are based on Community Types from the Metropolitan Area Planning Council (MAPC). Community Types are defined used land 
                                  use and housing patterns, growth trends, and projected development patterns. Because MAPC developed these definitions for the entire state, not all Community 
                                  Types are represented in the Boston MPO region. For more information, see ",
-                                 a("this page", href= "https://www.mapc.org/wp-content/uploads/2017/09/Massachusetts-Community-Types-Summary-July_2008.pdf",  target="_blank" ), "."),
+                                 a("this page.", href= "https://www.mapc.org/wp-content/uploads/2017/09/Massachusetts-Community-Types-Summary-July_2008.pdf",  target="_blank" )),
                                tags$div(
                                  tags$ul(
                                    tags$li(strong("Inner Core:"),
@@ -213,24 +193,26 @@ shinyUI(fluidPage(
                                    
                                  )
                                ),
-                               p("Using Community Types allow users to visualize how transportation access varies among different types of communities, controlling for land use and population 
-                                 density. Because regionwide analyses smooth out differences between communities, looking at each community type separately allows the user to visualize and 
-                                 identify those differences. By controlling for land use and density, users can see where there are gaps in the transportation network or in public transit 
-                                 service EJ populations and zero-vehicle households. Since denser communities—such as Inner Core communities—are generally more suitable for public transit 
-                                 and therefore have greater transit access, the ideal comparison is between Community Types and relative to the MPO region:", 
+                               p("Using Community Types allow users to visualize how transportation access varies among different types of communities, 
+                                 controlling for land use and population density. Because regionwide analyses smooth out differences between communities 
+                                 based on these characteristics, looking at each community type separately allows the user to visualize and identify those 
+                                 differences. By controlling for land use and density, users can see where there are gaps in the transportation network or 
+                                 in public transit service EJ populations and zero-vehicle households relative to other residents. Since denser communities—such 
+                                 as Inner Core communities—are generally more suitable for public transit and therefore have greater transit access, the ideal 
+                                 comparison is between Community Types and relative to the MPO region: ", 
                                  em(strong( "how does access differ between demographic groups and mode for a given destination and travel time?"))),
                                p(strong("Destinations:"), "Destinations in the application are defined as described below. For more details, see study’s GitHub page,", 
-                                 a("here", href= "https://github.com/CTPSSTAFF/existing-inequities", target="_blank" ), "."),
+                                 a("here.", href= "https://github.com/CTPSSTAFF/existing-inequities", target="_blank" )),
                                tags$div(
                                  tags$ul(
                                    tags$li(strong("Healthcare (emergency):"), " includes acute care hospitals"),
                                    tags$li(strong("Healthcare (non-emergency):"), " includes medical clinics and community health centers"),
                                    tags$li(strong("Employment:"), " data from the 2018 LODES (LEHD Origin-Destination Employment Statistics)"),
-                                   tags$li(strong("Essential Places:"), " includes three types of destinations: health, civic, and food. The health type consists of all healthcare destinations and retail pharmacies. The civic type consists of townhalls, post offices, and libraries. The food type consists of farmer's markets, and grocery stores."),
+                                   tags$li(strong("Essential Places:"), " includes three types of destinations: health, civic, and food. The health type consists of all healthcare destinations and retail pharmacies. The civic type consists of town halls, post offices, and libraries. The food type consists of farmer's markets, and grocery stores."),
                                    tags$li(strong("Higher Education: ")," colleges and universities where more than 50% of undergraduates live off campus and/or there is graduate enrollment."),
                                    tags$li(strong("Parks and Open Space:")," includes shared used paths and parks lager than one-half acre")
                                  )),
-                               p(strong("Populations of Concern Definitions")),
+                               p(strong("Equity Population  Definitions")),
                                tags$div(
                                  tags$ul(
                                    tags$li("A person is considered ",strong("low-income"),
@@ -240,11 +222,21 @@ shinyUI(fluidPage(
                                    tags$li(strong("Zero-vehicle households"), " are those that do not have access to a personal vehicle. Data are from the 2016-20 American Community Survey.")
                                  )
                                ),
-                               p(strong("How These Data Will Be Used")),
-                               p(strong("Statement About Error:"), "Like any modeling process, this work is assumes a low, but not zero, amount of error due to data and analysis process that is used. 
-                                 Sources of error include the data source (American Community Survey data are estimates) and the allocation of demographic data from 
-                                 vector polygons to raster cells. For more information on the methodology, see the study’s GitHub page,", 
-                                 a("here", href= "https://github.com/CTPSSTAFF/existing-inequities", target="_blank" ), ".")
+                               br(),
+                               h4(strong("Travel Cost Methodology")),
+                               p(strong("Housing and Transportation Costs in the Boston Region:"), "These data are from the Center for Neighborhood Technology (CNT). CNT 
+                                 calculates the percent of household income spent on transportation and housing costs from an in-house transportation cost model and housing 
+                                 costs from the American Community Survey. The CNT data were last updated in 2017 and use 2010 Census geography. For more information about 
+                                 the methodology and data used, see CNT’s", a("technical documentation.", href= "https://htaindex.cnt.org/about/HTMethods_2016.pdf")),
+                               p(strong("Value of Travel Time for Selected Trips:"), "Conveyal was used to calculate travel times on the roadway and public transit networks 
+                                 between origin-destination pairs. The VTT was calculated using assumptions from the Victoria Transportation Policy Institute’s ", 
+                                 a("Valuing Transit Service Quality Improvements.", href = "https://www.vtpi.org/traveltime.pdf")),
+                               br(),
+                               h4(strong("Statement About Error")),
+                               p("Like any modeling process, this work assumes a low, but not zero, amount of error due to the data 
+                                 and analysis process that is used. Sources of error include the data source (American Community Survey data are estimates) and the 
+                                 allocation of demographic data from vector polygons to raster cells. For more information on the methodology, see the study’s GitHub page,", 
+                                 a("here.", href= "https://github.com/CTPSSTAFF/existing-inequities", target="_blank" ))
                                ), 
                           column(2)
                                

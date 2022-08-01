@@ -1,24 +1,25 @@
-
+library(tidyverse)
+library(mapview)
 library(classInt)
 
-# cost data from Center for Neighborhood Technology
+# load cost data downloaded from Center for Neighborhood Technology
+# https://htaindex.cnt.org/download/data-dictionary.php
 costs_tract <- read_csv("data/TravelCost/htaindex_data_tracts_25.csv") %>% 
   mutate(tract= str_sub(tract,start =2, end= -2))
-# https://htaindex.cnt.org/download/data-dictionary.php
-
+# set up variable names
 vars <- c(t_cost_ami = 'Annual Transportation Cost for the Regional Typical Household',
           h_cost = 'Average Monthly Housing Cost',
-          h_ami = 'Housing Costs % Income for the Regional Typical Household',
-          t_ami = 'Transportation Costs % Income for the Regional Typical Household',
-          ht_ami = 'Housing + Transportation Costs % Income for the Regional Typical Household',
+          h_ami = 'Housing Costs as a % of Income for the Regional Typical Household',
+          t_ami = 'Transportation Costs as a % of Income for the Regional Typical Household',
+          ht_ami = 'Housing + Transportation Costs as a % of Income for the Regional Typical Household',
           auto_ownership_cost_ami  = 'Annual Auto Ownership Cost for the Regional Typical Household',
           transit_cost_ami = 'Annual Transit Cost for the Regional Typical Household')
-
 vars
 names <- unname(vars)
 vals <- names(vars)
 names(vals)<- names
 
+# pull 2010 tracts and munis from census
 tracts <- tidycensus::get_decennial(geography = "tract",
                                    variables = "H010001",
                                    year = 2010,
@@ -73,7 +74,21 @@ ggplot()+
 t <- tracts2%>% st_transform(4326)
 m <- munis2 %>% st_transform(4326)
 
-write_rds(t, "app/data/hta_index_tracts.rds")
+# add muni names to census tracts
+# prep muni names
+m_name <- m %>% 
+  select(GEOID, NAME) %>%
+  rowwise() %>% 
+  # pull muni name from census NAME field: takes string before the first comma and then drops the last word
+  mutate(muni= word(word(NAME, sep = ", "), end = -2)) %>% 
+  select( -NAME) %>% 
+  rename(GEOID_muni = GEOID)
+
+t_wMuni <- t %>% 
+  filter(is.na(t_cost_ami)==F) %>% 
+  st_join(m_name, join= st_intersects, largest = T)
+
+write_rds(t_wMuni, "app/data/hta_index_tracts.rds")
 write_rds(m, "app/data/hta_index_munis.rds")
 write_rds(vals, "app/data/hta_index_vars.rds")
 
