@@ -130,28 +130,34 @@ shinyUI(fluidPage(
                                         and the modeled transportation costs from the ", a("Center for Neighborhood Technology", href = "https://cnt.org/"), ". The second map shows the monetized value of travel 
                                         time (VTT) for trips to/from the Longwood Medical Area (LMA). VTT takes into account the perceived cost of a trip (as opposed to the 
                                         objective clock time of that trip) based on the opportunity cost of time spent on the trip."),
-                                      
-                                      
-                  
-                                      p(strong("Instructions:")," This map answers the question: ",
-                                        em(strong("how does travel cost differ?")), 
-                                        " U"),
-                                      p(strong("How to Interpret the Maps:"), "The a"),
-                                      p("From the Center for Neighborhood Technology"),
+                                    
                                       br()),
-                               column(5, 
+                               fluidRow(
+                                 column(1,),
+                                 column(4, 
                                     h4(strong('Housing and Transportation Costs in the Boston Region')),
                                     p(strong("Instructions:")," This map answers the question: ",
-                                      em(strong("how do household transportation and/or housing costs differ across the MPO region?")), 
-                                      " Use the drop-down menu to select the variable to display on the map, and hover over a Census tract to view housing and transportation cost data. See the About the Project tab for data sources."),
+                                      em(strong("how do household transportation and/or housing costs differ across the MPO region?"))),
+                                    p("Use the drop-down menu to select the variable to display on the map, and hover over a Census tract to view housing and transportation cost data. 
+                                      See the About the Project tab for data sources. (A “regional typical household” is the average for all households in the Boston MPO region.)"),
                                      selectInput("index_var", label= "Select Variable:", 
                                                  choices = index_vars, 
-                                                 selected = "ht_ami"),
+                                                 selected = "ht_ami",
+                                                 width = '100%'),
                                       ),
-                               column(7,
-                                      fluidRow(
-                                        leafletOutput("index_map", height = 500),
-                                      ))),
+                                column(7,
+                                      leafletOutput("index_map", height = 500),
+                                      )),
+                               br(),
+                               fluidRow(
+                                 column(1,),
+                                 column(4, 
+                                               h4(strong('Value of Travel Time for Selected Trips')),
+                                               p(strong("Instructions:")," This map answers the question: ",
+                                                 em(strong("how does the value of travel time differ between transportation modes for a sample origin-destination pair?")), 
+                                                 " Hover over each trip to see the difference in travel costs between driving and public transit."),
+                                        column(7,))
+                                        )),
                       tabPanel(strong("About Project"),
                                column(2),
                                column(8,
