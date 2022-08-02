@@ -1,6 +1,7 @@
 library(tidyverse)
 library(sf)
 library(leaflet)
+library(leaflet.extras)
 library(classInt)
 
 
@@ -52,7 +53,7 @@ labels <- sprintf(
   "Cost delta: <strong>$%.2f</strong><br/></sup>",
   cost_data$delta
 ) %>% lapply(htmltools::HTML)
-
+library(leaflet.providers)
 
 delta_map <- leaflet(options = leafletOptions(preferCanvas = TRUE,
                                         minZoom= 8,
@@ -78,6 +79,9 @@ delta_map <- leaflet(options = leafletOptions(preferCanvas = TRUE,
               fillOpacity = 1,
               popup = paste0("<b>",munis$municipality, "</b><br>",
                              munis$communityType, ": ", munis$subtype)) %>% 
+  # to add roads would need to set up map panes
+  # https://stackoverflow.com/questions/43881007/how-to-addtiles-on-top-of-addpolygons-in-rs-leaflet
+  # addProviderTiles(providers$Stamen.TonerLines) %>% 
   addPolylines(data = cost_data,
                weight = cost_data$delta/10,
                color = ~pal_delta(delta),#"green",
