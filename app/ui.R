@@ -128,7 +128,7 @@ shinyUI(fluidPage(
                                       p("This tab shows two different ways to analyze transportation costs in the region. The first map shows several variables related to 
                                         transportation and housing costs for Census tracts in the Boston region. These are based on housing cost data from the Census Bureau 
                                         and the modeled transportation costs from the ", a("Center for Neighborhood Technology", href = "https://cnt.org/"), ". The second map shows the monetized value of travel 
-                                        time (VTT) for trips to/from the Longwood Medical Area (LMA). VTT takes into account the perceived cost of a trip (as opposed to the 
+                                        time (VTT) for trips to select destinations in the Boston Region MPO. VTT takes into account the perceived cost of a trip (as opposed to the 
                                         objective clock time of that trip) based on the opportunity cost of time spent on the trip."),
                                     
                                       br()),
@@ -139,7 +139,7 @@ shinyUI(fluidPage(
                                     p(strong("Instructions:")," This map answers the question: ",
                                       em(strong("how do household transportation and/or housing costs differ across the MPO region?"))),
                                     p("Use the drop-down menu to select the variable to display on the map, and hover over a Census tract to view housing and transportation cost data. 
-                                      See the About the Project tab for data sources. (A “regional typical household” is the average for all households in the Boston MPO region.)"),
+                                      See the 'About Project' tab for data sources. (A “regional typical household” is the average for all households in the Boston MPO region.)"),
                                      selectInput("index_var", label= "Select Variable:", 
                                                  choices = index_vars, 
                                                  selected = "ht_ami",
@@ -155,9 +155,23 @@ shinyUI(fluidPage(
                                                h4(strong('Value of Travel Time for Selected Trips')),
                                                p(strong("Instructions:")," This map answers the question: ",
                                                  em(strong("how does the value of travel time differ between transportation modes for a sample origin-destination pair?")), 
-                                                 " Hover over each trip to see the difference in travel costs between driving and public transit."),
-                                        column(7,))
-                                        )),
+                                                 "Select a destination below. Hover over each trip to see the difference in travel costs between driving and public transit."),
+                                        p("Origins were found by finding the center of every census tract in the Boston Region MPO. 
+                                          Destinations were selected from the essential places. 
+                                          Cost deltas can only be calculated where there is both a drive cost and a transit cost. There is no cost delta where there is no transit path available."),
+                                        selectInput("delta_dest", label =  "Select destination:",
+                                                    choices = list("Downtown Boston" = 1,
+                                                                   "Framingham" = 2,
+                                                                   "Longwood Medical Area" = 3,
+                                                                   "Lynn" = 4, 
+                                                                   "Quincy" = 5),
+                                                    selected = 3),
+                                                      
+                                                    ),
+                                        column(7,
+                                               leafletOutput("delta_map", height = 500),
+                                               ))
+                                        ),
                       tabPanel(strong("About Project"),
                                column(2),
                                column(8,

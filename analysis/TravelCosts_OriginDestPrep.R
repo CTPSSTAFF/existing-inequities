@@ -22,7 +22,7 @@ mapview(t_centroid)
 ep_top <- essential_places %>% 
   arrange(desc(n)) %>% 
   slice_max(n, n = 50) %>% 
-  select(name = cluster) %>% 
+  select(name = cluster, n) %>% 
   mutate(type = "d")
 
 mapview(ep_top)

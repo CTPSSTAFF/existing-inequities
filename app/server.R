@@ -16,13 +16,14 @@ library(scales)
 library(leaflet)
 library(leaflet.extras)
 library(ggiraph)
+library(classInt)
 
 app_inputs <- read_rds("data/app_inputs.rds")
 
 mpoBoundary <- st_read("data/AggregationAreas.gpkg", "MPO_Boundary") %>%
   st_transform(3857)
 
-comm_types_id<- read_rds("data/comm_types_id.rds")
+comm_types_id <- read_rds("data/comm_types_id.rds")
 commTypes_byMuni <- st_read("data/AggregationAreas.gpkg", "CommunityTypes") %>% st_transform(3857)
 commTypes<- commTypes_byMuni %>%
   group_by(communityType, subtype) %>%
@@ -53,6 +54,8 @@ comm_types_rast<- read_rds("data/comm_types_rast.rds")
 t <- read_rds("data/hta_index_tracts.rds")
 # m <- read_rds("data/hta_index_munis.rds")
 index_vars <- read_rds("data/hta_index_vars.rds")
+
+cost_lines<- read_rds( "data/cost_lines.rds")
 
 access_all_comp <- read_csv("data/access_ratios.csv")
 
@@ -348,8 +351,18 @@ shinyServer(function(input, output, session) {
     var <- input$index_var
     legend_name <- names(index_vars[index_vars==var])#unname(index_vars[var])
     legend_title <- str_replace_all(str_wrap(unname(legend_name), width =20), "\n", "<br>") 
+    
     t_m <- t %>% mutate(v = ht_ami)
-    pal <- colorBin("YlGnBu", t_m$v, 5, pretty = F, na.color = "white")
+    brks <- classIntervals(c(min(t_m$v) - .00001,
+                             t_m$v), n = 5, style = "jenks")
+    
+    pal <- colorBin("YlGnBu", t_m$v, 5, bins =brks$brks, pretty = F, na.color = "white")
+    
+    labels <- sprintf(
+      "<strong>%s</strong><br/>Tract: %s<br/> %g<br/>",
+      t_m$muni,t_m$GEOID, t_m$v
+    ) %>% lapply(htmltools::HTML)
+    
     map <- leaflet(options = leafletOptions(preferCanvas = TRUE,
                                             minZoom= 8,
                                             maxZoom= 15, 
@@ -387,6 +400,7 @@ shinyServer(function(input, output, session) {
                                 "Annual Auto Ownership Cost: <b>$", comma(t_m$auto_ownership_cost_ami),"</b><br>",
                                 "Annual Transit Cost: <b>$", comma(t_m$transit_cost_ami),"</b>"
                   ),
+                  label = ~labels,
                   highlightOptions = highlightOptions(bringToFront = TRUE))
       
   })
@@ -405,7 +419,15 @@ shinyServer(function(input, output, session) {
         var == "auto_ownership_cost_ami" ~ auto_ownership_cost_ami,
         var == "transit_cost_ami" ~ transit_cost_ami
       ))
-    pal <- colorBin("YlGnBu", t_map$v, 5, pretty = F, na.color = "white")
+    brks <- classIntervals(c(min(t_map$v) - .00001,
+                             t_map$v), n = 5, style = "jenks")
+    
+    pal <- colorBin("YlGnBu", t_map$v, 5, bins =brks$brks, pretty = F, na.color = "white")
+    
+    labels <- sprintf(
+      "<strong>%s</strong><br/>Tract: %s<br/> %g<br/>",
+      t_map$muni,t_map$GEOID, t_map$v
+    ) %>% lapply(htmltools::HTML)
     
     leafletProxy("index_map") %>% 
       clearControls() %>%
@@ -427,13 +449,150 @@ shinyServer(function(input, output, session) {
                                "Housing + Transportation Costs as a % of Income: <b>", t_map$ht_ami,"%</b><br>",
                                "Annual Auto Ownership Cost: <b>$", comma(t_map$auto_ownership_cost_ami),"</b><br>",
                                "Annual Transit Cost: <b>$", comma(t_map$transit_cost_ami),"</b>"
-                  )) %>% 
+                  ),
+                  label = ~labels
+                  ) %>% 
       addLegend(position = "bottomright",
                 title= legend_title,
                 group = "map data",
                 pal = pal, values = t_map$v,
                 opacity = 1)
   })
-
+  output$delta_map <- renderLeaflet({
+    munis <- commTypes_byMuni %>% 
+      st_transform(4326)
+    commTypes<- commTypes_byMuni %>%
+      group_by(communityType, subtype) %>%
+      summarize(geometry = st_union(geom)) %>% 
+      st_as_sf() %>% 
+      st_transform(4326)
+    
+    cost_data <- cost_lines %>% filter(name_destination == 4) %>% 
+      arrange(desc(delta))
+    
+    brks <- classIntervals(c(min(cost_data$delta) - .00001,
+                             cost_data$delta), n = 5, style = "jenks")
+    
+    pal_delta<-colorBin(palette = "YlGnBu",domain = cost_data$delta, bins =brks$brks, pretty = FALSE)
+    
+    labels <- sprintf(
+      "Cost delta: <strong>$%.2f</strong><br/></sup>",
+      cost_data$delta
+    ) %>% lapply(htmltools::HTML)
+    
+    
+    delta_map <- leaflet(options = leafletOptions(preferCanvas = TRUE,
+                                            minZoom= 8,
+                                            maxZoom= 15, 
+                                            attributionConrol= FALSE,
+                                            closePopupOnClick= FALSE)) %>% 
+      setView(lng = -71.059, lat = 42.35, zoom = 10) %>%
+      addResetMapButton() %>% 
+      addPolygons(data = commTypes,
+                  color = "white",
+                  fillColor = "#fff3e0",
+                  weight= .5,
+                  smoothFactor = .6,
+                  opacity = 1, 
+                  fillOpacity = 1,
+                  popup = paste0("<b>",commTypes$communityType, ": ", commTypes$subtype,"</b><br>")) %>% 
+      addPolygons(data = munis,
+                  color = "white",
+                  fillColor = "transparent",
+                  weight= .5,
+                  smoothFactor = .6,
+                  opacity = 1, 
+                  fillOpacity = 1,
+                  popup = paste0("<b>",munis$municipality, "</b><br>",
+                                 munis$communityType, ": ", munis$subtype)) %>% 
+      addPolylines(data = cost_data,
+                   group = "map data",
+                   weight = cost_data$delta/10,
+                   color = ~pal_delta(delta),
+                   opacity= .8,
+                   popup = paste0("From: ", cost_data$municipality, "<br>",
+                                  "To: ",cost_data$to,"<br>",
+                                  "Cost Delta: $", formatC(round(cost_data$delta,2), format= 'f', digits= 2),"<br>",
+                                  "Drive Time: ", round(cost_data$drive_time), " minutes <br>",
+                                  "Drive Cost: $", formatC(round(cost_data$cost_drive,2), format= 'f', digits= 2),"<br>",
+                                  "Avg Transit Time: ", round(cost_data$mean_time), " minutes <br>",
+                                  "Transit Cost: $", formatC(round(cost_data$mean_costTransit, 2), format= 'f', digits= 2)),
+                   # label = paste0("From: ", "<br>",
+                   #                "To: ", "<br>",
+                   #                "Cost Delta: $", formatC(round(cost_data$delta,2), format= 'f', digits= 2)),
+                   label = labels,
+                   labelOptions = labelOptions(
+                     style = list("font-weight" = "normal", padding = "3px 8px"),
+                     textsize = "15px",
+                     direction = "auto"),
+                   highlightOptions =  highlightOptions(
+                     weight = 5,
+                     bringToFront = FALSE)) %>%
+      addLegend(pal = pal_delta, 
+                group= 'map_data',
+                values =cost_data$delta,
+                labFormat = labelFormat(prefix = "$"),
+                title = "How much more does <br>transit cost? <br>
+            (Cost Delta)",
+                position =  "bottomright")
+    
+  })
+  
+  observe({
+    dest <- case_when(
+      input$delta_dest == 1 ~ 26,
+      input$delta_dest == 2 ~ 1006,
+      input$delta_dest == 3 ~ 4,
+      input$delta_dest == 4 ~ 16,
+      input$delta_dest == 5 ~ 44)
+    
+    cost_data <- cost_lines %>% filter(name_destination == dest)%>% 
+      arrange(desc(delta))
+    
+    brks <- classIntervals(c(min(cost_data$delta) - .00001,
+                             cost_data$delta), n = 5, style = "jenks")
+    
+    pal_delta<-colorBin(palette = "YlGnBu",domain = cost_data$delta, bins =brks$brks, pretty = FALSE)
+    
+    labels <- sprintf(
+      "Cost delta: <strong>$%.2f</strong><br/></sup>",
+      cost_data$delta
+    ) %>% lapply(htmltools::HTML)
+    
+    
+    leafletProxy("delta_map") %>% 
+      clearControls() %>%
+      clearGroup(group= "map data" )%>%
+      addPolylines(data = cost_data,
+                   group = "map data",
+                   weight = cost_data$delta/10,
+                   color = ~pal_delta(delta),#"green",
+                   opacity= .8,
+                   popup = paste0("From: ", "<br>",
+                                  "To: ",cost_data$to,"<br>",
+                                  "Cost Delta: $", formatC(round(cost_data$delta,2), format= 'f', digits= 2),"<br>",
+                                  "Drive Time: ", round(cost_data$drive_time), " minutes <br>",
+                                  "Drive Cost: $", formatC(round(cost_data$cost_drive,2), format= 'f', digits= 2),"<br>",
+                                  "Avg Transit Time: ", round(cost_data$mean_time), " minutes <br>",
+                                  "Transit Cost: $", formatC(round(cost_data$mean_costTransit, 2), format= 'f', digits= 2)),
+                   # label = paste0("From: ", "<br>",
+                   #                "To: ", "<br>",
+                   #                "Cost Delta: $", formatC(round(cost_data$delta,2), format= 'f', digits= 2)),
+                   label = labels,
+                   labelOptions = labelOptions(
+                     style = list("font-weight" = "normal", padding = "3px 8px"),
+                     textsize = "15px",
+                     direction = "auto"),
+                   highlightOptions =  highlightOptions(
+                     weight = 5,
+                     bringToFront = FALSE)) %>%
+      addLegend(pal = pal_delta, 
+                group= 'map_data',
+                values =cost_data$delta,
+                labFormat = labelFormat(prefix = "$"),
+                title = "How much more does <br>transit cost? <br>
+            (Cost Delta)",
+                position =  "bottomright")
+  })
 
 })
