@@ -17,6 +17,7 @@ library(leaflet)
 library(leaflet.extras)
 library(ggiraph)
 library(classInt)
+library(htmltools)
 
 app_inputs <- read_rds("data/app_inputs.rds")
 
@@ -133,7 +134,7 @@ visualize_for_access_w_demo_w_tooltip <- function(access, demo, dests,modes, col
   plot_start <- function(access_weighted) {
     ggplot()+
       geom_stars(data = access_weighted)+
-      geom_sf(data = outside_agg, size=0, fill = '#F2F2F2', color = "transparent")+
+      geom_sf(data = outside_agg, size=0, fill = 'tan', color = "transparent")+
       geom_sf(data= mpoBoundary,size=.5,color='gray', fill= 'transparent')+
       geom_sf_interactive(data = commTypes_byMuni, size=.2, 
                           color = 'light gray',
@@ -358,8 +359,8 @@ shinyServer(function(input, output, session) {
     
     pal <- colorBin("YlGnBu", t_m$v, 5, bins =brks$brks, pretty = F, na.color = "white")
     
-    labels <- sprintf(
-      "<strong>%s</strong><br/>Tract: %s<br/> %g<br/>",
+    labels_index <- sprintf(
+      "<strong>%s</strong><br/>Tract: %s<br/> %g%%<br/>",
       t_m$muni,t_m$GEOID, t_m$v
     ) %>% lapply(htmltools::HTML)
     
@@ -375,6 +376,8 @@ shinyServer(function(input, output, session) {
                 title= legend_title,#"ht_ami",
                 group = "map data",
                 pal = pal, values = t_m$v,
+                labFormat = labelFormat(big.mark = ",",
+                                        suffix = '%'),
                 opacity = 1) %>% 
       # addPolygons(data = m,
       #             color = "white",
@@ -400,7 +403,11 @@ shinyServer(function(input, output, session) {
                                 "Annual Auto Ownership Cost: <b>$", comma(t_m$auto_ownership_cost_ami),"</b><br>",
                                 "Annual Transit Cost: <b>$", comma(t_m$transit_cost_ami),"</b>"
                   ),
-                  label = ~labels,
+                  label = ~labels_index,
+                  labelOptions = labelOptions(
+                    style = list("font-weight" = "normal", padding = "3px 8px"),
+                    textsize = "15px",
+                    direction = "auto"),
                   highlightOptions = highlightOptions(bringToFront = TRUE))
       
   })
@@ -423,11 +430,21 @@ shinyServer(function(input, output, session) {
                              t_map$v), n = 5, style = "jenks")
     
     pal <- colorBin("YlGnBu", t_map$v, 5, bins =brks$brks, pretty = F, na.color = "white")
-    
-    labels <- sprintf(
+    if(grepl('\\%', legend_name)){
+    labels_index <- sprintf(
       "<strong>%s</strong><br/>Tract: %s<br/> %g<br/>",
       t_map$muni,t_map$GEOID, t_map$v
     ) %>% lapply(htmltools::HTML)
+    prefix <- ""
+    suffix <- "%"
+    } else{
+      labels_index <- sprintf(
+        "<strong>%s</strong><br/>Tract: %s<br/> $%s<br/>",
+        t_map$muni,t_map$GEOID, comma(t_map$v)
+      ) %>% lapply(htmltools::HTML)
+      prefix <- "$"
+      suffix <- ""
+    }
     
     leafletProxy("index_map") %>% 
       clearControls() %>%
@@ -450,21 +467,23 @@ shinyServer(function(input, output, session) {
                                "Annual Auto Ownership Cost: <b>$", comma(t_map$auto_ownership_cost_ami),"</b><br>",
                                "Annual Transit Cost: <b>$", comma(t_map$transit_cost_ami),"</b>"
                   ),
-                  label = ~labels
+                  label = ~labels_index,
+                  labelOptions = labelOptions(
+                    style = list("font-weight" = "normal", padding = "3px 8px"),
+                    textsize = "15px",
+                    direction = "auto")
                   ) %>% 
       addLegend(position = "bottomright",
                 title= legend_title,
                 group = "map data",
                 pal = pal, values = t_map$v,
+                labFormat = labelFormat(prefix = prefix,
+                  big.mark = ",",
+                                        suffix = suffix),
                 opacity = 1)
   })
   output$delta_map <- renderLeaflet({
     munis <- commTypes_byMuni %>% 
-      st_transform(4326)
-    commTypes<- commTypes_byMuni %>%
-      group_by(communityType, subtype) %>%
-      summarize(geometry = st_union(geom)) %>% 
-      st_as_sf() %>% 
       st_transform(4326)
     
     cost_data <- cost_lines %>% filter(name_destination == 4) %>% 
@@ -488,17 +507,9 @@ shinyServer(function(input, output, session) {
                                             closePopupOnClick= FALSE)) %>% 
       setView(lng = -71.059, lat = 42.35, zoom = 10) %>%
       addResetMapButton() %>% 
-      addPolygons(data = commTypes,
-                  color = "white",
-                  fillColor = "#fff3e0",
-                  weight= .5,
-                  smoothFactor = .6,
-                  opacity = 1, 
-                  fillOpacity = 1,
-                  popup = paste0("<b>",commTypes$communityType, ": ", commTypes$subtype,"</b><br>")) %>% 
       addPolygons(data = munis,
                   color = "white",
-                  fillColor = "transparent",
+                  fillColor = "tan",
                   weight= .5,
                   smoothFactor = .6,
                   opacity = 1, 
@@ -534,7 +545,8 @@ shinyServer(function(input, output, session) {
                 labFormat = labelFormat(prefix = "$"),
                 title = "How much more does <br>transit cost? <br>
             (Cost Delta)",
-                position =  "bottomright")
+                position =  "bottomright",
+                opacity = 1)
     
   })
   
@@ -566,9 +578,9 @@ shinyServer(function(input, output, session) {
       addPolylines(data = cost_data,
                    group = "map data",
                    weight = cost_data$delta/10,
-                   color = ~pal_delta(delta),#"green",
+                   color = ~pal_delta(delta),
                    opacity= .8,
-                   popup = paste0("From: ", "<br>",
+                   popup = paste0("From: ", cost_data$municipality, "<br>",
                                   "To: ",cost_data$to,"<br>",
                                   "Cost Delta: $", formatC(round(cost_data$delta,2), format= 'f', digits= 2),"<br>",
                                   "Drive Time: ", round(cost_data$drive_time), " minutes <br>",
@@ -592,7 +604,8 @@ shinyServer(function(input, output, session) {
                 labFormat = labelFormat(prefix = "$"),
                 title = "How much more does <br>transit cost? <br>
             (Cost Delta)",
-                position =  "bottomright")
+                position =  "bottomright",
+                opacity = 1)
   })
 
 })

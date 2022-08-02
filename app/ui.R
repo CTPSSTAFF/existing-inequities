@@ -146,7 +146,7 @@ shinyUI(fluidPage(
                                                  width = '100%'),
                                       ),
                                 column(7,
-                                      leafletOutput("index_map", height = 500),
+                                      leafletOutput("index_map", height = 700),
                                       )),
                                br(),
                                fluidRow(
@@ -169,7 +169,7 @@ shinyUI(fluidPage(
                                                       
                                                     ),
                                         column(7,
-                                               leafletOutput("delta_map", height = 500),
+                                               leafletOutput("delta_map", height = 700),
                                                ))
                                         ),
                       tabPanel(strong("About Project"),
