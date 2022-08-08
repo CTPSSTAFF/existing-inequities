@@ -72,7 +72,7 @@ Access to destinations was calculated with [Conveyal's regional analysis](https:
    * Note: transportation management association (TMA) shuttles were not used  due to GTFS availability and inconsistent public access.
 * Conveyal settings were selected to align where possible with similar metrics used in the MPO’s disparate impact and disproportionate burden (DI/DB) analysis for the Long-Range Transportation Plan . Settings selected for different modes and time periods are recorded here: [`data/ConveyalRuns/`](https://github.com/CTPSSTAFF/existing-inequities/tree/main/data/ConveyalRuns).
 
-![image](https://user-images.githubusercontent.com/56197359/178547072-19015164-df70-4d37-ac9f-f4fda300b277.png)
+![Screenshot of Conveyal inferace showing analysis settings for AM Peak travel on all transit modes](https://user-images.githubusercontent.com/56197359/178547072-19015164-df70-4d37-ac9f-f4fda300b277.png)
 
 ## Processing Conveyal Access Outputs
 Conveyal access rasters are downloaded and processed in the script here: [`analysis/Process_Conveyal.R`](https://github.com/CTPSSTAFF/existing-inequities/blob/main/analysis/Process_Conveyal.R). This process uses the dasymetric raster output to weight access results by different demographic populations and aggregation areas prepared here: [`analysis/AggregationBoundaries.R`](https://github.com/CTPSSTAFF/existing-inequities/blob/main/analysis/AggregationBoundaries.R). To summarize the access for the entire MPO and within aggregation areas, we find average of access opportunities available to a population where access opportunities within a grid cell are weighted by the population estimated to live within that grid cell. 
@@ -91,5 +91,5 @@ Origins were identified by finding the center of every census tract in the MPO r
 
 ## Interactive App
 To summarize and visualize results, we developed an interactive app which is here: [`app`](https://github.com/CTPSSTAFF/existing-inequities/tree/main/app). And is hosted online here: (http://shinyapps.ctps.org/ExistingInequities/).
-![AppExample](https://user-images.githubusercontent.com/56197359/183463841-d53f0b5c-5d60-4cec-b81e-cbac9e368dc8.png)
+![Screenshot of online application with maps showing to amount of access to large parks within the MPO](https://user-images.githubusercontent.com/56197359/183463841-d53f0b5c-5d60-4cec-b81e-cbac9e368dc8.png)
 
