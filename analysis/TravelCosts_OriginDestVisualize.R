@@ -37,7 +37,7 @@ commTypes<- commTypes_byMuni %>%
 origins <- pts %>% 
   st_transform(4326) %>% 
   filter(type == "o") %>%
-  st_intersection(select(munis, municipality, communityType, subType))
+  st_intersection(select(munis, municipality, communityType, subtype))
 
 test <- cost_lines %>% left_join(select(st_drop_geometry(origins), name, municipality), by = c("name_origin"= "name"))
 
@@ -93,9 +93,6 @@ delta_map <- leaflet(options = leafletOptions(preferCanvas = TRUE,
                              "Drive Cost: $", formatC(round(cost_data$cost_drive,2), format= 'f', digits= 2),"<br>",
                              "Avg Transit Time: ", round(cost_data$mean_time), " minutes <br>",
                              "Transit Cost: $", formatC(round(cost_data$mean_costTransit, 2), format= 'f', digits= 2)),
-              # label = paste0("From: ", "<br>",
-              #                "To: ", "<br>",
-              #                "Cost Delta: $", formatC(round(cost_data$delta,2), format= 'f', digits= 2)),
               label = labels,
               labelOptions = labelOptions(
                 style = list("font-weight" = "normal", padding = "3px 8px"),

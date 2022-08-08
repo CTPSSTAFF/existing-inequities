@@ -43,9 +43,11 @@ transit_paths <- transit_paths %>%
   filter(type == "d") %>% 
   rename(name_destination = name) %>% 
   select(-type) %>% 
+  filter(name_origin != name_destination) %>% 
   rowwise() %>% 
   mutate(time_walk_to_stop = accessTime,
-         time_walk_to_destination = egressTime,
+         # note if just walking to destination is fastest then egress is NA but walk time is in totalTime
+         time_walk_to_destination = ifelse(is.na(egressTime)==T, totalTime, egressTime),
          time_in_vehicle = sum(as.numeric(str_split(rideTimes,"\\|")[[1]])),
          time_wait_at_stop = sum(as.numeric(str_split(waitTimes, "\\|")[[1]])),
          # 10 minute penalty per transfer 
