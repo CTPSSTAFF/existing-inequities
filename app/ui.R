@@ -118,7 +118,7 @@ shinyUI(fluidPage(
                                    selected aggregation area. Ratios where the equity population has less access are <span style= 'color:red'> shown in red</span>."))
                                  )),
                                br()),
-                               h4(strong("Weighted Average of the Number of Accessible Opportunities for the Boston Region MPO and Aggegration Areas")),
+                               h4(strong("Weighted Average of the Number of Accessible Opportunities for the Boston Region MPO and Aggregation Areas")),
                                reactableOutput("access_all"),
                               ),
                       tabPanel(strong("Travel Costs"),
