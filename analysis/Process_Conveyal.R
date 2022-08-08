@@ -2,51 +2,36 @@ library(tidyverse)
 library(sf)
 library(stars)
 
-# Model result outputs summarized here:
-# https://www.ctps.org/data/pdf/plans/LRTP/destination/Destination-2040-LRTP-20191030.pdf#page=243
-
 # SETUP INPUTS ####
+## AGGREGATION AREAS INPUTS ####
 boundary<-st_read("output/AggregationAreas.gpkg", layer= "MPO_Boundary") %>% 
-  st_transform(3857) # needs to be psudo-mercator for raster operations
-mpoBoundary <- boundary
+  st_transform(3857) # needs to be psudo-mercator for raster operations?
 comm_types <- st_read("output/AggregationAreas.gpkg", layer= "CommunityTypes") %>%
   st_transform(3857)
-commTypes_byMuni<- comm_types
-# Prep demographic data ####
+
+## DEOMGRAPHIC DATA ####
+### Prep to rasterize demo ####
+# pulling in Conveyal grid output to use the raster grid as a template to map demo data onto
 prep_grid <- read_stars("data/lodes-data-2018 Workers total conveyal.tif") %>% 
    st_crop(boundary) #%>% 
 #   st_as_sf() %>% 
 #   rename(workers = 1)
+# write template grid to python notebook data forlder to use the dasymetric mapping
 # st_write(prep_grid, "notebooks/data/mpo_conveyal_grid_as_vector.gpkg", layer= 'workers')
 names(prep_grid) = 'lodes_wkrs'
 
+# read in census demo
 demo <- st_read("output/DemographicData.gpkg", layer = 'tracts_acs_dec_2020') %>% 
   st_transform(3857)
+# read in dasymetric output. Demo as raster from python notebook output
+# note result is a vector of small tiles that needs to be rasterized
 dasy_demo <- st_read("notebooks/pop_output/dasy_demo.gpkg", layer = 'interpolated') %>% 
   st_transform(st_crs(prep_grid))
-
 dasy_raster <- dasy_demo %>% 
   st_rasterize(template = prep_grid)
 # write_rds(dasy_raster, "app/data/dasy_raster.rds")
-total_pop_dec <- sum(as.vector(dasy_raster$pop_dec), na.rm = T)
-total_pop_adult <- sum(as.vector(dasy_raster$pop_dec_adult), na.rm = T)
-weights_all_for_plot <- dasy_raster %>% 
-  mutate(pct_min = minority/(minority+nonminority),
-         pct_nonmin = nonminority/(minority+nonminority),
-         # pct_min_adult = minority_adult/(minority_adult+nonminority_adult),
-         # pct_nonmin_adult = nonminority_adult/(minority_adult+nonminority_adult),
-         pct_lowinc = lowinc/ (lowinc+ nonlowinc),
-         pct_nonlowinc = nonlowinc/ (lowinc +nonlowinc),
-         # pct_lowinc_adult = lowinc_adult/ (lowinc_adult+ nonlowinc_adult),
-         # pct_nonlowinc_adult = nonlowinc_adult/ (lowinc_adult +nonlowinc_adult),
-         pct_zvhh = zero_veh_hh/(zero_veh_hh+ non_zero_veh_hh),
-         pct_nonzvhh = non_zero_veh_hh/(zero_veh_hh+ non_zero_veh_hh),
-         pct_pop = pop_dec/total_pop_dec,
-         # pct_pop_adult = pop_dec_adult/ total_pop_adult
-         ) %>% 
-  select(starts_with("pct"))
-#write_rds(weights_all_for_plot, "app/data/weights_for_all_plot.rds")
-# Check demographic totals
+
+### Check demographic totals ####
 # make sure that populations in census tract demo are account for in the dasymetric mapping process
 demo_summary <- demo %>% 
   st_drop_geometry() %>% 
@@ -64,8 +49,22 @@ dasy_demo_summary <- dasy_demo %>%
 
 demo_check <- demo_summary %>% bind_rows(dasy_demo_summary)
 
-# Prep aggregation data ####
-# rasterize commtypes
+# prep demo weights to use in app
+total_pop_dec <- sum(as.vector(dasy_raster$pop_dec), na.rm = T)
+weights_all_for_plot <- dasy_raster %>% 
+  mutate(pct_min = minority/(minority+nonminority),
+         pct_nonmin = nonminority/(minority+nonminority),
+         pct_lowinc = lowinc/ (lowinc+ nonlowinc),
+         pct_nonlowinc = nonlowinc/ (lowinc +nonlowinc),
+         pct_zvhh = zero_veh_hh/(zero_veh_hh+ non_zero_veh_hh),
+         pct_nonzvhh = non_zero_veh_hh/(zero_veh_hh+ non_zero_veh_hh),
+         pct_pop = pop_dec/total_pop_dec
+  ) %>% 
+  select(starts_with("pct"))
+#write_rds(weights_all_for_plot, "app/data/weights_for_all_plot.rds")
+
+## Prep aggregation data ####
+### Rasterize commtypes ####
 comm_types_id <- comm_types %>% 
   st_drop_geometry() %>% 
   distinct(communityType, subtype) %>% 
@@ -95,7 +94,7 @@ comm_types_rast <- comm_types_rast %>%
 
 #write_rds(comm_types_rast, "app/data/comm_types_rast.rds")
 
-# read in conveyal runs ####
+## READ IN CONVEYAL RUNS ####
 datafolder <- "data/ConveyalRuns/Sept2019/"
 filenames_all <- list.files(datafolder)
 
@@ -115,7 +114,7 @@ assign(dest_name, access_data)
 }
  rm(dest_name, files, access_data)
  
-# SPLIT out multiple runs for same destination types
+## SPLIT out multiple runs for same destination types ####
 healthcareEmg <- healthcare %>% select(starts_with("Healthcare_Emergency"))
 healthcareNonEmg <- healthcare %>% select(starts_with("Healthcare_Nonemergency"))
 rm(healthcare) 
@@ -125,17 +124,20 @@ openspace_paths <- openspace %>% select(starts_with("OpenSpacePaths_"))
 openspace <- openspace %>% select(starts_with("OpenSpace_Weekend"))
 rm(openspacepaths)
 
-# write to app data
-write_rds(healthcareNonEmg, "data/ConveyalRuns/Sept2019_Processed/healthcareNonEmg_access.rds")
-write_rds(healthcareEmg, "data/ConveyalRuns/Sept2019_Processed/healthcareEmg_access.rds")
-write_rds(jobs, "data/ConveyalRuns/Sept2019_Processed/jobs_access.rds")
-write_rds(essentialplaces, "data/ConveyalRuns/Sept2019_Processed/essentialplaces_access.rds")
-write_rds(highered, "data/ConveyalRuns/Sept2019_Processed/highered_access.rds")
-write_rds(openspace, "data/ConveyalRuns/Sept2019_Processed/openspace_access.rds")
-write_rds(openspace_conservation, "data/ConveyalRuns/Sept2019_Processed/openspace_conservation_access.rds")
-write_rds(openspace_paths, "data/ConveyalRuns/Sept2019_Processed/openspace_paths_access.rds")
+### Save grouped rasters as stars objects #####
+# write_rds(healthcareNonEmg, "data/ConveyalRuns/Sept2019_Processed/healthcareNonEmg_access.rds")
+# write_rds(healthcareEmg, "data/ConveyalRuns/Sept2019_Processed/healthcareEmg_access.rds")
+# write_rds(jobs, "data/ConveyalRuns/Sept2019_Processed/jobs_access.rds")
+# write_rds(essentialplaces, "data/ConveyalRuns/Sept2019_Processed/essentialplaces_access.rds")
+# write_rds(highered, "data/ConveyalRuns/Sept2019_Processed/highered_access.rds")
+# write_rds(openspace, "data/ConveyalRuns/Sept2019_Processed/openspace_access.rds")
+# write_rds(openspace_conservation, "data/ConveyalRuns/Sept2019_Processed/openspace_conservation_access.rds")
+# write_rds(openspace_paths, "data/ConveyalRuns/Sept2019_Processed/openspace_paths_access.rds")
 
 # Visualize by access type ####
+# set up versions to match app variables so visualization functions match
+commTypes_byMuni<- comm_types
+mpoBoundary <- boundary 
 visualize_for_access <- function(access){
   if (length(names(access))>1 ){
     access <- access %>% st_redimension()
@@ -343,6 +345,8 @@ access_all_comp <- access_all_ratios %>%
             by = c("destination", "mode", "time", "type"),
             suffix = c(" Aggregation Area", " MPO")) %>% 
   bind_rows(rename(access_all_ratios_MPO, `Ratio MPO`  = Ratio))
+
+
 
 # SAVE RESULTS ####
 write_csv(access_all_comp, "output/access_all_comp.csv")
