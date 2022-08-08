@@ -74,12 +74,20 @@ Access to destinations was calculated with [Conveyal's regional analysis](https:
 
 ![image](https://user-images.githubusercontent.com/56197359/178547072-19015164-df70-4d37-ac9f-f4fda300b277.png)
 
-## Processing Conveyal Outputs
+## Processing Conveyal Access Outputs
 Conveyal access rasters are downloaded and processed in the script here: [`/analysis/Process_Conveyal.R`](https://github.com/CTPSSTAFF/existing-inequities/blob/main/analysis/Process_Conveyal.R). This process uses the dasymetric raster output to weight access results by different demographic populations and aggregation areas prepared here: [`/analysis/AggregationBoundaries.R`](https://github.com/CTPSSTAFF/existing-inequities/blob/main/analysis/AggregationBoundaries.R). To summarize the access for the entire MPO and within aggregation areas, we find average of access opportunities available to a population where access opportunities within a grid cell are weighted by the population estimated to live within that grid cell. 
 * Note: When applying the dasymetric weighting, we do not recommend aggregating at a sub-municipal geographic unit, as the demographic inputs from the census are not appropriate at that scale. 
 
 To compare average access opportunities by population, we calculate a **ratio** where the numerator is the average opportunities accessible by a population of concern (low-income/minority/zero-vehicle-households) and the denominator is the average opportunities accessible by the non-protected population. When a ratio is 1, that indicates parity where both populations have equal access. When the ratio is below 1, this indicates better access to the non-protected population. When the ratio is above 1, this indicates better access to the protected population. All Conveyal runs are recorded here: [`output/access_all_comp.csv`](https://github.com/CTPSSTAFF/existing-inequities/blob/main/output/access_all_comp.csv). 
 
+## Travel Costs
+### Housing and Transportation Costs in the Boston Region
+These data are from the Center for Neighborhood Technology (CNT). CNT calculates the percent of household income spent on transportation and housing costs from an in-house transportation cost model and housing costs from the American Community Survey. This analysis uses costs for the regional typical household, which represents the average for all households in the region. The CNT data were last updated in 2017 and use 2010 Census geography. For more information about the methodology and data used, see CNT’s [technical documentation](https://htaindex.cnt.org/about/HTMethods_2016.pdf).
+
+### Value of Travel Time for Selected Trips
+Conveyal was used to calculate travel times on the roadway and public transit networks between origin-destination pairs. VTT was calculated using assumptions from the Victoria Transportation Policy Institute’s [Valuing Transit Service Quality Improvements](https://www.vtpi.org/traveltime.pdf). 
+
 ## Interactive App
 To summarize and visualize results, we developed an interactive app which is here: [`/app`](https://github.com/CTPSSTAFF/existing-inequities/tree/main/app). And is hosted online here: (http://shinyapps.ctps.org/ExistingInequities/).
-![image](https://user-images.githubusercontent.com/56197359/178550685-1dfda3ad-f546-423f-9036-47776e5f6152.png)
+![AppExample](https://user-images.githubusercontent.com/56197359/183463841-d53f0b5c-5d60-4cec-b81e-cbac9e368dc8.png)
+
