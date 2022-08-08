@@ -91,7 +91,6 @@ visualize_for_access_w_demo_w_tooltip <- function(access, demo, dests,modes, col
   
   n <- paste(t, m)
   names(access)<- n
-  
   if(demo == 0){
     access_weighted <- access
   } else if (demo == 1){
@@ -104,7 +103,7 @@ visualize_for_access_w_demo_w_tooltip <- function(access, demo, dests,modes, col
     weight_nonej <- select(weights_all_for_plot, pct_nonmin)
     
     access_ej <- access*weight_ej
-    names(access_ej)<- paste("Minorirty,\n", names(access_ej))
+    names(access_ej)<- paste("Minority,\n", names(access_ej))
     access_nonej <- access*weight_nonej
     names(access_nonej)<- paste("Nonminority,\n", names(access_nonej))
     access_weighted <- c( access_ej, access_nonej)
@@ -117,14 +116,31 @@ visualize_for_access_w_demo_w_tooltip <- function(access, demo, dests,modes, col
     access_nonej <- access*weight_nonej
     names(access_nonej)<- paste("Non-low-income,\n", names(access_nonej))
     access_weighted <- c( access_ej, access_nonej)
+  } else if (demo == 7 & 5 %in% modes & length(modes)==1){
+    weight_nonej <- select(weights_all_for_plot, pct_nonzvhh)
+    access_nonej <- access*weight_nonej
+    names(access_nonej)<- paste("Households with cars,\n", names(access_nonej))
+    access_weighted <- access_nonej#c( access_nonej, access_ej)
+  }  else if (demo == 7 & 5 %in% modes){
+    weight_ej <- select(weights_all_for_plot, pct_zvhh)
+    weight_nonej <- select(weights_all_for_plot, pct_nonzvhh)
+    access_ej <- access %>% select(-contains("Drive"))
+    access_ej <- access_ej*weight_ej
+    names(access_ej)<- paste("Zero-vehicle households,\n", names(access_ej))
+    names(access_ej)<- str_replace(names(access_ej),"X", "")
+    names(access_ej)<- str_replace_all(names(access_ej),"\\.", " ")
+    #access_ej <- access_ej %>% select(-contains("Drive")) 
+    access_nonej <- access*weight_nonej
+    names(access_nonej)<- paste("Households with cars,\n", names(access_nonej))
+    access_weighted <- c( access_ej, access_nonej)%>% select(!contains('Drive'), contains('Drive'))
+    names(access_weighted)<- str_replace_all(names(access_weighted), "\\.\\.", ",\n") %>% str_replace_all("\\.", " ")
   } else if (demo == 7){
     weight_ej <- select(weights_all_for_plot, pct_zvhh)
     weight_nonej <- select(weights_all_for_plot, pct_nonzvhh)
-    
     access_ej <- access*weight_ej
     names(access_ej)<- paste("Zero-vehicle households,\n", names(access_ej))
     access_nonej <- access*weight_nonej
-    names(access_nonej)<- paste("Non-zero vehicle households,\n", names(access_nonej))
+    names(access_nonej)<- paste("Households with cars,\n", names(access_nonej))
     access_weighted <- c( access_ej, access_nonej)
   } else (
     access_weighted <- access
@@ -158,11 +174,23 @@ visualize_for_access_w_demo_w_tooltip <- function(access, demo, dests,modes, col
             strip.placement = "inside") #legend.position = "bottom")
   }
   
-  if (demo == 0 &length(names(access_weighted))>1 & length(modes)>1){
+  if(length(names(access_weighted))== 3){
+    access_weighted <- access_weighted %>% st_redimension()
+    plot <- plot_start(access_weighted )+
+      facet_wrap(~new_dim, ncol = 3 )
+  } else if (length(names(access_weighted))%in% c(5)){
+    access_weighted <- access_weighted %>% st_redimension()
+    plot <- plot_start(access_weighted )+
+      facet_wrap(~new_dim, ncol = 2)
+  } else if (length(names(access_weighted))%in% c(7)){
+    access_weighted <- access_weighted %>% st_redimension()
+    plot <- plot_start(access_weighted )+
+      facet_wrap(~new_dim, ncol = 3)
+  }else if (demo == 0 &length(names(access_weighted))>1 & length(modes)>1){
     # plots when no demo split multiple modes selected AND multiple layers
     access_weighted <- access_weighted %>% st_redimension()
     plot <- plot_start(access_weighted )+
-      facet_wrap(~new_dim ) #,ncol = cols
+      facet_wrap(~new_dim) #,ncol = cols
   }else if (length(names(access_weighted))>1 & length(modes)>1){
     # plots when multiple modes selected AND multiple layers
     access_weighted <- access_weighted %>% st_redimension()
@@ -489,10 +517,11 @@ shinyServer(function(input, output, session) {
     cost_data <- cost_lines %>% filter(name_destination == 4) %>% 
       arrange(desc(delta))
     
-    brks <- classIntervals(c(min(cost_data$delta) - .00001,
-                             cost_data$delta), n = 5, style = "jenks")
-    
-    pal_delta<-colorBin(palette = "YlGnBu",domain = cost_data$delta, bins =brks$brks, pretty = FALSE)
+    # brks <- classIntervals(c(min(cost_data$delta) - .00001,
+    #                          cost_data$delta), n = 5, style = "jenks")
+    brks <- c(0, 5.6, 11.2,16.8,22.4,28)
+    pal_delta<-colorBin(palette = "YlGnBu",domain = cost_data$delta, bins =brks, pretty = FALSE)
+    cols <- unique(pal_delta(cost_lines$delta))
     
     labels <- sprintf(
       "Cost delta: <strong>$%.2f</strong><br/></sup>",
@@ -539,10 +568,11 @@ shinyServer(function(input, output, session) {
                    highlightOptions =  highlightOptions(
                      weight = 5,
                      bringToFront = FALSE)) %>%
-      addLegend(pal = pal_delta, 
-                group= 'map_data',
-                values =cost_data$delta,
-                labFormat = labelFormat(prefix = "$"),
+      addLegend(
+        colors = rev(cols) ,#c('red', 'orange', 'yellow', 'green', 'blue'),
+                #values =cost_data$delta,
+                # labFormat = labelFormat(prefix = "$"),
+                labels = c("$0.00 – 5.60", " $5.61 – 11.20", "$11.21 – 16.80", "$16.81 – 22.40", "$22.41 – 28.00"),
                 title = "How much more does <br>transit cost? <br>
             (Cost Delta)",
                 position =  "bottomright",
@@ -561,10 +591,12 @@ shinyServer(function(input, output, session) {
     cost_data <- cost_lines %>% filter(name_destination == dest)%>% 
       arrange(desc(delta))
     
-    brks <- classIntervals(c(min(cost_data$delta) - .00001,
-                             cost_data$delta), n = 5, style = "jenks")
-    
-    pal_delta<-colorBin(palette = "YlGnBu",domain = cost_data$delta, bins =brks$brks, pretty = FALSE)
+    # brks <- classIntervals(c(min(cost_data$delta) - .00001,
+    #                          cost_data$delta), n = 5, style = "jenks")
+    # 
+    # pal_delta<-colorBin(palette = "YlGnBu",domain = cost_data$delta, bins =brks$brks, pretty = FALSE)
+    brks <- c(-2, 0, 7,14,21,28)
+    pal_delta<-colorBin(palette = "YlGnBu",domain = cost_data$delta, bins =brks, pretty = FALSE)
     
     labels <- sprintf(
       "Cost delta: <strong>$%.2f</strong><br/></sup>",
@@ -573,7 +605,7 @@ shinyServer(function(input, output, session) {
     
     
     leafletProxy("delta_map") %>% 
-      clearControls() %>%
+      # clearControls() %>%
       clearGroup(group= "map data" )%>%
       addPolylines(data = cost_data,
                    group = "map data",
@@ -597,15 +629,7 @@ shinyServer(function(input, output, session) {
                      direction = "auto"),
                    highlightOptions =  highlightOptions(
                      weight = 5,
-                     bringToFront = FALSE)) %>%
-      addLegend(pal = pal_delta, 
-                group= 'map_data',
-                values =cost_data$delta,
-                labFormat = labelFormat(prefix = "$"),
-                title = "How much more does <br>transit cost? <br>
-            (Cost Delta)",
-                position =  "bottomright",
-                opacity = 1)
+                     bringToFront = FALSE)) 
   })
 
 })
