@@ -154,7 +154,8 @@ visualize_for_access_w_demo_w_tooltip <- function(access, demo, dests,modes, col
       geom_sf(data= mpoBoundary,size=.5,color='gray', fill= 'transparent')+
       geom_sf_interactive(data = commTypes_byMuni, size=.2, 
                           color = 'light gray',
-                          fill = 'transparent', #'pink',
+                          fill = 'white',# 'transparent', #'pink',
+                          alpha = 0.01,
                           aes(tooltip = municipality, data_id = municipality))+
       coord_sf()+
       scale_fill_gradient(low= 'white', high= '#871F78' ,trans="sqrt",
