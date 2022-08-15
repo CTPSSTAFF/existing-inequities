@@ -3,6 +3,8 @@
 # The idea of essential places is informed by pandemic era essential worker locations/ key in-person activity destinations
 # but we are not strictly sticking to the pandemic framework.
 
+# This script walks through a couple different clustering algorithms (OPTICS, HDBSCAN, DBSCAN) and ends up settling on DBSCAN.
+
 # PACKAGES ####
 library(tidyverse)
 library(dbscan) # Density Based scanning package has an assortment of point clustering options
@@ -20,7 +22,8 @@ ed <- essential_destinations # copy to ed to modify
 coordinates_dest <- ed %>%
   st_coordinates()
 
-# OPTION 1: Density Based scan (DBSCAN)
+# INVESTIGATE CLUSTERING ALGORITHMS ####
+## OPTION 1: Density Based scan (DBSCAN)
 # Determine inputs for the dbscan process, https://medium.com/@tarammullin/dbscan-parameter-estimation-ff8330e3a3bd
 # minPts: the fewest number of points required to form a cluster
 # eds: "epsilon" is the maximum distance two points can be from one another while still belonging to the same cluster
@@ -37,7 +40,7 @@ ed$cluster_dbscan <- dbscan(coordinates_dest, eps = eps, minPts = minPts) %>%
   pluck('cluster') %>% as.character()
 mapview(ed, zcol= 'cluster_dbscan')
 
-# OPTION 2: Use a hierarchical density based scan (HDBSCAN) 
+## OPTION 2: Use a hierarchical density based scan (HDBSCAN) 
 # https://cran.r-project.org/web/packages/dbscan/vignettes/hdbscan.html
 # where the only input is min points
 clusters <- hdbscan(coordinates_dest, minPts = minPts)
@@ -58,7 +61,7 @@ mapview(ed, zcol= 'cluster_hdbscan')
 # mapview(filter(dissolved, cluster_hdbscan!= "0"), zcol='cluster_hdbscan')
 
 
-# OPTION 3: OPTICS
+## OPTION 3: OPTICS
 # OPTICS takes the upper limit epsilon size for the neighborhood and minPts
 clusters <- optics(coordinates_dest, eps= eps, minPts = minPts)
 # eps cl is the threshold to identify clusters
@@ -78,6 +81,12 @@ cluster_summary <- ed %>%
            dbscan = max(as.numeric(cluster_dbscan)))
 
 
+## selecting DBSCAN for essential place clustering ####
+# Selecting DBSCAN for clarity of explanation and control provided by a set epsilon/max distance to next value.
+# Not going with optics because of the challenge of identifying a eps_cl/threshold? value for the region.
+
+
+# CREATE FINAL CLUSTERS ####
 # Create compromise clusters region-wide ###
 # Use DBSCAN with stricter inputs to identify clusters within the inner core, then 
 # use DBSCAN with less strict inputs to identify remaining clusters outside of the inner core.
@@ -291,7 +300,7 @@ ep3_pt <- ep3 %>%
 
 mapview(ep1)+ ep2 + ep3
 
-
+# IDENTIFY FINAL CLUSTERS ####
 # Finalize. Picked option 2 with a threshold of at least 5 destinations in the cluster
 ep2_final<- ep2 %>% 
   filter(n >= 5)
