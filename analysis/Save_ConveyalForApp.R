@@ -3,11 +3,11 @@ library(stars)
 
 # input options
 app_inputs <- tibble(dest = 
-                 c(rep("Essential Places", 4),rep("Healthcare, emergency", 2), rep("Healthcare, non-emergency", 2),
+                 c(rep("Essential Places", 2),rep("Healthcare, emergency", 2), rep("Healthcare, non-emergency", 2),
                    rep("Higher Education", 2),rep("Jobs", 2),rep("Parks, All", 2),rep("Parks, Large", 2),rep("Paths", 2)), 
-               modes =  c("Bike", "Walk", "Drive", "Transit","Drive", "Transit", "Drive", "Transit","Drive", "Transit",
+               modes =  c("Bike", "Walk","Drive", "Transit", "Drive", "Transit","Drive", "Transit",
                    "Drive", "Transit","Bike", "Walk","Drive", "Transit","Bike", "Walk"), 
-               times = c(15, 15, 30, 30,45, 45,45, 45,45, 45,45, 45, 15, 15, 45, 45,15, 15)) %>% 
+               times = c(15, 15, 45, 45,45, 45,45, 45,45, 45, 15, 15, 45, 45,15, 15)) %>% 
   mutate(mode_time = paste(times, "minute", modes)) %>% 
   mutate(dest_id= case_when(
     dest == "Essential Places" ~ 5,
@@ -45,7 +45,7 @@ openspace_paths<- read_rds( "data/ConveyalRuns/Sept2019_Processed/openspace_path
 healthcareNonEmg <- healthcareNonEmg %>% select(ends_with("Drive_45min"), ends_with("TransitAll_45min"))
 healthcareEmg <- healthcareEmg %>% select(ends_with("Drive_45min"), ends_with("TransitAll_45min"))
 jobs <- jobs %>% select(ends_with("Drive_45min"), ends_with("TransitAll_45min"))
-essentialplaces <- essentialplaces %>% select(ends_with("Walk_15min"), ends_with("Bike_15min"), ends_with("Drive_30min"), ends_with("TransitAll_30min"))
+essentialplaces <- essentialplaces %>% select(ends_with("Walk_15min"), ends_with("Bike_15min"))
 highered <- highered %>% select(ends_with("Drive_45min"), ends_with("TransitAll_45min"))
 openspace <- openspace %>% select(ends_with("Walk_15min"), ends_with("Bike_15min"))
 openspace_conservation <- openspace_conservation %>% select(ends_with("Drive_45min"), ends_with("TransitAll_45min"))
@@ -75,10 +75,6 @@ access_ratios_for_app <- access_all_comp %>%
       type %in% c("Total population", "Minority status", "Income status", "Household vehicles") ~ T,
     destination == "Jobs" &
       time == 45 & 
-      mode %in% c("Drive", "Transit (All modes)") &
-      type %in% c("Total population", "Minority status", "Income status", "Household vehicles") ~ T,
-    destination == "Essential Places" &
-      time == 30 &
       mode %in% c("Drive", "Transit (All modes)") &
       type %in% c("Total population", "Minority status", "Income status", "Household vehicles") ~ T,
     destination == "Essential Places" &

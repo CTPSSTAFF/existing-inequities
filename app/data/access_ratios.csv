@@ -63,62 +63,6 @@ Essential Places,Walk,15,Regional Urban Centers: Sub-Regional Urban Centers,Tota
 Essential Places,Walk,15,Regional Urban Centers: Sub-Regional Urban Centers,Minority status,NA,8.67,4.451,1.948,1.839
 Essential Places,Walk,15,Regional Urban Centers: Sub-Regional Urban Centers,Income status,NA,9.033,4.938,1.829,1.793
 Essential Places,Walk,15,Regional Urban Centers: Sub-Regional Urban Centers,Household vehicles,NA,10.303,5.257,1.96,3.006
-Essential Places,Drive,30,MPO,Total population,427.823,NA,NA,NA,NA
-Essential Places,Drive,30,MPO,Minority status,NA,530.488,376.124,NA,1.41
-Essential Places,Drive,30,MPO,Income status,NA,533.97,401.207,NA,1.331
-Essential Places,Transit (All modes),30,MPO,Total population,48.759,NA,NA,NA,NA
-Essential Places,Transit (All modes),30,MPO,Minority status,NA,68.949,38.593,NA,1.787
-Essential Places,Transit (All modes),30,MPO,Income status,NA,76.115,41.9,NA,1.817
-Essential Places,Transit (All modes),30,MPO,Household vehicles,NA,118.86,39.692,NA,2.995
-Essential Places,Drive,30,Developing Suburbs: Country Suburbs,Total population,95.04,NA,NA,NA,NA
-Essential Places,Drive,30,Developing Suburbs: Country Suburbs,Minority status,NA,98.111,94.537,1.038,1.41
-Essential Places,Drive,30,Developing Suburbs: Country Suburbs,Income status,NA,89.193,95.506,0.934,1.331
-Essential Places,Transit (All modes),30,Developing Suburbs: Country Suburbs,Total population,1.107,NA,NA,NA,NA
-Essential Places,Transit (All modes),30,Developing Suburbs: Country Suburbs,Minority status,NA,0.709,1.172,0.605,1.787
-Essential Places,Transit (All modes),30,Developing Suburbs: Country Suburbs,Income status,NA,1.78,1.053,1.69,1.817
-Essential Places,Transit (All modes),30,Developing Suburbs: Country Suburbs,Household vehicles,NA,1.717,1.113,1.543,2.995
-Essential Places,Drive,30,Developing Suburbs: Maturing New England Towns,Total population,105.688,NA,NA,NA,NA
-Essential Places,Drive,30,Developing Suburbs: Maturing New England Towns,Minority status,NA,104.247,105.889,0.984,1.41
-Essential Places,Drive,30,Developing Suburbs: Maturing New England Towns,Income status,NA,100.278,106.341,0.943,1.331
-Essential Places,Transit (All modes),30,Developing Suburbs: Maturing New England Towns,Total population,2.842,NA,NA,NA,NA
-Essential Places,Transit (All modes),30,Developing Suburbs: Maturing New England Towns,Minority status,NA,2.568,2.88,0.892,1.787
-Essential Places,Transit (All modes),30,Developing Suburbs: Maturing New England Towns,Income status,NA,3.248,2.793,1.163,1.817
-Essential Places,Transit (All modes),30,Developing Suburbs: Maturing New England Towns,Household vehicles,NA,3.535,2.958,1.195,2.995
-Essential Places,Drive,30,Inner Core: Metro Core Communities,Total population,764.651,NA,NA,NA,NA
-Essential Places,Drive,30,Inner Core: Metro Core Communities,Minority status,NA,754.879,775.318,0.974,1.41
-Essential Places,Drive,30,Inner Core: Metro Core Communities,Income status,NA,774.073,760.48,1.018,1.331
-Essential Places,Transit (All modes),30,Inner Core: Metro Core Communities,Total population,124.059,NA,NA,NA,NA
-Essential Places,Transit (All modes),30,Inner Core: Metro Core Communities,Minority status,NA,118.707,129.876,0.914,1.787
-Essential Places,Transit (All modes),30,Inner Core: Metro Core Communities,Income status,NA,132.041,120.489,1.096,1.817
-Essential Places,Transit (All modes),30,Inner Core: Metro Core Communities,Household vehicles,NA,166.857,112.917,1.478,2.995
-Essential Places,Drive,30,Inner Core: Streetcar Suburbs,Total population,531.645,NA,NA,NA,NA
-Essential Places,Drive,30,Inner Core: Streetcar Suburbs,Minority status,NA,543.935,526.752,1.033,1.41
-Essential Places,Drive,30,Inner Core: Streetcar Suburbs,Income status,NA,548.726,528.609,1.038,1.331
-Essential Places,Transit (All modes),30,Inner Core: Streetcar Suburbs,Total population,21.974,NA,NA,NA,NA
-Essential Places,Transit (All modes),30,Inner Core: Streetcar Suburbs,Minority status,NA,25.118,20.72,1.212,1.787
-Essential Places,Transit (All modes),30,Inner Core: Streetcar Suburbs,Income status,NA,29.549,20.625,1.433,1.817
-Essential Places,Transit (All modes),30,Inner Core: Streetcar Suburbs,Household vehicles,NA,52.631,19.681,2.674,2.995
-Essential Places,Drive,30,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Total population,174.688,NA,NA,NA,NA
-Essential Places,Drive,30,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Minority status,NA,193.416,169.837,1.139,1.41
-Essential Places,Drive,30,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Income status,NA,183.24,173.848,1.054,1.331
-Essential Places,Transit (All modes),30,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Total population,3.917,NA,NA,NA,NA
-Essential Places,Transit (All modes),30,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Minority status,NA,4.377,3.798,1.152,1.787
-Essential Places,Transit (All modes),30,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Income status,NA,4.042,3.905,1.035,1.817
-Essential Places,Transit (All modes),30,Maturing Suburbs: Established Suburbs and Cape Cod Towns,Household vehicles,NA,5.159,3.783,1.364,2.995
-Essential Places,Drive,30,Maturing Suburbs: Mature Suburban Towns,Total population,226.996,NA,NA,NA,NA
-Essential Places,Drive,30,Maturing Suburbs: Mature Suburban Towns,Minority status,NA,216.688,229.793,0.943,1.41
-Essential Places,Drive,30,Maturing Suburbs: Mature Suburban Towns,Income status,NA,225.392,227.231,0.992,1.331
-Essential Places,Transit (All modes),30,Maturing Suburbs: Mature Suburban Towns,Total population,8.913,NA,NA,NA,NA
-Essential Places,Transit (All modes),30,Maturing Suburbs: Mature Suburban Towns,Minority status,NA,9.206,8.834,1.042,1.787
-Essential Places,Transit (All modes),30,Maturing Suburbs: Mature Suburban Towns,Income status,NA,9.605,8.812,1.09,1.817
-Essential Places,Transit (All modes),30,Maturing Suburbs: Mature Suburban Towns,Household vehicles,NA,10.179,8.933,1.14,2.995
-Essential Places,Drive,30,Regional Urban Centers: Sub-Regional Urban Centers,Total population,258.672,NA,NA,NA,NA
-Essential Places,Drive,30,Regional Urban Centers: Sub-Regional Urban Centers,Minority status,NA,286.388,244.399,1.172,1.41
-Essential Places,Drive,30,Regional Urban Centers: Sub-Regional Urban Centers,Income status,NA,273.363,254.251,1.075,1.331
-Essential Places,Transit (All modes),30,Regional Urban Centers: Sub-Regional Urban Centers,Total population,20.405,NA,NA,NA,NA
-Essential Places,Transit (All modes),30,Regional Urban Centers: Sub-Regional Urban Centers,Minority status,NA,28.427,16.275,1.747,1.787
-Essential Places,Transit (All modes),30,Regional Urban Centers: Sub-Regional Urban Centers,Income status,NA,27.638,18.229,1.516,1.817
-Essential Places,Transit (All modes),30,Regional Urban Centers: Sub-Regional Urban Centers,Household vehicles,NA,27.542,18.961,1.453,2.995
 "Healthcare, emergency",Drive,45,MPO,Total population,17.824,NA,NA,NA,NA
 "Healthcare, emergency",Drive,45,MPO,Minority status,NA,20.568,16.441,NA,1.251
 "Healthcare, emergency",Drive,45,MPO,Income status,NA,20.141,17.242,NA,1.168
