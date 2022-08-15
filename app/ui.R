@@ -35,13 +35,13 @@ shinyUI(fluidPage(
                 tabPanel(strong("Destination Access"),
                          column(12,  
                                 br(),
-                                p(strong("Instructions:")," This application answers the question: ",
-                                  em(strong("how does access differ between demographic groups and modes for a given destination and travel time?")), 
-                                  " Use the options in the sidebar to change the maps below. Each map shows the number destinations people living 
-                                 within the selected aggregation area. Users can select the MPO region or a smaller aggregation area, as well as 
+                                p(strong("Instructions:"),' This application answers the question, ',
+                                  em(strong('"how does access differ between demographic groups and modes for a given destination and travel time?"')), 
+                                  " Use the options in the sidebar to change the maps below. Each map shows the number of destinations that people living 
+                                 within the selected aggregation area can access. Users can select the MPO region or a smaller aggregation area, as well as 
                                  filter the results by demographic group. See the “About the Study” tab for more information about the map filters."),
                                 p(strong("How to Interpret the Maps:"), "The application is designed for users to compare access to a selected destination 
-                                   for different modes, demographic groups, and travel time thresholds. Only one aggregation area can be selected at a time. 
+                                   for different modes, demographic groups, and travel-time thresholds. Only one aggregation area can be selected at a time. 
                                    Areas in darker purple indicate that people living in that location have greater access to the selected destination than 
                                    areas in lighter purple."),
                                 br()),
@@ -127,7 +127,7 @@ shinyUI(fluidPage(
                                       p("This tab shows two different ways to analyze transportation costs in the region. The first map shows several variables related to 
                                         transportation and housing costs for Census tracts in the Boston region. These are based on housing cost data from the Census Bureau 
                                         and the modeled transportation costs from the ", a("Center for Neighborhood Technology", href = "https://cnt.org/"), ". The second map shows the monetized value of travel 
-                                        time (VTT) for trips to select destinations in the Boston Region MPO. VTT takes into account the perceived cost of a trip (as opposed to the 
+                                        time (VTT) for trips to select destinations in the Boston Region MPO. VTT considers the perceived cost of a trip (as opposed to the 
                                         objective clock time of that trip) based on the opportunity cost of time spent on the trip. For information about how VTT was calculated, see ",
                                         a("this report", href = "https://www.vtpi.org/traveltime.pdf"), "from the Victoria Transport Policy Institute."),
                                     
@@ -136,9 +136,9 @@ shinyUI(fluidPage(
                                  tabPanel( strong('Housing and Transportation Costs'),
                                    column(4,
                                    h4(strong('Housing and Transportation Costs in the Boston Region')),
-                                           p(strong("Instructions:")," This map answers the question: ",
-                                             em(strong("how do household transportation and/or housing costs differ across the MPO region?"))),
-                                           p("Use the drop-down menu to select the variable to display on the map, and hover over a Census tract to view housing and transportation cost data for the regional typical household. 
+                                           p(strong("Instructions:")," This map answers the question, ",
+                                             em(strong('"how do household transportation and/or housing costs differ across the MPO region?"'))),
+                                           p("Use the dropdown menu to select the variable to display on the map, and hover over a Census tract to view housing and transportation cost data for the regional typical household. 
                                       See the 'About the Study' tab for data sources. (A “regional typical household” is the average for all households in the Boston MPO region.)"),
                                            selectInput("index_var", label= "Select Variable:", 
                                                        choices = index_vars, 
@@ -151,9 +151,9 @@ shinyUI(fluidPage(
                                  tabPanel(strong('Value of Travel Time'),
                                    column(4, 
                                           h4(strong('Value of Travel Time (VTT) for Selected Trips')),
-                                          p(strong("Instructions:")," This map answers the question: ",
-                                            em(strong("how does the VTT differ between transportation modes for a sample origin-destination pair?")), 
-                                            "Select a destination below. Hover over each trip to see how much more public transit trips cost than driving trips between the same origin and destination. Note that costs do not include the direct costs (for example, tolls, or public transit fares). Rather, costs account for travel time trip quality, which is determined by factors such as congestion and the number of transfers."),
+                                          p(strong("Instructions:")," This map answers the question, ",
+                                            em(strong('"how does the VTT differ between transportation modes for a sample origin-destination pair?"')), 
+                                            "Select a destination below. Hover over each trip to see how much more public transit trips cost than driving trips between the same origin and destination. Note that costs do not include the direct costs (for example, tolls or public transit fares). Rather, costs account for travel time trip quality, which is determined by factors such as congestion and the number of transfers."),
                                           p("Origins were identified by finding the center of every census tract in the MPO region. 
                                           Destinations were selected from the essential places metric. 
                                           Cost deltas can only be calculated where there is both a drive cost and a transit cost. There is no cost delta where no transit route is available."),
@@ -177,7 +177,7 @@ shinyUI(fluidPage(
                                #      h4(strong('Housing and Transportation Costs in the Boston Region')),
                                #      p(strong("Instructions:")," This map answers the question: ",
                                #        em(strong("how do household transportation and/or housing costs differ across the MPO region?"))),
-                               #      p("Use the drop-down menu to select the variable to display on the map, and hover over a Census tract to view housing and transportation cost data for the regional typical household. 
+                               #      p("Use the dropdown menu to select the variable to display on the map, and hover over a Census tract to view housing and transportation cost data for the regional typical household. 
                                #        See the 'About the Study' tab for data sources. (A “regional typical household” is the average for all households in the Boston MPO region.)"),
                                #       selectInput("index_var", label= "Select Variable:", 
                                #                   choices = index_vars, 
@@ -220,31 +220,31 @@ shinyUI(fluidPage(
                                  in the Boston Region.  The study sought to quantify existing transportation inequities among environmental justice (EJ)—minority and 
                                  low-income—populations and zero-vehicle households in the Boston region using several destination access metrics. In addition, the study 
                                  explored two methodologies for analyzing transportation costs. This application shows the results of that study. Detailed methodology 
-                                 can be found at the study’s GitHub page,", 
-                                 a("here.", href= "https://github.com/CTPSSTAFF/existing-inequities", target="_blank" )),
+                                 can be found at the study’s ", 
+                                 a("GitHub page.", href= "https://github.com/CTPSSTAFF/existing-inequities", target="_blank" )),
                                br(),
                                h4(strong("Definitions")),
-                               p(strong("Aggregation Area:"), "These are based on Community Types from the Metropolitan Area Planning Council (MAPC). Community Types are defined used land 
+                               p(strong("Aggregation Area:"), "Aggregation areas are based on Community Types from the Metropolitan Area Planning Council (MAPC). Community Types are defined by land 
                                  use and housing patterns, growth trends, and projected development patterns. Because MAPC developed these definitions for the entire state, not all Community 
                                  Types are represented in the Boston MPO region. For more information, see ",
                                  a("this page.", href= "https://www.mapc.org/wp-content/uploads/2017/09/Massachusetts-Community-Types-Summary-July_2008.pdf",  target="_blank" )),
                                tags$div(
                                  tags$ul(
-                                   tags$li(strong("Inner Core:"),
+                                   tags$li(strong("Inner Core"),
                                            tags$ul(
-                                           tags$li(strong("Metropolitan Core Communities:"), " high density inner cities"),
+                                           tags$li(strong("Metropolitan Core Communities:"), " high-density inner cities"),
                                            tags$li(strong("Streetcar Suburbs:"), " historic, high-density suburbs near the urban core")
                                            )),
-                                   tags$li(strong("Regional Urban Centers:"),
+                                   tags$li(strong("Regional Urban Centers"),
                                     tags$ul(
                                      tags$li(strong("Subregional Urban Centers:"), " large, high-density urban centers that are not near Boston"),
                                    )),
-                                   tags$li(strong("Maturing Suburbs:"),
+                                   tags$li(strong("Maturing Suburbs"),
                                            tags$ul(
-                                             tags$li(strong("Mature Suburban Towns:"), " moderate-density towns that are nearly built-out"),
-                                             tags$li(strong("Established Suburbs:"), " lower-density towns that are nearly built-out")
+                                             tags$li(strong("Mature Suburban Towns:"), " moderate-density towns that are nearly built out"),
+                                             tags$li(strong("Established Suburbs:"), " lower-density towns that are nearly built out")
                                            )),
-                                   tags$li(strong("Developing Suburbs:"),
+                                   tags$li(strong("Developing Suburbs"),
                                            tags$ul(
                                              tags$li(strong("Maturing New England Towns:"), " towns with well-defined town centers, mixed densities, and room to grow"),
                                              tags$li(strong("Country Suburbs:"), " towns with very low density, with country character and room to grow")
@@ -258,27 +258,27 @@ shinyUI(fluidPage(
                                  differences. By controlling for land use and density, users can see where there are gaps in the transportation network or 
                                  in public transit service EJ populations and zero-vehicle households relative to other residents. Since denser communities—such 
                                  as Inner Core communities—are generally more suitable for public transit and therefore have greater transit access, the ideal 
-                                 comparison is between Community Types and relative to the MPO region: ", 
-                                 em(strong( "how does access differ between demographic groups and mode for a given destination and travel time?"))),
-                               p(strong("Destinations:"), "Destinations in the application are defined as described below. For more details on the methodology and data sources, see study’s GitHub page,", 
-                                 a("here.", href= "https://github.com/CTPSSTAFF/existing-inequities", target="_blank" )),
+                                 comparison is between Community Types and relative to the MPO region question, ", 
+                                 em(strong( '"how does access differ between demographic groups and mode for a given destination and travel time?"'))),
+                               p(strong("Destinations:"), "Destinations in the application are defined as described below. For more details on the methodology and data sources, see the study’s ,", 
+                                 a("GitHub page.", href= "https://github.com/CTPSSTAFF/existing-inequities", target="_blank" )),
                                tags$div(
                                  tags$ul(
                                    tags$li(strong("Healthcare (emergency):"), " acute care hospitals"),
                                    tags$li(strong("Healthcare (non-emergency):"), " medical clinics and community health centers"),
                                    tags$li(strong("Employment:"), " all jobs"),
-                                   tags$li(strong("Essential Places:"), " includes three types of destinations: health, civic, and food. The health type consists of all healthcare destinations and retail pharmacies. The civic type consists of town halls, post offices, and libraries. The food type consists of farmer's markets, and grocery stores."),
-                                   tags$li(strong("Higher Education: ")," colleges and universities where more than 50% of undergraduates live off campus and/or there is graduate enrollment."),
+                                   tags$li(strong("Essential Places:"), " includes three types of destinations—health, civic, and food. The health type consists of all healthcare destinations and retail pharmacies. The civic type consists of town halls, post offices, and libraries. The food type consists of farmer's markets and grocery stores."),
+                                   tags$li(strong("Higher Education: ")," colleges and universities where more than 50 percent of undergraduates live off campus and/or there is graduate enrollment."),
                                    tags$li(strong("Parks and Open Space:")," shared used paths and/or parks lager than one-half acre")
                                  )),
                                p(strong("Equity Population  Definitions")),
                                tags$div(
                                  tags$ul(
                                    tags$li("A person is considered ",strong("low-income"),
-                                   " if their family income is less than 200% of the federal poverty level. Data are from the 2016-20 American Community Survey."),
+                                   " if their family income is less than 200 percent of the federal poverty level. Data are from the 2016–20 American Community Survey."),
                                    tags$li("A person is considered a ", strong("minority"),
                                            " if they identify as a race other than White or as Hispanic or Latino/a. Data are from the 2020 US Census."),
-                                   tags$li(strong("Zero-vehicle households"), " are households that do not have access to a personal vehicle. Data are from the 2016-20 American Community Survey.")
+                                   tags$li(strong("Zero-vehicle households"), " are households that do not have access to a personal vehicle. Data are from the 2016–20 American Community Survey.")
                                  )
                                ),
                                br(),
@@ -290,14 +290,14 @@ shinyUI(fluidPage(
                                  the methodology and data used, see CNT’s", a("technical documentation.", href= "https://htaindex.cnt.org/about/HTMethods_2016.pdf")),
                                p(strong("Value of Travel Time for Selected Trips:"), "Conveyal was used to calculate travel times on the roadway and public transit networks 
                                  between origin-destination pairs. VTT was calculated using assumptions from the Victoria Transportation Policy Institute’s ", 
-                                 a("Valuing Transit Service Quality Improvements.", href = "https://www.vtpi.org/traveltime.pdf"), "For more details on the methodology and data sources, see study’s GitHub page,", 
-                                 a("here.", href= "https://github.com/CTPSSTAFF/existing-inequities", target="_blank" )),
+                                 a("Valuing Transit Service Quality Improvements.", href = "https://www.vtpi.org/traveltime.pdf"), "For more details on the methodology and data sources, see study’s ", 
+                                 a("GitHub page.", href= "https://github.com/CTPSSTAFF/existing-inequities", target="_blank" )),
                                br(),
                                h4(strong("Statement About Error")),
                                p("Like any modeling process, this work assumes a low, but not zero, amount of error due to the data 
                                  and analysis process that is used. Sources of error include the data source (American Community Survey data are estimates) and the 
-                                 allocation of demographic data from vector polygons to raster cells. For more information on the methodology, see the study’s GitHub page,", 
-                                 a("here.", href= "https://github.com/CTPSSTAFF/existing-inequities", target="_blank" ))
+                                 allocation of demographic data from vector polygons to raster cells. For more information on the methodology, see the study’s", 
+                                 a("GitHub page.", href= "https://github.com/CTPSSTAFF/existing-inequities", target="_blank" ))
                                ), 
                           column(2)
                                
