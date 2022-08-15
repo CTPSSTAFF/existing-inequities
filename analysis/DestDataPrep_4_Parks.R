@@ -1,5 +1,9 @@
-# DESTINATION DATA CLEANING ####
+# OPEN SPACE DESTINATION DATA CLEANING ####
+## GOAL ####
 # Read in files, check for gaps or missing fields, merge into one layer for each destination type.
+## DATA SOURCES ####
+# Open space: https://www.mass.gov/info-details/massgis-data-protected-and-recreational-openspace
+# Tracks and trails: https://www.mass.gov/info-details/massgis-data-tracks-and-trails
 
 # PACKAGES ####
 library(tidyverse)

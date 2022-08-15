@@ -1,5 +1,8 @@
-# DESTINATION DATA CLEANING ####
+# HIGHER EDUCATION DESTINATION DATA CLEANING ####
+## GOAL ####
 # Read in files, check for gaps or missing fields, merge into one layer for each destination type.
+## DATA SOURCES ####
+# colleges and universities:  https://www.mass.gov/info-details/massgis-data-colleges-and-universities
 
 # PACKAGES ###
 library(tidyverse)

@@ -1,5 +1,16 @@
-# DESTINATION DATA CLEANING ####
+# ESSENTIAL DESTINATION DATA CLEANING ####
+
+## Goals ####
 # Read in files, check for gaps or missing fields, merge into one layer for each destination type.
+
+## Data sources ####
+# See healthcare data
+# pharmacies: https://madph.mylicense.com/verification/Search.aspx?facility=Y
+# post offices: scraped from the USPS website
+# grocery stores: https://datacommon.mapc.org/browser/datasets/416
+# town halls : https://www.mass.gov/info-details/massgis-data-town-and-city-halls
+# libraries: https://www.mass.gov/info-details/massgis-data-libraries
+# farmer's markets: https://www.mass.gov/info-details/massgis-data-farmers-markets
 
 # PACKAGES ###
 library(tidyverse)

@@ -1,5 +1,13 @@
-# DESTINATION DATA CLEANING ####
+# HEALTHCARE DESTINATION DATA CLEANING ####
+
+## Goals ####
 # Read in files, check for gaps or missing fields, merge into one layer for each destination type.
+
+## Data sources ####
+# Acute care hospitals: https://www.mass.gov/info-details/massgis-data-acute-care-hospitals
+# Community Health Centers: https://www.mass.gov/info-details/massgis-data-community-health-centers
+# Clinics: https://www.mass.gov/service-details/find-information-about-licensed-or-certified-health-care-facilities
+
 
 # PACKAGES ###
 library(tidyverse)
