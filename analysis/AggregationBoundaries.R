@@ -2,8 +2,9 @@
 # This script prepares the aggregation geographies for the region.
 # Outputs are:
 # 1. boundary layer: a boundary of the Boston Region MPO region
-# 2. community_types layer: shapefiles of community types within the subregion
-# 3. housing_submarket layer: shapefiles of the housing submarkets as defined by MAPC
+# 2. community_types layer: spatial file of community types within the subregion
+# 3. housing_submarket layer: spatial file of the housing submarkets as defined by MAPC
+# 4. Saves aggregation area mini-maps/icons for use in the app.
 
 
 # PACKAGES ####
