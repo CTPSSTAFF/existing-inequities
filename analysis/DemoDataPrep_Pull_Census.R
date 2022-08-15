@@ -5,6 +5,7 @@
 library(tidyverse)
 library(tidycensus)
 library(mapview)
+library(sf)
 
 # FUNCTIONS ####
 source("functions/census_demo_pull.R")
@@ -12,7 +13,9 @@ source("functions/census_demo_pull.R")
 br_mpo_munis <- read_csv("data/town_codes.csv") %>% 
   filter(MPO == "Boston")
 
+# demo data plan made in "DemoDataPrep_Planning.R"
 demo_data<- read_csv("data/demo_data_plan.csv") %>% 
+  # decided to focus on tracts because easily fit within MPO boundary and able to pull for all variables
   filter(geogs == "tract")
 
 # Pull Demo Data for all of MA using functions ####
@@ -82,7 +85,13 @@ st_write(mpo_tract_geog, "output/DemographicData.gpkg","tracts_acs_dec_2020", dr
 #mpo_tract_geog<- st_read("output/DemographicData.gpkg", layer= "tracts_acs_dec_2020")
 
 
+
+# Median Earnings ####
+# pull median earnings for mpo to use in the travel cost calculation
 median_earnings_mpo <- get_median_inc(2020, "MA", br_mpo_geog, "earnings-worker")
 # median earnings mpo $56,507.64
+
+
+# pull median hh income for MPO as comparison 
 median_incHH_mpo <- get_median_inc(2020, "MA", br_mpo_geog, "income-household")
 # median hh inc mpo $97,085.11
