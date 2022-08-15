@@ -20,6 +20,7 @@ if (universe_type == "total population"){
                        year= year_acs) %>% 
    left_join(tibble(variable = m_acs,
                    min_status = m_stat),by = "variable")
+  
   min_acs <- min_acs_raw %>%
    group_by(GEOID, min_status) %>% 
    summarize(est=sum(estimate),
@@ -33,6 +34,7 @@ if (universe_type == "total population"){
   
   if(year_dec == 2010){ dec_var <- "P002001"}
   if(year_dec == 2020){ dec_var <- "P2_001N"}
+  
   dec_raw <- get_decennial(geography = census_geog,
                          variables = dec_var,
                          state = state,
@@ -69,6 +71,7 @@ if (universe_type == "total population"){
                            state= state,
                            geometry = F,
                            year= year_acs) 
+    
     min_acs <- min_acs_raw %>%
       group_by(GEOID, variable) %>% 
       summarize(est=sum(estimate),
@@ -83,6 +86,7 @@ if (universe_type == "total population"){
     
     if(year_dec == 2010){ dec_var <- "P004001"}
     if(year_dec == 2020){ dec_var <- "P4_001N"}
+    
     dec_raw <- get_decennial(geography = census_geog,
                              variables = dec_var,
                              state = state,
