@@ -60,8 +60,8 @@ weights_all_for_plot <- dasy_raster %>%
          pct_nonzvhh = non_zero_veh_hh/(zero_veh_hh+ non_zero_veh_hh),
          pct_pop = pop_dec/total_pop_dec
   ) %>% 
-  select(starts_with("pct"))
-#write_rds(weights_all_for_plot, "app/data/weights_for_all_plot.rds")
+  select(starts_with("pct"), pop_dec,hh_dec, minority, nonminority, lowinc, nonlowinc, zero_veh_hh, non_zero_veh_hh)
+write_rds(weights_all_for_plot, "app/data/weights_for_all_plot.rds")
 
 ## Prep aggregation data ####
 ### Rasterize commtypes ####
@@ -92,7 +92,7 @@ comm_types_rast <- comm_types_rast %>%
   )
 #plot(comm_types_rast %>% select(id7))
 
-#write_rds(comm_types_rast, "app/data/comm_types_rast.rds")
+write_rds(comm_types_rast, "app/data/comm_types_rast.rds")
 
 ## READ IN CONVEYAL RUNS ####
 datafolder <- "data/ConveyalRuns/Sept2019/"
@@ -176,7 +176,7 @@ visualize_for_access2 <- function(access){
       geom_sf(data= mpoBoundary,size=.5,color='gray', fill= 'transparent')+
       geom_sf_interactive(data = commTypes_byMuni, size=.2,
                           color = 'light gray',
-                          fill = 'transparent',
+                          fill = 'white', alpha= .001,
                           aes(tooltip = municipality, data_id = municipality))+
       coord_sf()+
       scale_fill_gradient(low= 'white', high= '#871F78' ,trans="sqrt", #'log1p',
@@ -193,7 +193,9 @@ visualize_for_access2 <- function(access){
   } else {
     ggplot()+
       geom_stars(data = access)+
-      geom_sf(data = commTypes_byMuni, size=.2, color = 'light gray', fill = 'transparent')+
+      geom_sf(data = commTypes_byMuni, size=.2, 
+              fill = 'white', alpha= .001,
+              color = 'light gray')+
       geom_sf(data= mpoBoundary,size=.5,color='gray', fill= 'transparent')+
       coord_sf()+
       scale_fill_gradient(low= 'white', high= '#871F78' ,trans="sqrt",#trans= 'log1p',
@@ -214,6 +216,11 @@ plot(test$HigherEd_MD_TransitAll_30min)
 
 
 # Find weighted average region wide and  for sub-regions ####
+# The weighted average results in the average number of opportunities available to a person within a given aggregation area (or for the entire MPO).
+# To do this, we use the weighted_mean function, where the population within the cell is the weight and the opportunities are the value impacted by the weights.
+# The weighted average function then needs to be applied to every layer within a an access object, to all access objects, and to all aggregation areas.
+
+# first, make a function that takes a single layer and the corresponding weights and reports a weighted average for all of the variables
 get_weighted_avgs <- function(access_layer, weights){
   access_vector <- as.vector(access_layer)
   weighted_mean_for_avg <- function(w){result <- weighted.mean(access_vector, as.vector(w), na.rm=T)}
@@ -251,19 +258,26 @@ get_weighted_avgs <- function(access_layer, weights){
   return(weighted_avgs)
 }
 
-# set up loop to get through all access layers
+# next, we need to apply the get weighted avgs to all layers within a stars access object, 
+# then to all of the stars objects, 
+# and to all of the different aggregation areas
+
+# set up list of access object to loop to get through all access layers
 access_all <- list(healthcareNonEmg, healthcareEmg, jobs, essentialplaces, highered, openspace, openspace_paths, openspace_conservation)
+# set up community types filters to call on in for loop
 comm_filters <- comm_types_id %>% 
   mutate(comm_filter = map(.x= id, ~select(comm_types_rast, paste0("id", .x))))
 
+# loop through all of the access objects
 access_all_avgs <- tibble()
-
 for (i in 1:length(access_all)){
   access <- access_all[i][[1]]
+  # get weighted average for the entire mpo
   avgs_mpo <- lapply(access, get_weighted_avgs, weights= dasy_raster)
   avgs_mpo <- plyr::ldply(avgs_mpo, data.frame) %>% 
     mutate(region = "MPO")
   
+  # get weighted averages for each aggregation area
   access_avgs_agg <- tibble()
   for(j in 1: 7){
     agg <- j
@@ -283,6 +297,8 @@ for (i in 1:length(access_all)){
     if (agg == 6) { access_agg <- access * (comm_types_rast %>% select(id6))}
     if (agg == 7) { access_agg <- access * (comm_types_rast %>% select(id7))}
     
+    # apply the filter to the population raster
+    # removes areas outside of the aggregation area
     dasy_filtered <- dasy_raster * comm_filter
     
     avgs <- lapply(access_agg, get_weighted_avgs,weights= dasy_filtered)
@@ -323,6 +339,8 @@ access_all_avgs2 <- access_all_avgs %>%
            TRUE ~ NA_character_)) %>% 
   select(-name,  -.id, -value)
 
+# calculate ratios to compare EJ to non-EJ
+# where there is parity the ratio will be one. 
 access_all_ratios <-access_all_avgs2 %>% 
   mutate(type_detail = case_when(
     grepl('Total', type)~ "Total",
