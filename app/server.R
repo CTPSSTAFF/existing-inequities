@@ -91,6 +91,9 @@ visualize_for_access_w_demo_w_tooltip <- function(access, demo, dests,modes, col
   
   n <- paste(t, m)
   names(access)<- n
+  
+  # demo <- 4
+  
   if(demo == 0){
     access_weighted <- access
   } else if (demo == 1){
@@ -100,11 +103,17 @@ visualize_for_access_w_demo_w_tooltip <- function(access, demo, dests,modes, col
     access_weighted <- c( access_w)
   } else if (demo == 4){
     weight_ej <- select(weights_all_for_plot, pct_min)
-    weight_nonej <- select(weights_all_for_plot, pct_nonmin)
-    
+    # pop_ej <- select(weights_all_for_plot, minority)
+    # pop_ej <- pop_ej %>% mutate(minority = ifelse(minority ==0 , -1, minority))
+    # access_ej <- access/pop_ej
     access_ej <- access*weight_ej
     names(access_ej)<- paste("Minority,\n", names(access_ej))
-    access_nonej <- access*weight_nonej
+    
+    weight_nonej <- select(weights_all_for_plot, pct_nonmin)
+    # pop_nonej <- select(weights_all_for_plot, nonminority) %>% 
+    #   mutate(nonminority = ifelse(nonminority ==0 , -1, nonminority))
+    # access_nonej <- access*pop_nonej
+     access_nonej <- access*weight_nonej
     names(access_nonej)<- paste("Nonminority,\n", names(access_nonej))
     access_weighted <- c( access_ej, access_nonej)
   } else if (demo == 6){
@@ -225,6 +234,10 @@ shinyServer(function(input, output, session) {
   })
   
   output$access_plots <- renderGirafe({
+    # dests <- 3
+    # modes <- 5
+    # time <- 3
+    # agg <- 8
     dests <- input$dest
     mts <- app_inputs %>% filter(dest_id == dests)%>% filter(mt_id %in% input$mode_time)
     modes <- mts$mode_id#input$modes
