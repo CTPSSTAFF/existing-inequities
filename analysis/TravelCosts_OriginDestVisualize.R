@@ -108,3 +108,39 @@ delta_map <- leaflet(options = leafletOptions(preferCanvas = TRUE,
             (Cost Delta)",
             position =  "bottomright")
 delta_map
+
+# Exploring a plot to complement cost delta map
+
+costs<- read_rds( "app/data/cost_lines.rds")
+cost_prep<- costs %>%
+  mutate(dist = round(unclass(st_length(geom))/1609, 2)) %>% 
+  st_drop_geometry()
+
+ggplot(cost_prep)+
+  geom_point(aes(x= dist, y= delta, color = to), alpha = .5)+
+  theme_minimal()+
+  labs(x = "Distance (miles)",
+       y = "Cost Delta ($)")+
+  ggtitle("Distance vs Cost Delta by Destination")+
+  facet_wrap(~to)
+
+cost_lines<- st_read("output/TravelCosts.gpkg", layer = "cost_lines") 
+cost_prep2<- cost_lines %>%
+  filter( is.na(mean_costTransit)==F) %>% 
+  mutate(delta = round(mean_costTransit - cost_drive, 2),
+         mean_time = round(mean_time),
+         cost_drive = round(cost_drive, 2),
+         mean_costTransit = round(mean_costTransit, 2)
+  ) %>% 
+  arrange(desc(mean_costTransit)) %>% 
+  mutate(dist = round(unclass(st_length(geom))/1609, 2)) %>% 
+  st_drop_geometry()
+
+ggplot(cost_prep2)+
+  geom_point(aes(x= dist, y= delta), size = .5, alpha = .3)+
+  theme_minimal()+
+  labs(x = "Distance (miles)",
+       y = "Cost Delta ($)")+
+  ggtitle("Distance vs Cost Delta by Destination")+
+  facet_wrap(~name_destination)
+
