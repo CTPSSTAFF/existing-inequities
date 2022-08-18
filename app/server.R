@@ -56,7 +56,10 @@ t <- read_rds("data/hta_index_tracts.rds")
 # m <- read_rds("data/hta_index_munis.rds")
 index_vars <- read_rds("data/hta_index_vars.rds")
 
-cost_lines<- read_rds( "data/cost_lines.rds")
+# cost_lines<- read_rds( "data/vtt_cost_lines.rds")
+cost_byTract <- read_rds("data/vtt_cost_byTract.rds")
+vtt_origins <- read_rds("data/vtt_origins.rds")
+vtt_dests <- read_rds("data/vtt_dests.rds")
 
 access_all_comp <- read_csv("data/access_ratios.csv")
 
@@ -162,7 +165,7 @@ visualize_for_access_w_demo_w_tooltip <- function(access, demo, dests,modes, col
       geom_sf(data = outside_agg, size=0, fill = 'tan', color = "transparent")+
       geom_sf(data= mpoBoundary,size=.5,color='gray', fill= 'transparent')+
       geom_sf_interactive(data = commTypes_byMuni, size=.2, 
-                          color = 'light gray',
+                          color = 'gray',
                           fill = 'white',# 'transparent', #'pink',
                           alpha = 0.01,
                           aes(tooltip = municipality, data_id = municipality))+
@@ -528,15 +531,19 @@ shinyServer(function(input, output, session) {
     munis <- commTypes_byMuni %>% 
       st_transform(4326)
     
-    cost_data <- cost_lines %>% filter(name_destination == 4) %>% 
+    cost_data <- cost_byTract %>%  # cost_lines %>% 
+      filter(name_destination == 4) %>% 
       arrange(desc(delta))
     
-    # brks <- classIntervals(c(min(cost_data$delta) - .00001,
-    #                          cost_data$delta), n = 5, style = "jenks")
-    brks <- c(0, 5.6, 11.2,16.8,22.4,28)
-    pal_delta<-colorBin(palette = "YlGnBu",domain = cost_data$delta, bins =brks, pretty = FALSE)
-    cols <- unique(pal_delta(cost_lines$delta))
+    dest_pt <- vtt_dests %>% filter(name == 4)
     
+    or_pts<- vtt_origins %>% filter(name %in% cost_data$name_origin)
+    
+    brks <- classIntervals(c(min(cost_data$delta) - .00001,
+                             cost_data$delta), n = 5, style = "jenks")
+    
+    pal_delta <- colorBin("YlGnBu", cost_data$delta , 5, bins =brks$brks, pretty = F, na.color = "white")
+
     labels <- sprintf(
       "Cost delta: <strong>$%.2f</strong><br/></sup>",
       cost_data$delta
@@ -559,11 +566,14 @@ shinyServer(function(input, output, session) {
                   fillOpacity = 1,
                   popup = paste0("<b>",munis$municipality, "</b><br>",
                                  munis$communityType, ": ", munis$subtype)) %>% 
-      addPolylines(data = cost_data,
+      addPolygons(data = cost_data,
                    group = "map data",
-                   weight = cost_data$delta/10,
-                   color = ~pal_delta(delta),
-                   opacity= .8,
+                  color = "white",
+                  weight= .5,
+                  smoothFactor = .6,
+                  opacity = 1, 
+                  fillOpacity = 1,
+                  fillColor = ~pal_delta(delta),
                    popup = paste0("From: ", cost_data$municipality, "<br>",
                                   "To: ",cost_data$to,"<br>",
                                   "Cost Delta: $", formatC(round(cost_data$delta,2), format= 'f', digits= 2),"<br>",
@@ -571,9 +581,6 @@ shinyServer(function(input, output, session) {
                                   "Drive Cost: $", formatC(round(cost_data$cost_drive,2), format= 'f', digits= 2),"<br>",
                                   "Avg Transit Time: ", round(cost_data$mean_time), " minutes <br>",
                                   "Transit Cost: $", formatC(round(cost_data$mean_costTransit, 2), format= 'f', digits= 2)),
-                   # label = paste0("From: ", "<br>",
-                   #                "To: ", "<br>",
-                   #                "Cost Delta: $", formatC(round(cost_data$delta,2), format= 'f', digits= 2)),
                    label = labels,
                    labelOptions = labelOptions(
                      style = list("font-weight" = "normal", padding = "3px 8px"),
@@ -582,50 +589,76 @@ shinyServer(function(input, output, session) {
                    highlightOptions =  highlightOptions(
                      weight = 5,
                      bringToFront = FALSE)) %>%
-      addLegend(
-        colors = rev(cols) ,#c('red', 'orange', 'yellow', 'green', 'blue'),
-                #values =cost_data$delta,
-                # labFormat = labelFormat(prefix = "$"),
-                labels = c("$0.00 – 5.60", " $5.61 – 11.20", "$11.21 – 16.80", "$16.81 – 22.40", "$22.41 – 28.00"),
-                title = "How much more does <br>transit cost? <br>
+      # addMarkers(data = dest_pt,
+      #            group = 'map data',
+      #            popup = paste0("Destination: ", dest_pt$dest)) %>% 
+      # addCircleMarkers(data = or_pts,
+      #                  group = "map data",
+      #                  radius = 1, color = "gray", stroke= T) %>%
+      addLegend(position = "bottomright",
+                title= "How much more does <br>transit cost? <br>
             (Cost Delta)",
-                position =  "bottomright",
+                group = "map data",
+                pal = pal_delta, values = cost_data$delta,
+                labFormat = labelFormat(big.mark = ",",
+                                        prefix ='$'),
                 opacity = 1)
-    
+     
   })
   
   observe({
-    dest <- case_when(
+    dest_id <- case_when(
       input$delta_dest == 1 ~ 26,
       input$delta_dest == 2 ~ 1006,
       input$delta_dest == 3 ~ 4,
       input$delta_dest == 4 ~ 16,
       input$delta_dest == 5 ~ 44)
     
-    cost_data <- cost_lines %>% filter(name_destination == dest)%>% 
+    cost_data <-cost_byTract %>%  #cost_lines %>% 
+      filter(name_destination == dest_id)%>%
       arrange(desc(delta))
     
+    dest_pt <- vtt_dests %>% filter(name == dest_id)
+    or_pts<- vtt_origins %>% filter(name %in% cost_data$name_origin)
+    
+    # icons <- awesomeIcons(icon ="book-open",# "whatever",
+    #                       iconColor = "black",
+    #                       library = "ion",
+    #                       markerColor = "black")
+    
+    
+    brks <- classIntervals(c(min(cost_data$delta) - .00001,
+                             cost_data$delta), n = 5, style = "jenks")
+    
+    pal_delta <- colorBin("YlGnBu", cost_data$delta , 5, bins =brks$brks, pretty = F, na.color = "white")
+    
+    # labels_index <- sprintf(
+    #   "<strong>%s</strong><br/>Tract: %s<br/> %g%%<br/>",
+    #   t_m$muni,t_m$GEOID, t_m$v
+    # ) %>% lapply(htmltools::HTML)
     # brks <- classIntervals(c(min(cost_data$delta) - .00001,
     #                          cost_data$delta), n = 5, style = "jenks")
-    # 
-    # pal_delta<-colorBin(palette = "YlGnBu",domain = cost_data$delta, bins =brks$brks, pretty = FALSE)
-    brks <- c(-2, 0, 7,14,21,28)
-    pal_delta<-colorBin(palette = "YlGnBu",domain = cost_data$delta, bins =brks, pretty = FALSE)
+    # brks <- c(0, 5.6, 11.2,16.8,22.4,28)
+    # pal_delta<-colorBin(palette = "YlGnBu",domain = cost_data$delta,# bins =brks, 
+    #                     pretty = FALSE)
+    # cols <- unique(pal_delta(cost_lines$delta))
     
     labels <- sprintf(
       "Cost delta: <strong>$%.2f</strong><br/></sup>",
       cost_data$delta
     ) %>% lapply(htmltools::HTML)
     
-    
     leafletProxy("delta_map") %>% 
-      # clearControls() %>%
+      clearControls() %>%
       clearGroup(group= "map data" )%>%
-      addPolylines(data = cost_data,
+      addPolygons(data = cost_data,
                    group = "map data",
-                   weight = cost_data$delta/10,
-                   color = ~pal_delta(delta),
-                   opacity= .8,
+                  color = "white",
+                  weight= .5,
+                  smoothFactor = .6,
+                  opacity = 1, 
+                  fillOpacity = 1,
+                  fillColor = ~pal_delta(delta),
                    popup = paste0("From: ", cost_data$municipality, "<br>",
                                   "To: ",cost_data$to,"<br>",
                                   "Cost Delta: $", formatC(round(cost_data$delta,2), format= 'f', digits= 2),"<br>",
@@ -643,7 +676,24 @@ shinyServer(function(input, output, session) {
                      direction = "auto"),
                    highlightOptions =  highlightOptions(
                      weight = 5,
-                     bringToFront = FALSE)) 
+                     bringToFront = FALSE))  %>%
+      # addAwesomeMarkers(data = dest_pt, icon = icons, 
+      #                   group = 'map data',
+      #                   popup = paste0("Destination: ", dest_pt$dest)) %>% 
+      # addMarkers(data = dest_pt,
+      #            group = 'map data',
+      #            popup = paste0("Destination: ", dest_pt$dest)) %>%
+      # addCircleMarkers(data = or_pts, 
+      #                  group = 'map data',
+      #                  radius = 1, color = "gray", stroke= T) %>%
+      addLegend(position = "bottomright",
+                title="How much more does <br>transit cost? <br>
+            (Cost Delta)",
+                group = "map data",
+                pal = pal_delta, values = cost_data$delta,
+                labFormat = labelFormat(big.mark = ",",
+                                        prefix ='$'),
+                opacity = 1)
   })
 
 })

@@ -21,6 +21,22 @@ cost_lines<- st_read("output/TravelCosts.gpkg", layer = "cost_lines") %>%
                         name_destination == 1006 ~ "Framingham")) %>% 
   select( -c( min_time, max_time, min_costTransit, max_costTransit))
 
+cost_byTract <- st_read("output/TravelCosts.gpkg", layer = "cost_byTract") %>% 
+  filter(name_destination %in% c( 4, 26, 44, 16, 1006) & is.na(mean_costTransit)==F) %>% 
+  mutate(delta = round(mean_costTransit - cost_drive, 2),
+         mean_time = round(mean_time),
+         cost_drive = round(cost_drive, 2),
+         mean_costTransit = round(mean_costTransit, 2)
+  ) %>% 
+  arrange(desc(mean_costTransit)) %>% 
+  st_transform(4326) %>% 
+  mutate(to = case_when(name_destination == 4 ~ "Longwood Medical Area",
+                        name_destination == 26 ~ "Downtown Boston",
+                        name_destination == 44 ~ "Quincy",
+                        name_destination == 16 ~ "Lynn", 
+                        name_destination == 1006 ~ "Framingham")) %>% 
+  select( -c( min_time, max_time, min_costTransit, max_costTransit))
+
 
 pts<- st_read("output/TravelCosts.gpkg", layer = "ODpts")
 
@@ -39,10 +55,26 @@ origins <- pts %>%
   filter(type == "o") %>%
   st_intersection(select(munis, municipality, communityType, subtype))
 
-test <- cost_lines %>% left_join(select(st_drop_geometry(origins), name, municipality), by = c("name_origin"= "name"))
+destinations<- pts %>% 
+  st_transform(4326) %>% 
+  filter(name %in% c(4, 26, 44, 16, 1006)) %>% 
+  mutate(dest = case_when(name == 4 ~ "Longwood Medical Area",
+                        name == 26 ~ "Downtown Boston",
+                        name == 44 ~ "Quincy",
+                        name == 16 ~ "Lynn", 
+                        name == 1006 ~ "Framingham")) 
+  
 
-write_rds(test, "app/data/cost_lines.rds")
-cost_data <- cost_lines 
+cost_lines <- cost_lines %>% left_join(select(st_drop_geometry(origins), name, municipality), by = c("name_origin"= "name"))
+cost_byTract <- cost_byTract %>% left_join(select(st_drop_geometry(origins), name, municipality), by = c("name_origin"= "name"))
+
+write_rds(cost_byTract, "app/data/vtt_cost_byTract.rds")
+write_rds(origins, "app/data/vtt_origins.rds")
+write_rds(destinations, "app/data/vtt_dests.rds")
+write_rds(cost_lines, "app/data/vtt_cost_lines.rds")
+
+# Switching from lines to by origin tract geometry for visualization
+cost_data <- cost_byTract#cost_lines 
 
 brks <- classIntervals(c(min(cost_data$delta) - .00001,
                          cost_data$delta), n = 5, style = "jenks")
@@ -82,10 +114,12 @@ delta_map <- leaflet(options = leafletOptions(preferCanvas = TRUE,
   # to add roads would need to set up map panes
   # https://stackoverflow.com/questions/43881007/how-to-addtiles-on-top-of-addpolygons-in-rs-leaflet
   # addProviderTiles(providers$Stamen.TonerLines) %>% 
-  addPolylines(data = cost_data,
-               weight = cost_data$delta/10,
-               color = ~pal_delta(delta),#"green",
-               opacity= .8,
+  addPolygons(data = cost_data,
+               # weight = cost_data$delta/10,
+               fillColor= ~pal_delta(delta),#"green",
+               color = "white",
+              weight = 1, smoothFactor = 0.5,
+              opacity = 1.0, fillOpacity = 1,
               popup = paste0("From: ", "<br>",
                              "To: ",cost_data$to,"<br>",
                              "Cost Delta: $", formatC(round(cost_data$delta,2), format= 'f', digits= 2),"<br>",

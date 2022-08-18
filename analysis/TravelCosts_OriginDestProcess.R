@@ -76,7 +76,7 @@ price_travel_transit<- function(
   cost <- sum(
     time_walk_to_stop/60*wage_rate_hrly*.7,
     time_wait_at_stop/60*wage_rate_hrly*.7,
-    time_in_vehicle/60*wage_rate_hrly*.35,
+    time_in_vehicle/60*wage_rate_hrly*.67,
     transfer_penalty/60*wage_rate_hrly*.35,
     time_transfer_wait/60*wage_rate_hrly*.7,
     time_walk_to_destination/60*wage_rate_hrly*.7, na.rm = T)
@@ -85,16 +85,10 @@ price_travel_transit<- function(
 price_travel_drive <- function(wage_rate_hrly= wage_rate, 
                                time_in_vehicle) {
   cost <- sum(
-    time_in_vehicle/60*wage_rate_hrly*.35, na.rm = T)
+    time_in_vehicle/60*wage_rate_hrly*.67, na.rm = T)
   return(cost)
 }
 
-price_travel_drive <- function(wage_rate_hrly= wage_rate, 
-                               time_in_vehicle) {
-  cost <- sum(
-    time_in_vehicle/60*wage_rate_hrly*.35, na.rm = T)
-  return(cost)
-}
 
 # Price travel, drive
 drive_times_priced <- drive_times %>% 
@@ -147,5 +141,19 @@ cost_lines <- costs %>%
   st_as_sf(crs= 4326) %>%
   select(-c(lon1, lon2, lat1, lat2))
 
-st_write(cost_lines,"output/TravelCosts.gpkg", layer = "cost_lines")
+
+tracts <- st_read("output/DemographicData.gpkg", "tracts_acs_dec_2020") %>% 
+  st_transform(4326) %>% 
+  select(GEOID, pop_dec)
+
+cost_byTract <- costs %>%
+  left_join(tracts, by = c("name_origin"= "GEOID")) %>% 
+  filter(pop_dec > 0) %>% 
+  st_as_sf() 
+  
+test <- cost_byTract %>% filter(name_destination == 1065)
+mapview(test, zcol = 'mean_costTransit')+ filter(pts, name == '25009202104')
+
+st_write(cost_lines,"output/TravelCosts.gpkg", layer = "cost_lines", append = F)
+st_write(cost_byTract, "output/TravelCosts.gpkg", layer = "cost_byTract", append = F)
 write_csv(costs, "output/travel_costs.csv")

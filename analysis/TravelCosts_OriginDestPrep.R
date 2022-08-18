@@ -16,7 +16,7 @@ t_centroid <- tracts %>%
   select(name = GEOID) %>% 
   mutate(type = "o")
 
-mapview(t_centroid)
+mapview(t_centroid)+ tracts
 
 # destinations
 ep_top <- essential_places %>% 
