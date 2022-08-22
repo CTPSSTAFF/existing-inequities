@@ -162,11 +162,11 @@ visualize_for_access_w_demo_w_tooltip <- function(access, demo, dests,modes, col
   plot_start <- function(access_weighted) {
     ggplot()+
       geom_stars(data = access_weighted)+
-      geom_sf(data = outside_agg, size=0, fill = 'tan', color = "transparent")+
+      geom_sf(data = outside_agg, size=0, fill = '#dedede', color = "transparent")+
       geom_sf(data= mpoBoundary,size=.5,color='gray', fill= 'transparent')+
       geom_sf_interactive(data = commTypes_byMuni, size=.2, 
                           color = 'gray',
-                          fill = 'white',# 'transparent', #'pink',
+                          fill = 'white',
                           alpha = 0.01,
                           aes(tooltip = municipality, data_id = municipality))+
       coord_sf()+
@@ -559,7 +559,7 @@ shinyServer(function(input, output, session) {
       addResetMapButton() %>% 
       addPolygons(data = munis,
                   color = "white",
-                  fillColor = "tan",
+                  fillColor = "#dedede",
                   weight= .5,
                   smoothFactor = .6,
                   opacity = 1, 

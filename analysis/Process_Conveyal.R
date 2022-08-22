@@ -125,14 +125,14 @@ openspace <- openspace %>% select(starts_with("OpenSpace_Weekend"))
 rm(openspacepaths)
 
 ### Save grouped rasters as stars objects #####
-# write_rds(healthcareNonEmg, "data/ConveyalRuns/Sept2019_Processed/healthcareNonEmg_access.rds")
-# write_rds(healthcareEmg, "data/ConveyalRuns/Sept2019_Processed/healthcareEmg_access.rds")
-# write_rds(jobs, "data/ConveyalRuns/Sept2019_Processed/jobs_access.rds")
-# write_rds(essentialplaces, "data/ConveyalRuns/Sept2019_Processed/essentialplaces_access.rds")
-# write_rds(highered, "data/ConveyalRuns/Sept2019_Processed/highered_access.rds")
-# write_rds(openspace, "data/ConveyalRuns/Sept2019_Processed/openspace_access.rds")
-# write_rds(openspace_conservation, "data/ConveyalRuns/Sept2019_Processed/openspace_conservation_access.rds")
-# write_rds(openspace_paths, "data/ConveyalRuns/Sept2019_Processed/openspace_paths_access.rds")
+write_rds(healthcareNonEmg, "data/ConveyalRuns/Sept2019_Processed/healthcareNonEmg_access.rds")
+write_rds(healthcareEmg, "data/ConveyalRuns/Sept2019_Processed/healthcareEmg_access.rds")
+write_rds(jobs, "data/ConveyalRuns/Sept2019_Processed/jobs_access.rds")
+write_rds(essentialplaces, "data/ConveyalRuns/Sept2019_Processed/essentialplaces_access.rds")
+write_rds(highered, "data/ConveyalRuns/Sept2019_Processed/highered_access.rds")
+write_rds(openspace, "data/ConveyalRuns/Sept2019_Processed/openspace_access.rds")
+write_rds(openspace_conservation, "data/ConveyalRuns/Sept2019_Processed/openspace_conservation_access.rds")
+write_rds(openspace_paths, "data/ConveyalRuns/Sept2019_Processed/openspace_paths_access.rds")
 
 # Visualize by access type ####
 # set up versions to match app variables so visualization functions match

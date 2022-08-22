@@ -60,14 +60,24 @@ br_mpo_geog <- ma_muni_geog %>%
   filter(GEOID %in% br_mpo_munis$GEOID)
 # mapview(br_mpo_geog)
 
+tract_geog<- get_acs(geography = "tract",
+                     variable = "B03002_001",
+                     year= 2020,
+                     state = "MA",
+                     geometry = T)
+mpo_tract <- tract_geog %>% 
+  st_centroid() %>% 
+  st_filter(br_mpo_geog, .predicate = st_within)
+
 # 2020 census tracts in the MPO
 mpo_tract_geog<- get_acs(geography = "tract",
                         variable = "B03002_001",
                         year= 2020,
                         state = "MA",
                         geometry = T)%>% 
-  st_intersection(st_geometry(br_mpo_geog)) %>% 
+  filter(GEOID %in% mpo_tract$GEOID) %>% 
   select(GEOID, NAME)
+
 
 
 # Join 2020 demo data with geog
