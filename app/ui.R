@@ -100,6 +100,7 @@ shinyUI(fluidPage(
                          column(9,
                                fluidRow(
                                  girafeOutput("access_plots", height = 1000),
+                                 # reactableOutput("equityFlag"),
                                ))
                                ),
                       tabPanel(strong("Compare Access"),

@@ -61,7 +61,8 @@ cost_byTract <- read_rds("data/vtt_cost_byTract.rds")
 vtt_origins <- read_rds("data/vtt_origins.rds")
 vtt_dests <- read_rds("data/vtt_dests.rds")
 
-access_all_comp <- read_csv("data/access_ratios.csv")
+access_all_comp <- read_csv("data/access_ratios.csv") %>% 
+  mutate(mode = ifelse(mode == "Transit (All modes)", "Transit", mode)) 
 
 visualize_for_access_w_demo_w_tooltip <- function(access, demo, dests,modes, cols = 4 , outside_agg){
   if (dests == 1) {d <- "Healthcare opportunities, \nnon-emergency"
@@ -169,6 +170,12 @@ visualize_for_access_w_demo_w_tooltip <- function(access, demo, dests,modes, col
                           fill = 'white',
                           alpha = 0.01,
                           aes(tooltip = municipality, data_id = municipality))+
+      # text on plot example https://davidgohel.github.io/ggiraph/articles/offcran/examples.html
+      # geom_text_interactive(
+      #   aes(
+      #       label = "Voluntary departures:
+      #                Involuntary departures: "),
+      #   color = "black",size = 2,hjust = "left",alpha = 0,lineheight = 1)+
       coord_sf()+
       scale_fill_gradient(low= 'white', high= '#871F78' ,trans="sqrt",
                           na.value = "transparent",
@@ -288,14 +295,6 @@ shinyServer(function(input, output, session) {
       outside_agg <- commTypes %>% filter(id == 8)
     }
     
-    # access_rv$access <- access
-    # test_access <<-access
-    # test_demo <<- demo
-    # test_dests <<- dests
-    # test_modes <<- modes
-    # test_cols <<- length(modes)
-    # test_outside_agg <<- outside_agg
-    
     plot <- visualize_for_access_w_demo_w_tooltip(access,demo,dests,modes, cols= length(modes), outside_agg) 
     girafe(ggobj = plot,
            width_svg = 12, height_svg = 7,
@@ -305,9 +304,112 @@ shinyServer(function(input, output, session) {
              opts_hover(css = "fill:gray !important ;fill-opacity: .7; stroke:darkgray !important; ")))
     
   })
+  output$equityFlag <- renderReactable({
+    dests <- app_inputs %>% filter(dest_id == input$dest)
+    mts <- app_inputs %>% filter(dest_id == input$dest)%>% filter(mt_id %in% input$mode_time)
+    modes <- mts$modes#input$modes
+    times <- mts$times#input$time
+    agg <- case_when(
+      input$aggArea == 8 ~ "MPO",
+      input$aggArea == 3 ~ "Developing Suburbs: Country Suburbs",
+      input$aggArea == 1 ~ "Developing Suburbs: Maturing New England Towns" ,
+      input$aggArea == 6 ~ "Inner Core: Metro Core Communities",
+      input$aggArea == 2 ~ "Inner Core: Streetcar Suburbs",
+      input$aggArea == 4 ~ "Maturing Suburbs: Established Suburbs and Cape Cod Towns",
+      input$aggArea == 5 ~ "Maturing Suburbs: Mature Suburban Towns",
+      input$aggArea == 7 ~ "Regional Urban Centers: Sub-Regional Urban Centers")
+    
+    # demo <- as.numeric(input$demo)
+    
+    access_tbl <- access_all_comp %>% 
+      filter(destination %in% dests$dest & mode %in% modes & time %in% times) %>%
+      filter(region == agg) %>% 
+      rename(`Equity Population `= type,
+             `Destinations` = destination,
+             `Mode` = mode,
+             `Travel Time (minutes)`= time,
+             `Aggregation Area `=  region,
+             `Total Population`= Total,
+             `Equity Population` = EJ,
+             `Non-Equity Popultation`= `Non-EJ`,
+             `Aggregation Area`= `Ratio Aggregation Area`,
+             `MPO Region`= `Ratio MPO`)
+    reactable(access_tbl, compact = TRUE, 
+              #filterable = T,
+              highlight = T, 
+              # searchable = T
+              # groupBy = c("Destinations", 'Aggregation Area '),
+              columns = list(
+                `Destinations`= colDef(minWidth = 150),
+                `Aggregation Area ` = colDef(minWidth = 200),
+                `Travel Time (minutes)`= colDef(format = colFormat(suffix = " min")),
+                `Total Population` = colDef(  format = colFormat(separators = T)),
+                `Equity Population` = colDef(filterable = F, format = colFormat(separators = T)),
+                `Non-Equity Popultation` = colDef(filterable  = F, format = colFormat(separators = T)),
+                `Aggregation Area`=  colDef(filterable =F,
+                                            # count inequity flags
+                                            aggregate = JS("function(values, rows) {
+        let flag = 0
+        rows.forEach(function(row) {
+         if ( row['Aggregation Area'] < 1 ) {
+          flag += 1
+          }
+        })
+        let unit = ''
+        if (flag === 1) { unit = ' equity flag'} else {unit = ' equity flags'}
+        return( flag + unit)
+      }"),
+                                            style = JS("function(rowInfo) {
+      const value = rowInfo.values['Aggregation Area']
+      let color
+      let weight
+      if (value < 1) {
+        color = '#e00000'
+        weight =  'bold'
+      } else {
+        color = '#000'
+        weight= 'normal'
+      }
+      return { color: color, fontWeight: weight }
+    }")
+                ),
+                `MPO Region`= colDef(filterable= F,
+                                     # count inequity flags
+                                     aggregate = JS("function(values, rows) {
+        let flag = 0
+        rows.forEach(function(row) {
+         if ( row['MPO Region'] < 1 ) {
+          flag += 1
+          }
+        })
+        let unit = ''
+        if (flag === 1) { unit = ' equity flag'} else {unit = ' equity flags'}
+        return( flag + unit)
+      }"),
+                                     style = JS("function(rowInfo) {
+      const value = rowInfo.values['MPO Region']
+      let color
+      let weight
+      if (value < 1) {
+        color = '#e00000'
+        weight= 'bold'
+      } else {
+        color = '#000'
+        weight = 'normal'
+      }
+      return { color: color, fontWeight: weight }
+    }"))),
+              columnGroups = list(
+                colGroup(name = "Average Number of Opportunities Accessible Per Person, by Demographic",
+                         columns= c("Total Population", "Equity Population", "Non-Equity Popultation")),
+                colGroup(name = "Equity Check Ratio",
+                         columns= c("Aggregation Area", "MPO Region")))
+    )
+    
+  })
+  
   output$access_all <- renderReactable({
     access_all_tbl <- access_all_comp %>% 
-      mutate(mode = ifelse(mode == "Transit (All modes)", "Transit", mode)) %>% 
       rename(`Equity Population `= type,
              `Destinations` = destination,
              `Mode` = mode,
