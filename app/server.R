@@ -536,17 +536,21 @@ shinyServer(function(input, output, session) {
       arrange(desc(delta))
     
     dest_pt <- vtt_dests %>% filter(name == 4)
-    icons <- awesomeIcons(icon = "whatever",
-                          iconColor = "black",
-                          library = "ion",
-                          markerColor = "black")
-    
+    # icons <- awesomeIcons(icon = "whatever",
+    #                       iconColor = "black",
+    #                       library = "ion",
+    #                       markerColor = "black")
+    # 
     or_pts<- vtt_origins %>% filter(name %in% cost_data$name_origin)
     
-    brks <- classIntervals(c(min(cost_data$delta) - .00001,
-                             cost_data$delta), n = 5, style = "jenks")
+    # brks <- classIntervals(c(min(cost_data$delta) - .00001,
+    #                          cost_data$delta), n = 5, style = "jenks")
+    br_int <- 32.25/7
+    brks <- c(0:6)
+    brks <- round(brks*br_int, 2) 
+    brks <- c(brks, 32.25)
     
-    pal_delta <- colorBin("YlGnBu", cost_data$delta , 5, bins =brks$brks, pretty = F, na.color = "white")
+    pal_delta <- colorBin("YlGnBu", cost_data$delta , 5, bins =brks, pretty = F, na.color = "white")
 
     labels <- sprintf(
       "Cost delta: <strong>$%.2f</strong><br/></sup>",
@@ -596,15 +600,17 @@ shinyServer(function(input, output, session) {
                    highlightOptions =  highlightOptions(
                      weight = 5,
                      bringToFront = FALSE)) %>%
-      # addCircleMarkers(data = dest_pt,
-      #            color = "black",
-      #            radius = 4,
-      #                   group = 'map data dest',
-      #                   popup = paste0("Destination: ", dest_pt$dest)) %>% 
-      addAwesomeMarkers(data = dest_pt,
-                        icon = icons,
-                 group = 'map data dest',
-                 popup = paste0("Destination: ", dest_pt$dest)) %>%
+      addCircleMarkers(data = dest_pt,
+                 color = "black",
+                 fillColor= "gray",
+                 weight = 2,
+                 radius = 6,
+                        group = 'map data dest',
+                        popup = paste0("Destination: ", dest_pt$dest)) %>%
+      # addAwesomeMarkers(data = dest_pt,
+      #                   icon = icons,
+      #            group = 'map data dest',
+      #            popup = paste0("Destination: ", dest_pt$dest)) %>%
       addCircles(data = or_pts,
                        group = "map data origins",
                        radius = 30, color = "white",
@@ -647,16 +653,18 @@ shinyServer(function(input, output, session) {
     dest_pt <- vtt_dests %>% filter(name == dest_id)
     or_pts<- vtt_origins %>% filter(name %in% cost_data$name_origin)
     
-    icons <- awesomeIcons(icon = "whatever",
-                          iconColor = "black",
-                          library = "ion",
-                          markerColor = "black")
+    # icons <- awesomeIcons(icon = "whatever",
+    #                       iconColor = "black",
+    #                       library = "ion",
+    #                       markerColor = "black")
     
     
-    brks <- classIntervals(c(min(cost_data$delta) - .00001,
-                             cost_data$delta), n = 5, style = "jenks")
+    br_int <- 32.25/7
+    brks <- c(0:6)
+    brks <- round(brks*br_int, 2) 
+    brks <- c(brks, 32.25)
     
-    pal_delta <- colorBin("YlGnBu", cost_data$delta , 5, bins =brks$brks, pretty = F, na.color = "white")
+    pal_delta <- colorBin("YlGnBu", cost_data$delta , 5, bins =brks, pretty = F, na.color = "white")
     
     # labels_index <- sprintf(
     #   "<strong>%s</strong><br/>Tract: %s<br/> %g%%<br/>",
@@ -709,11 +717,16 @@ shinyServer(function(input, output, session) {
                    highlightOptions =  highlightOptions(
                      weight = 5,
                      bringToFront = FALSE))  %>%
-      addAwesomeMarkers(data = dest_pt, icon = icons,
-                        group = 'map data dest',
-                        popup = paste0("Destination: ", dest_pt$dest)) %>%
-      # addMarkers(data = dest_pt,
-      #            group = 'map data',
+      addCircleMarkers(data = dest_pt,
+                       color = "black",
+                       fillColor= "gray",
+                       weight = 2,
+                       radius = 6,
+                       group = 'map data dest',
+                       popup = paste0("Destination: ", dest_pt$dest)) %>%
+      # addAwesomeMarkers(data = dest_pt,
+      #                   icon = icons,
+      #            group = 'map data dest',
       #            popup = paste0("Destination: ", dest_pt$dest)) %>%
       addCircles(data = or_pts,
                  group = "map data origins",
