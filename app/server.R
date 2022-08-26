@@ -244,6 +244,10 @@ shinyServer(function(input, output, session) {
   })
   
   output$access_plots <- renderGirafe({
+    validate(
+      need(input$mode_time, 'Please select at least one travel time and mode combination.')
+    )
+    
     # dests <- 3
     # modes <- 5
     # time <- 3

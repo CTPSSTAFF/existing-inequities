@@ -121,6 +121,8 @@ shinyUI(fluidPage(
                                br()),
                                h4(strong("Weighted Average of the Number of Accessible Opportunities for the Boston Region MPO and Aggregation Areas")),
                                reactableOutput("access_all"),
+                               br(),
+                               p("Navigate the table above using the arrows to display results for different destinations and aggregation areas."),
                               ),
                       tabPanel(strong("Travel Costs"),
                                column(12,  
@@ -154,9 +156,9 @@ shinyUI(fluidPage(
                                           h4(strong('Value of Travel Time (VTT) for Selected Trips')),
                                           p(strong("Instructions:")," This map answers the question, ",
                                             em(strong('"how does the VTT differ between transportation modes for a sample origin-destination pair?"')), 
-                                            "Select a destination below. Hover over each trip to see how much more public transit trips cost than driving trips between the same origin and destination. Note that costs do not include the direct costs (for example, tolls or public transit fares). Rather, costs account for travel time trip quality, which is determined by factors such as congestion and the number of transfers."),
-                                          p("Origins were identified by finding the center of every census tract in the MPO region. 
-                                          Destinations were selected from the essential places metric. 
+                                            "Select a destination below. Hover over each tract to see how much more public transit trips cost than driving trips from that tract to the selected destination. Note that costs do not include the direct costs (for example, tolls or public transit fares). Rather, costs account for travel time trip quality, which is determined by factors such as congestion and the number of transfers."),
+                                          p("Origins were identified by finding the center of every census tract in the MPO region. When zooming in, origins appear on the map as light gray points. 
+                                          Destinations were selected from the essential places metric. The selected destination appears on the map as a dark gray point.
                                           Cost deltas can only be calculated where there is both a drive cost and a transit cost. There is no cost delta where no transit route is available."),
                                           selectInput("delta_dest", label =  "Select destination:",
                                                       choices = list("Downtown Boston" = 1,
