@@ -20,6 +20,7 @@ prep_grid <- read_stars("data/lodes-data-2018 Workers total conveyal.tif") %>%
 # st_write(prep_grid, "notebooks/data/mpo_conveyal_grid_as_vector.gpkg", layer= 'workers')
 names(prep_grid) = 'lodes_wkrs'
 
+
 # read in census demo
 demo <- st_read("output/DemographicData.gpkg", layer = 'tracts_acs_dec_2020') %>% 
   st_transform(3857)
@@ -108,11 +109,10 @@ for(i in 1: length(dest_types)){
 access_data <- read_stars(files, quiet= T)
 names(access_data)<- str_remove(names(access_data),"_50pct.geotiff")
 # note cropping pulls raster cells based on whether the cell center falls within the boundary
-access_data <- suppressWarnings(st_crop(access_data, boundary))
-
+access_data <- suppressWarnings(st_crop(access_data, boundary)) %>% st_normalize()
 assign(dest_name, access_data)
 }
- rm(dest_name, files, access_data)
+rm(dest_name, files, access_data)
  
 ## SPLIT out multiple runs for same destination types ####
 healthcareEmg <- healthcare %>% select(starts_with("Healthcare_Emergency"))
@@ -368,4 +368,3 @@ access_all_comp <- access_all_ratios %>%
 
 # SAVE RESULTS ####
 write_csv(access_all_comp, "output/access_all_comp.csv")
-
