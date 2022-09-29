@@ -30,7 +30,7 @@ shinyUI(fluidPage(
   ),
 
     # Application title
-    titlePanel("An Exploration of Destination Access and Transportation Cost Inequities in the Boston Region"),
+    titlePanel("An Exploration of Destination Access and Transportation Cost Analyses", windowTitle= "Existing Inequities"),
     tabsetPanel(type = "tabs",
                 tabPanel(strong("Destination Access"),
                          column(12,  
@@ -219,8 +219,8 @@ shinyUI(fluidPage(
                                column(8,
                                 br(), 
                                 h4(strong("Introduction")),
-                               p("In 2022, the Boston Region Metropolitan Planning Organization (MPO) conducted a study called Identifying Transportation Inequities 
-                                 in the Boston Region.  The study sought to quantify existing transportation inequities among environmental justice (EJ)—minority and 
+                               p("In 2022, the Boston Region Metropolitan Planning Organization (MPO) conducted a study called 
+                               An Exploration of Destination Access and Transportation Cost Analyses: Developing Baseline Transportation Equity Metrics for the Boston Region. The study sought to quantify existing transportation inequities among environmental justice (EJ)—minority and 
                                  low-income—populations and zero-vehicle households in the Boston region using several destination access metrics. In addition, the study 
                                  explored two methodologies for analyzing transportation costs. This application shows the results of that study. Detailed methodology 
                                  can be found at the study’s ", 

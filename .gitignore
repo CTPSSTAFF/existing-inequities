@@ -33,3 +33,9 @@ notebooks/data/nlcd_2019_impervious_descriptor_l48_20210604/nlcd_2019_impervious
 notebooks/data/mpo_walk_network.gpkg
 notebooks/data/mpo_drive_network.gpkg
 notebooks/data/MA_drive_primary.gpkg
+output/EngagementMaterial/EngagmentMaps/
+notebooks/data/BrooklineOSMNetwork_drive.gpkg
+notebooks/data/BrooklineOSMNetwork_walk.gpkg
+*.dcf
+output/EngagementMaterial_Data/
+output/EngagementMaterial/EngagementMaps_Draft_1.ai
